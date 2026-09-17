@@ -1,6 +1,9 @@
 <Solution>
-  <Project Path="BusinessLogic/BusinessLogic.csproj" Id="ddba1139-a754-4319-b871-1d81b30680c5" />
-  <Project Path="DB/DB.csproj" Id="3d045e33-f022-4de0-bf75-5cea04d28188" />
-  <Project Path="Model/Model.csproj" Id="fccf280b-7117-44b8-9d31-a844d7653408" />
-  <Project Path="UI/UI.csproj" Id="71820432-9ed3-44a7-b30c-3d9fd5e29a73" />
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Project Path="BusinessLogic\BusinessLogic.csproj" Id="ddba1139-a754-4319-b871-1d81b30680c5" />
+  <Project Path="DB\DB.csproj" Id="3d045e33-f022-4de0-bf75-5cea04d28188" />
+  <Project Path="Model\Model.csproj" Id="fccf280b-7117-44b8-9d31-a844d7653408" />
+  <Project Path="UI\UI.csproj" Id="71820432-9ed3-44a7-b30c-3d9fd5e29a73" />
 </Solution>
