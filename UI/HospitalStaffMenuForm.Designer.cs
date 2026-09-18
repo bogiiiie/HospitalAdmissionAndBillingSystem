@@ -31,8 +31,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblMainMenu = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.lblUserInfo = new System.Windows.Forms.Label();
             this.llblLogout = new System.Windows.Forms.LinkLabel();
+            this.lblUserInfo = new System.Windows.Forms.Label();
             this.btnRoomMgmt = new System.Windows.Forms.Button();
             this.btnPatientInfo = new System.Windows.Forms.Button();
             this.btnPatientSearch = new System.Windows.Forms.Button();
@@ -78,15 +78,6 @@
             this.panel2.Size = new System.Drawing.Size(901, 25);
             this.panel2.TabIndex = 1;
             // 
-            // lblUserInfo
-            // 
-            this.lblUserInfo.AutoSize = true;
-            this.lblUserInfo.Location = new System.Drawing.Point(-3, 3);
-            this.lblUserInfo.Name = "lblUserInfo";
-            this.lblUserInfo.Size = new System.Drawing.Size(217, 16);
-            this.lblUserInfo.TabIndex = 1;
-            this.lblUserInfo.Text = "Logged in as: [Name] | Role: [Role]";
-            // 
             // llblLogout
             // 
             this.llblLogout.AutoSize = true;
@@ -97,6 +88,16 @@
             this.llblLogout.TabIndex = 2;
             this.llblLogout.TabStop = true;
             this.llblLogout.Text = "[ Main Menu ]  [ Logout ]";
+            this.llblLogout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblLogout_LinkClicked);
+            // 
+            // lblUserInfo
+            // 
+            this.lblUserInfo.AutoSize = true;
+            this.lblUserInfo.Location = new System.Drawing.Point(-3, 3);
+            this.lblUserInfo.Name = "lblUserInfo";
+            this.lblUserInfo.Size = new System.Drawing.Size(217, 16);
+            this.lblUserInfo.TabIndex = 1;
+            this.lblUserInfo.Text = "Logged in as: [Name] | Role: [Role]";
             // 
             // btnRoomMgmt
             // 
@@ -233,6 +234,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "HospitalStaffMenuForm";
             this.Text = "HospitalStaffMenuForm";
+            this.Load += new System.EventHandler(this.HospitalStaffMenuForm_Load_1);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);

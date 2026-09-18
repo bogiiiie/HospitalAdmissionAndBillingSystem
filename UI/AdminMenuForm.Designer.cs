@@ -80,7 +80,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(900, 29);
             this.panel2.TabIndex = 1;
-            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // llblLogout
             // 
@@ -92,6 +91,7 @@
             this.llblLogout.TabIndex = 1;
             this.llblLogout.TabStop = true;
             this.llblLogout.Text = "[ Main Menu ]  [ Logout ]";
+            this.llblLogout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblLogout_LinkClicked);
             // 
             // lblUserInfo
             // 
@@ -279,7 +279,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "AdminMenuForm";
             this.Text = "Main Menu";
-            this.Load += new System.EventHandler(this.AdminMenuForm_Load);
+            this.Load += new System.EventHandler(this.AdminMenuForm_Load_1);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
