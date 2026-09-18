@@ -46,8 +46,10 @@
   <ItemGroup>
     <Folder Include="PostScript\" />
     <Folder Include="StoredProc\" />
-    <Folder Include="Table\" />
     <Folder Include="View\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Table\Users.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
