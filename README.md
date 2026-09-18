@@ -27,6 +27,14 @@ These are the two test accounts seeded into the database:
 
 ---
 
+## 📋 Project Kanban Board
+
+Track the project's tasks, progress, and development status through our GitHub Kanban Board:
+
+### [🔗 View Group 4 Kanban Board](https://github.com/users/bogiiiie/projects/4)
+
+---
+
 ## 🎬 Demo
 
 ### Login and Role-Based Main Menu
@@ -140,27 +148,41 @@ HospitalAdmissionAndBillingSystem/
 ### Architecture Overview
 
 ```text
-┌─────────────────────────────────────────────┐
-│                     UI                      │
-│            Windows Forms Application        │
-└──────────────────────┬──────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────┐
-│              BusinessLogic                  │
-│                                             │
-│  ┌─────────────────┐  ┌─────────────────┐  │
-│  │   Controller    │  │   Repository    │  │
-│  │ Business Rules  │  │ Database Access │  │
-│  └─────────────────┘  └────────┬────────┘  │
-└─────────────────────────────────┼───────────┘
-                                  │
-                     ┌────────────┴────────────┐
-                     ▼                         ▼
-              ┌─────────────┐          ┌─────────────┐
-              │    Model    │          │     DB      │
-              │ Data Models │          │ SQL Scripts │
-              └─────────────┘          └─────────────┘
+┌───────────────────────────────────────────────────────────┐
+│                          UI                               │
+│                 Windows Forms Application                 │
+│    (LoginPage, AdminMenuForm, HospitalStaffMenuForm)      │
+└───────────────────────────┬───────────────────────────────┘
+                            │
+                            │ calls
+                            ▼
+┌───────────────────────────────────────────────────────────┐
+│                     BusinessLogic                         │
+│                                                           │
+│   ┌───────────────────┐         ┌─────────────────────┐  │
+│   │    Controller     │────────▶│     Repository      │  │
+│   │  (LoginController)│         │  (UserRepository,   │  │
+│   │                   │         │   DatabaseInitializer)│ │
+│   │  Business rules   │         │  Database access    │  │
+│   └─────────┬─────────┘         └──────────┬──────────┘  │
+└─────────────┼──────────────────────────────┼─────────────┘
+              │                              │
+              │ uses                         │ reads/writes
+              ▼                              ▼
+      ┌──────────────┐              ┌──────────────────┐
+      │    Model     │              │   SQLite (.db)   │
+      │              │              │                  │
+      │  User.cs     │              │  UI/App_Data/    │
+      │  Room.cs     │              │  HospitalDB.db   │
+      │  Patient.cs  │              │                  │
+      └──────────────┘              └──────────────────┘
+
+      ┌──────────────────────────────────────┐
+      │              DB Project              │
+      │   (SQL scripts — documentation and   │
+      │    reference only; runs at runtime   │
+      │    through DatabaseInitializer.cs)   │
+      └──────────────────────────────────────┘
 ```
 
 ---
