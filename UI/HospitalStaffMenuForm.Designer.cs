@@ -28,218 +28,218 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.lblMainMenu = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.llblLogout = new System.Windows.Forms.LinkLabel();
-            this.lblUserInfo = new System.Windows.Forms.Label();
-            this.btnRoomMgmt = new System.Windows.Forms.Button();
-            this.btnPatientInfo = new System.Windows.Forms.Button();
-            this.btnPatientSearch = new System.Windows.Forms.Button();
-            this.btnRoomSearch = new System.Windows.Forms.Button();
-            this.btnAdmission = new System.Windows.Forms.Button();
-            this.btnTreatmentBilling = new System.Windows.Forms.Button();
-            this.btnBilling = new System.Windows.Forms.Button();
-            this.btnDischarge = new System.Windows.Forms.Button();
-            this.btnDischargeSummary = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.RoyalBlue;
-            this.panel1.Controls.Add(this.lblMainMenu);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(901, 46);
-            this.panel1.TabIndex = 0;
-            // 
-            // lblMainMenu
-            // 
-            this.lblMainMenu.AutoSize = true;
-            this.lblMainMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMainMenu.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblMainMenu.Location = new System.Drawing.Point(3, 9);
-            this.lblMainMenu.Name = "lblMainMenu";
-            this.lblMainMenu.Size = new System.Drawing.Size(119, 25);
-            this.lblMainMenu.TabIndex = 1;
-            this.lblMainMenu.Text = "Main Menu";
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.panel2.Controls.Add(this.llblLogout);
-            this.panel2.Controls.Add(this.lblUserInfo);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 46);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(901, 25);
-            this.panel2.TabIndex = 1;
-            // 
-            // llblLogout
-            // 
-            this.llblLogout.AutoSize = true;
-            this.llblLogout.LinkColor = System.Drawing.Color.Black;
-            this.llblLogout.Location = new System.Drawing.Point(742, 3);
-            this.llblLogout.Name = "llblLogout";
-            this.llblLogout.Size = new System.Drawing.Size(147, 16);
-            this.llblLogout.TabIndex = 2;
-            this.llblLogout.TabStop = true;
-            this.llblLogout.Text = "[ Main Menu ]  [ Logout ]";
-            this.llblLogout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblLogout_LinkClicked);
-            // 
-            // lblUserInfo
-            // 
-            this.lblUserInfo.AutoSize = true;
-            this.lblUserInfo.Location = new System.Drawing.Point(-3, 3);
-            this.lblUserInfo.Name = "lblUserInfo";
-            this.lblUserInfo.Size = new System.Drawing.Size(217, 16);
-            this.lblUserInfo.TabIndex = 1;
-            this.lblUserInfo.Text = "Logged in as: [Name] | Role: [Role]";
-            // 
-            // btnRoomMgmt
-            // 
-            this.btnRoomMgmt.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.btnRoomMgmt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRoomMgmt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRoomMgmt.ForeColor = System.Drawing.Color.Black;
-            this.btnRoomMgmt.Location = new System.Drawing.Point(12, 94);
-            this.btnRoomMgmt.Name = "btnRoomMgmt";
-            this.btnRoomMgmt.Size = new System.Drawing.Size(196, 88);
-            this.btnRoomMgmt.TabIndex = 3;
-            this.btnRoomMgmt.Text = "Room Mgmt";
-            this.btnRoomMgmt.UseVisualStyleBackColor = false;
-            // 
-            // btnPatientInfo
-            // 
-            this.btnPatientInfo.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.btnPatientInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPatientInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPatientInfo.ForeColor = System.Drawing.Color.Black;
-            this.btnPatientInfo.Location = new System.Drawing.Point(236, 94);
-            this.btnPatientInfo.Name = "btnPatientInfo";
-            this.btnPatientInfo.Size = new System.Drawing.Size(196, 88);
-            this.btnPatientInfo.TabIndex = 4;
-            this.btnPatientInfo.Text = "Patient Info";
-            this.btnPatientInfo.UseVisualStyleBackColor = false;
-            // 
-            // btnPatientSearch
-            // 
-            this.btnPatientSearch.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.btnPatientSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPatientSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPatientSearch.ForeColor = System.Drawing.Color.Black;
-            this.btnPatientSearch.Location = new System.Drawing.Point(455, 94);
-            this.btnPatientSearch.Name = "btnPatientSearch";
-            this.btnPatientSearch.Size = new System.Drawing.Size(196, 88);
-            this.btnPatientSearch.TabIndex = 5;
-            this.btnPatientSearch.Text = "Patient Search";
-            this.btnPatientSearch.UseVisualStyleBackColor = false;
-            // 
-            // btnRoomSearch
-            // 
-            this.btnRoomSearch.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.btnRoomSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRoomSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRoomSearch.ForeColor = System.Drawing.Color.Black;
-            this.btnRoomSearch.Location = new System.Drawing.Point(670, 94);
-            this.btnRoomSearch.Name = "btnRoomSearch";
-            this.btnRoomSearch.Size = new System.Drawing.Size(196, 88);
-            this.btnRoomSearch.TabIndex = 6;
-            this.btnRoomSearch.Text = "Room Search";
-            this.btnRoomSearch.UseVisualStyleBackColor = false;
-            // 
-            // btnAdmission
-            // 
-            this.btnAdmission.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.btnAdmission.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAdmission.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdmission.ForeColor = System.Drawing.Color.Black;
-            this.btnAdmission.Location = new System.Drawing.Point(12, 210);
-            this.btnAdmission.Name = "btnAdmission";
-            this.btnAdmission.Size = new System.Drawing.Size(196, 88);
-            this.btnAdmission.TabIndex = 7;
-            this.btnAdmission.Text = "Admission";
-            this.btnAdmission.UseVisualStyleBackColor = false;
-            // 
-            // btnTreatmentBilling
-            // 
-            this.btnTreatmentBilling.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.btnTreatmentBilling.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTreatmentBilling.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTreatmentBilling.ForeColor = System.Drawing.Color.Black;
-            this.btnTreatmentBilling.Location = new System.Drawing.Point(236, 210);
-            this.btnTreatmentBilling.Name = "btnTreatmentBilling";
-            this.btnTreatmentBilling.Size = new System.Drawing.Size(196, 88);
-            this.btnTreatmentBilling.TabIndex = 9;
-            this.btnTreatmentBilling.Text = "Treatment Billing";
-            this.btnTreatmentBilling.UseVisualStyleBackColor = false;
-            // 
-            // btnBilling
-            // 
-            this.btnBilling.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.btnBilling.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBilling.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBilling.ForeColor = System.Drawing.Color.Black;
-            this.btnBilling.Location = new System.Drawing.Point(455, 210);
-            this.btnBilling.Name = "btnBilling";
-            this.btnBilling.Size = new System.Drawing.Size(196, 88);
-            this.btnBilling.TabIndex = 11;
-            this.btnBilling.Text = "Billing";
-            this.btnBilling.UseVisualStyleBackColor = false;
-            // 
-            // btnDischarge
-            // 
-            this.btnDischarge.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.btnDischarge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDischarge.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDischarge.ForeColor = System.Drawing.Color.Black;
-            this.btnDischarge.Location = new System.Drawing.Point(670, 210);
-            this.btnDischarge.Name = "btnDischarge";
-            this.btnDischarge.Size = new System.Drawing.Size(196, 88);
-            this.btnDischarge.TabIndex = 12;
-            this.btnDischarge.Text = "Discharge";
-            this.btnDischarge.UseVisualStyleBackColor = false;
-            // 
-            // btnDischargeSummary
-            // 
-            this.btnDischargeSummary.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.btnDischargeSummary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDischargeSummary.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDischargeSummary.ForeColor = System.Drawing.Color.Black;
-            this.btnDischargeSummary.Location = new System.Drawing.Point(12, 324);
-            this.btnDischargeSummary.Name = "btnDischargeSummary";
-            this.btnDischargeSummary.Size = new System.Drawing.Size(196, 88);
-            this.btnDischargeSummary.TabIndex = 13;
-            this.btnDischargeSummary.Text = "Discharge Summary";
-            this.btnDischargeSummary.UseVisualStyleBackColor = false;
-            // 
-            // HospitalStaffMenuForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(901, 510);
-            this.Controls.Add(this.btnDischargeSummary);
-            this.Controls.Add(this.btnDischarge);
-            this.Controls.Add(this.btnBilling);
-            this.Controls.Add(this.btnTreatmentBilling);
-            this.Controls.Add(this.btnAdmission);
-            this.Controls.Add(this.btnRoomSearch);
-            this.Controls.Add(this.btnPatientSearch);
-            this.Controls.Add(this.btnPatientInfo);
-            this.Controls.Add(this.btnRoomMgmt);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
-            this.Name = "HospitalStaffMenuForm";
-            this.Text = "HospitalStaffMenuForm";
-            this.Load += new System.EventHandler(this.HospitalStaffMenuForm_Load_1);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.ResumeLayout(false);
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.lblMainMenu = new System.Windows.Forms.Label();
+			this.panel2 = new System.Windows.Forms.Panel();
+			this.llblLogout = new System.Windows.Forms.LinkLabel();
+			this.lblUserInfo = new System.Windows.Forms.Label();
+			this.btnRoomMgmt = new System.Windows.Forms.Button();
+			this.btnPatientInfo = new System.Windows.Forms.Button();
+			this.btnPatientSearch = new System.Windows.Forms.Button();
+			this.btnRoomSearch = new System.Windows.Forms.Button();
+			this.btnAdmission = new System.Windows.Forms.Button();
+			this.btnTreatmentBilling = new System.Windows.Forms.Button();
+			this.btnBilling = new System.Windows.Forms.Button();
+			this.btnDischarge = new System.Windows.Forms.Button();
+			this.btnDischargeSummary = new System.Windows.Forms.Button();
+			this.panel1.SuspendLayout();
+			this.panel2.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// panel1
+			// 
+			this.panel1.BackColor = System.Drawing.Color.RoyalBlue;
+			this.panel1.Controls.Add(this.lblMainMenu);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel1.Location = new System.Drawing.Point(0, 0);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(901, 46);
+			this.panel1.TabIndex = 0;
+			// 
+			// lblMainMenu
+			// 
+			this.lblMainMenu.AutoSize = true;
+			this.lblMainMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblMainMenu.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+			this.lblMainMenu.Location = new System.Drawing.Point(3, 9);
+			this.lblMainMenu.Name = "lblMainMenu";
+			this.lblMainMenu.Size = new System.Drawing.Size(119, 25);
+			this.lblMainMenu.TabIndex = 1;
+			this.lblMainMenu.Text = "Main Menu";
+			// 
+			// panel2
+			// 
+			this.panel2.BackColor = System.Drawing.SystemColors.ScrollBar;
+			this.panel2.Controls.Add(this.llblLogout);
+			this.panel2.Controls.Add(this.lblUserInfo);
+			this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel2.Location = new System.Drawing.Point(0, 46);
+			this.panel2.Name = "panel2";
+			this.panel2.Size = new System.Drawing.Size(901, 25);
+			this.panel2.TabIndex = 1;
+			// 
+			// llblLogout
+			// 
+			this.llblLogout.AutoSize = true;
+			this.llblLogout.LinkColor = System.Drawing.Color.Black;
+			this.llblLogout.Location = new System.Drawing.Point(827, 3);
+			this.llblLogout.Name = "llblLogout";
+			this.llblLogout.Size = new System.Drawing.Size(62, 16);
+			this.llblLogout.TabIndex = 2;
+			this.llblLogout.TabStop = true;
+			this.llblLogout.Text = "[ Logout ]";
+			this.llblLogout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblLogout_LinkClicked);
+			// 
+			// lblUserInfo
+			// 
+			this.lblUserInfo.AutoSize = true;
+			this.lblUserInfo.Location = new System.Drawing.Point(5, 3);
+			this.lblUserInfo.Name = "lblUserInfo";
+			this.lblUserInfo.Size = new System.Drawing.Size(217, 16);
+			this.lblUserInfo.TabIndex = 1;
+			this.lblUserInfo.Text = "Logged in as: [Name] | Role: [Role]";
+			// 
+			// btnRoomMgmt
+			// 
+			this.btnRoomMgmt.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.btnRoomMgmt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnRoomMgmt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnRoomMgmt.ForeColor = System.Drawing.Color.Black;
+			this.btnRoomMgmt.Location = new System.Drawing.Point(12, 94);
+			this.btnRoomMgmt.Name = "btnRoomMgmt";
+			this.btnRoomMgmt.Size = new System.Drawing.Size(196, 88);
+			this.btnRoomMgmt.TabIndex = 3;
+			this.btnRoomMgmt.Text = "Room Mgmt";
+			this.btnRoomMgmt.UseVisualStyleBackColor = false;
+			// 
+			// btnPatientInfo
+			// 
+			this.btnPatientInfo.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.btnPatientInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnPatientInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnPatientInfo.ForeColor = System.Drawing.Color.Black;
+			this.btnPatientInfo.Location = new System.Drawing.Point(236, 94);
+			this.btnPatientInfo.Name = "btnPatientInfo";
+			this.btnPatientInfo.Size = new System.Drawing.Size(196, 88);
+			this.btnPatientInfo.TabIndex = 4;
+			this.btnPatientInfo.Text = "Patient Info";
+			this.btnPatientInfo.UseVisualStyleBackColor = false;
+			// 
+			// btnPatientSearch
+			// 
+			this.btnPatientSearch.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.btnPatientSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnPatientSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnPatientSearch.ForeColor = System.Drawing.Color.Black;
+			this.btnPatientSearch.Location = new System.Drawing.Point(455, 94);
+			this.btnPatientSearch.Name = "btnPatientSearch";
+			this.btnPatientSearch.Size = new System.Drawing.Size(196, 88);
+			this.btnPatientSearch.TabIndex = 5;
+			this.btnPatientSearch.Text = "Patient Search";
+			this.btnPatientSearch.UseVisualStyleBackColor = false;
+			// 
+			// btnRoomSearch
+			// 
+			this.btnRoomSearch.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.btnRoomSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnRoomSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnRoomSearch.ForeColor = System.Drawing.Color.Black;
+			this.btnRoomSearch.Location = new System.Drawing.Point(670, 94);
+			this.btnRoomSearch.Name = "btnRoomSearch";
+			this.btnRoomSearch.Size = new System.Drawing.Size(196, 88);
+			this.btnRoomSearch.TabIndex = 6;
+			this.btnRoomSearch.Text = "Room Search";
+			this.btnRoomSearch.UseVisualStyleBackColor = false;
+			// 
+			// btnAdmission
+			// 
+			this.btnAdmission.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.btnAdmission.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnAdmission.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnAdmission.ForeColor = System.Drawing.Color.Black;
+			this.btnAdmission.Location = new System.Drawing.Point(12, 210);
+			this.btnAdmission.Name = "btnAdmission";
+			this.btnAdmission.Size = new System.Drawing.Size(196, 88);
+			this.btnAdmission.TabIndex = 7;
+			this.btnAdmission.Text = "Admission";
+			this.btnAdmission.UseVisualStyleBackColor = false;
+			// 
+			// btnTreatmentBilling
+			// 
+			this.btnTreatmentBilling.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.btnTreatmentBilling.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnTreatmentBilling.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnTreatmentBilling.ForeColor = System.Drawing.Color.Black;
+			this.btnTreatmentBilling.Location = new System.Drawing.Point(236, 210);
+			this.btnTreatmentBilling.Name = "btnTreatmentBilling";
+			this.btnTreatmentBilling.Size = new System.Drawing.Size(196, 88);
+			this.btnTreatmentBilling.TabIndex = 9;
+			this.btnTreatmentBilling.Text = "Treatment Billing";
+			this.btnTreatmentBilling.UseVisualStyleBackColor = false;
+			// 
+			// btnBilling
+			// 
+			this.btnBilling.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.btnBilling.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnBilling.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnBilling.ForeColor = System.Drawing.Color.Black;
+			this.btnBilling.Location = new System.Drawing.Point(455, 210);
+			this.btnBilling.Name = "btnBilling";
+			this.btnBilling.Size = new System.Drawing.Size(196, 88);
+			this.btnBilling.TabIndex = 11;
+			this.btnBilling.Text = "Billing";
+			this.btnBilling.UseVisualStyleBackColor = false;
+			// 
+			// btnDischarge
+			// 
+			this.btnDischarge.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.btnDischarge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnDischarge.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnDischarge.ForeColor = System.Drawing.Color.Black;
+			this.btnDischarge.Location = new System.Drawing.Point(670, 210);
+			this.btnDischarge.Name = "btnDischarge";
+			this.btnDischarge.Size = new System.Drawing.Size(196, 88);
+			this.btnDischarge.TabIndex = 12;
+			this.btnDischarge.Text = "Discharge";
+			this.btnDischarge.UseVisualStyleBackColor = false;
+			// 
+			// btnDischargeSummary
+			// 
+			this.btnDischargeSummary.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.btnDischargeSummary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnDischargeSummary.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnDischargeSummary.ForeColor = System.Drawing.Color.Black;
+			this.btnDischargeSummary.Location = new System.Drawing.Point(12, 324);
+			this.btnDischargeSummary.Name = "btnDischargeSummary";
+			this.btnDischargeSummary.Size = new System.Drawing.Size(196, 88);
+			this.btnDischargeSummary.TabIndex = 13;
+			this.btnDischargeSummary.Text = "Discharge Summary";
+			this.btnDischargeSummary.UseVisualStyleBackColor = false;
+			// 
+			// HospitalStaffMenuForm
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size(901, 510);
+			this.Controls.Add(this.btnDischargeSummary);
+			this.Controls.Add(this.btnDischarge);
+			this.Controls.Add(this.btnBilling);
+			this.Controls.Add(this.btnTreatmentBilling);
+			this.Controls.Add(this.btnAdmission);
+			this.Controls.Add(this.btnRoomSearch);
+			this.Controls.Add(this.btnPatientSearch);
+			this.Controls.Add(this.btnPatientInfo);
+			this.Controls.Add(this.btnRoomMgmt);
+			this.Controls.Add(this.panel2);
+			this.Controls.Add(this.panel1);
+			this.Name = "HospitalStaffMenuForm";
+			this.Text = "HospitalStaffMenuForm";
+			this.Load += new System.EventHandler(this.HospitalStaffMenuForm_Load_1);
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
+			this.panel2.ResumeLayout(false);
+			this.panel2.PerformLayout();
+			this.ResumeLayout(false);
 
         }
 

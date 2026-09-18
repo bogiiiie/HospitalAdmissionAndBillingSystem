@@ -14,6 +14,7 @@
 //   - Only seeds users if the table is empty
 // ============================================================
 
+using System;                       // For AppDomain
 using System.Configuration;         // For ConfigurationManager (reads App.config)
 using System.Data.SQLite;           // For SQLiteConnection, SQLiteCommand
 using System.IO;                    // For File, Directory, Path
@@ -30,10 +31,11 @@ namespace BusinessLogic.Repository
 		// EnsureDatabase
 		// Public method that Program.cs calls at startup.
 		// 1. Reads the connection string from App.config
-		// 2. Makes sure the App_Data folder exists
-		// 3. Opens the .db file (creating it if it doesn't exist)
-		// 4. Creates the Users table if missing
-		// 5. Seeds admin01 and areyes if the table is empty
+		// 2. Resolves |DataDirectory| to a real path
+		// 3. Makes sure the App_Data folder exists
+		// 4. Opens the .db file (creating it if it doesn't exist)
+		// 5. Creates the Users table if missing
+		// 6. Seeds admin01 and areyes if the table is empty
 		// ------------------------------------------------------------
 		public static void EnsureDatabase()
 		{
@@ -43,32 +45,42 @@ namespace BusinessLogic.Repository
 			string connectionString = ConfigurationManager
 				.ConnectionStrings["HospitalDB"].ConnectionString;
 
-			// Step 2: Figure out the actual file path on disk.
-			// SQLiteConnectionStringBuilder parses the connection string
-			// and lets us read the "Data Source" (the .db file path).
-			var builder = new SQLiteConnectionStringBuilder(connectionString);
+			// Step 2: Resolve |DataDirectory| manually.
+			// .NET replaces this placeholder only when OPENING a connection.
+			// Since we need the actual file path (to create the folder),
+			// we resolve it here ourselves.
+			//
+			// If |DataDirectory| isn't set (unusual), fall back to the
+			// application's base directory.
+			string dataDirectory = AppDomain.CurrentDomain
+				.GetData("DataDirectory")?.ToString()
+				?? AppDomain.CurrentDomain.BaseDirectory;
+
+			string resolvedConnectionString = connectionString
+				.Replace("|DataDirectory|", dataDirectory);
+
+			// Step 3: Parse the RESOLVED connection string to get the file path.
+			// The unresolved version still has "|DataDirectory|" which
+			// Path.GetDirectoryName can't handle.
+			var builder = new SQLiteConnectionStringBuilder(resolvedConnectionString);
 			string dbPath = builder.DataSource;
 
-			// Step 3: Make sure the folder that holds the .db file exists.
+			// Step 4: Make sure the folder that holds the .db file exists.
 			// If App_Data doesn't exist yet, the app can't create the .db file.
-			// So we create the folder here.
 			string directory = Path.GetDirectoryName(dbPath);
 			if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
 			{
 				Directory.CreateDirectory(directory);
 			}
 
-			// Step 4: Open (or create) the SQLite database file.
-			// If HospitalDB.db already exists, this just opens it.
-			// If it doesn't exist, SQLite creates an empty one.
+			// Step 5: Open (or create) the SQLite database file.
+			// We use the ORIGINAL connection string here because SQLite
+			// knows how to resolve |DataDirectory| on its own.
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
 
-				// ---- Step 4a: Create the Users table if it doesn't exist ----
-				// This SQL matches what's inside DB/Table/Users.sql.
-				// It's duplicated here so the app can self-initialize
-				// without needing the .sql files at runtime.
+				// ---- 5a: Create the Users table if it doesn't exist ----
 				string createUsersTable = @"
                     CREATE TABLE IF NOT EXISTS Users (
                         UserID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -81,28 +93,20 @@ namespace BusinessLogic.Repository
 
 				using (var cmd = new SQLiteCommand(createUsersTable, conn))
 				{
-					cmd.ExecuteNonQuery();  // ExecuteNonQuery for CREATE/INSERT/UPDATE/DELETE
+					cmd.ExecuteNonQuery();
 				}
 
-				// ---- Step 4b: Seed the two test accounts if the table is empty ----
-				// We only want to insert seed data if the table has no rows.
-				// Otherwise we'd duplicate users every time the app starts.
-				string countSql = "SELECT COUNT(*) FROM Users;";
+				// ---- 5b: Seed the two test accounts if the table is empty ----
 				long userCount = 0;
+				string countSql = "SELECT COUNT(*) FROM Users;";
 
 				using (var cmd = new SQLiteCommand(countSql, conn))
 				{
-					// ExecuteScalar returns the first column of the first row
-					// as a single object. We cast it to long (SQLite's integer type).
 					userCount = (long)cmd.ExecuteScalar();
 				}
 
-				// Only insert if the table is currently empty.
 				if (userCount == 0)
 				{
-					// These hashes match the ones in DB/PostScript/SeedUsers.sql.
-					//   admin01  -> admin123
-					//   areyes   -> staff123
 					string seedUsers = @"
                         INSERT INTO Users (Username, PasswordHash, Role, IsActive) VALUES
                         ('admin01',
@@ -119,8 +123,6 @@ namespace BusinessLogic.Repository
 						cmd.ExecuteNonQuery();
 					}
 				}
-
-				// Connection closes automatically when 'using' ends.
 			}
 		}
 	}
