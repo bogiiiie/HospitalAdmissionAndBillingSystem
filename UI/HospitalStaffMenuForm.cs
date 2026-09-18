@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace UI
 {
-	public partial class LoginForm : Form
-	{
-		public LoginForm()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class HospitalStaffMenuForm : Form
+    {
+        public HospitalStaffMenuForm()
+        {
+            InitializeComponent();
+        }
+    }
 }

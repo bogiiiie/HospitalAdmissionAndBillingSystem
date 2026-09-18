@@ -10,11 +10,13 @@ using System.Windows.Forms;
 
 namespace UI
 {
-	public partial class MainMenuForm : Form
-	{
-		public MainMenuForm()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class LoginPage : Form
+    {
+        public LoginPage()
+        {
+            InitializeComponent();
+        }
+
+      
+    }
 }
