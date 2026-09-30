@@ -28,43 +28,6 @@ namespace UI
             _role = role;
         }
 
-        private void HospitalStaffMenuForm_Load(object sender, EventArgs e)
-        {
-            if (lblUserInfo != null)
-            {
-                lblUserInfo.Text = $"Logged in as: {_username} | Role: {_role}";
-            }
-        }
-
-        private void lblLogout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            PerformLogout();
-        }
-
-        private void btnLogout_Click(object sender, EventArgs e)
-        {
-            PerformLogout();
-        }
-
-        private void PerformLogout()
-        {
-            if (_loginPage != null)
-            {
-                _loginPage.Show();
-            }
-            this.Close();
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-
-            if (e.CloseReason == CloseReason.UserClosing && _loginPage != null && !_loginPage.Visible)
-            {
-                _loginPage.Show();
-            }
-        }
-
         private void HospitalStaffMenuForm_Load_1(object sender, EventArgs e)
         {
 
