@@ -123,6 +123,45 @@ namespace BusinessLogic.Repository
 						cmd.ExecuteNonQuery();
 					}
 				}
+
+				// ---- 5c: Create the Rooms table if it doesn't exist ----
+				string createRoomsTable = @"
+											CREATE TABLE IF NOT EXISTS Rooms (
+												RoomID INTEGER PRIMARY KEY AUTOINCREMENT,
+												RoomNumber TEXT NOT NULL UNIQUE,
+												RoomType TEXT NOT NULL,
+												Rate REAL NOT NULL,
+												Status TEXT NOT NULL DEFAULT 'Available'
+											);";
+
+				using (var cmd = new SQLiteCommand(createRoomsTable, conn))
+				{
+					cmd.ExecuteNonQuery();
+				}
+
+				// ---- 5d: Seed sample rooms if the table is empty ----
+				long roomCount = 0;
+				using (var cmd = new SQLiteCommand("SELECT COUNT(*) FROM Rooms;", conn))
+				{
+					roomCount = (long)cmd.ExecuteScalar();
+				}
+
+				if (roomCount == 0)
+				{
+					string seedRooms = @"
+						INSERT INTO Rooms (RoomNumber, RoomType, Rate, Status) VALUES
+							('201', 'Ward',         800.00,  'Available'),
+							('202', 'Private',      2500.00, 'Available'),
+							('203', 'Semi-Private', 1200.00, 'Maintenance'),
+							('204', 'Private',      1500.00, 'Available'),
+							('205', 'ICU',          4000.00, 'Available'),
+							('206', 'Ward',         800.00,  'Available');";
+
+					using (var cmd = new SQLiteCommand(seedRooms, conn))
+					{
+						cmd.ExecuteNonQuery();
+					}
+				}
 			}
 		}
 	}
