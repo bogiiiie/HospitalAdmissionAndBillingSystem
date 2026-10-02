@@ -1,6 +1,6 @@
 # Hospital Admission and Billing System
 
-**Group 4 | BT3101**
+**Group 4 | BT3101**  
 Stephen William De Jesus · Lynet Cielo · Luster Tamanu Mangaliman · Neil Jerson Manalo
 
 A hospital admission and billing system with role-based access for **Admin** and **Hospital Staff**.
@@ -35,7 +35,7 @@ Track the project's tasks, progress, and development status through our GitHub K
 
 ---
 
-## 🎬 Demo
+## 🎬 Demos
 
 ### Login and Role-Based Main Menu
 
@@ -43,16 +43,22 @@ Track the project's tasks, progress, and development status through our GitHub K
   <img src="assets/LoginDemo.gif" alt="Login Demo" width="900">
 </p>
 
+### Room Management — CRUD and Status Filter
+
+<p align="center">
+  <img src="assets/RoomManagementDemo.gif" alt="Room Management Demo" width="900">
+</p>
+
 ---
 
 ## 👥 Team Roles
 
-| Member                   | GitHub                                                             | Role(s)                                                           |
-| ------------------------ | ------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| Stephen William De Jesus | [@bogiiiie](https://github.com/bogiiiie)                           | Product Owner + Reviewer + Database Developer + Backend Developer |
-| Lynet Cielo              | [@lynet-cielo-disputado](https://github.com/lynet-cielo-disputado) | UX/UI Designer + Frontend Developer                               |
-| Luster Tamanu Mangaliman | [@lstrmangaliman-hue](https://github.com/lstrmangaliman-hue)       | Backend Developer                                                 |
-| Neil Jerson Manalo       | Pending collaborator                                               | Backend Developer                                                 |
+| Member                   | GitHub                                                             | Role(s)                                                                     |
+| ------------------------ | ------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| Stephen William De Jesus | [@bogiiiie](https://github.com/bogiiiie)                           | Product Owner + Reviewer + Database Developer + Backend Developer + Tester  |
+| Lynet Cielo              | [@lynet-cielo-disputado](https://github.com/lynet-cielo-disputado) | UX/UI Designer + Frontend Developer                                         |
+| Luster Tamanu Mangaliman | [@lstrmangaliman-hue](https://github.com/lstrmangaliman-hue)       | Backend Developer + Tester                                                  |
+| Neil Jerson Manalo       | Pending collaborator                                               | Backend Developer                                                           |
 
 ---
 
@@ -61,7 +67,7 @@ Track the project's tasks, progress, and development status through our GitHub K
 | #  | Module                             | Status        |
 | -- | ---------------------------------- | ------------- |
 | 1  | Login & Main Menu (role-based)     | ✅ **Done**    |
-| 2  | Room Management                    | ⬜ Not started |
+| 2  | Room Management                    | ✅ **Done**    |
 | 3  | Patient Information Maintenance    | ⬜ Not started |
 | 4  | Patient Info Search                | ⬜ Not started |
 | 5  | Patient Room Search                | ⬜ Not started |
@@ -81,9 +87,11 @@ Track the project's tasks, progress, and development status through our GitHub K
 
 * **US-001 Role-Based Navigation** — Main Menu shows different tiles for Admin and Hospital Staff.
 * **US-002 Login** — SHA256 password hashing with SQLite database, automatically created on first run.
-* **Database Initialization** — `DatabaseInitializer.EnsureDatabase()` creates and seeds the database.
-* **UI Wiring** — `LoginPage` is connected to `LoginController` and role-based menu forms.
-* **Demo GIF** — `assets/LoginDemo.gif` shows the working login flow.
+* **US-003a Manage Rooms (Admin)** — Full CRUD with validation, unique room number enforcement, and blocked deletion of occupied rooms.
+* **US-003b View Room Availability (Staff)** — Read-only view with role-based UI hiding and status filter.
+* **Database Initialization** — `DatabaseInitializer.EnsureDatabase()` creates and seeds the Users and Rooms tables.
+* **UI Wiring** — `LoginPage` is connected to `LoginController`, and `RoomManagementForm` is connected to `RoomController`.
+* **Demo GIFs** — `assets/LoginDemo.gif` and `assets/RoomManagementDemo.gif` show the working modules.
 
 ### In Progress
 
@@ -91,7 +99,6 @@ Track the project's tasks, progress, and development status through our GitHub K
 
 ### Not Started
 
-* **US-003a / US-003b** — Room Management
 * **US-004a / US-004b** — Patient Information Maintenance
 * **US-005** — Patient Info Search
 * **US-006** — Patient Room Search
@@ -111,36 +118,46 @@ Track the project's tasks, progress, and development status through our GitHub K
 HospitalAdmissionAndBillingSystem/
 │
 ├── Model/
-│   └── # Data models and entities
+│   ├── User.cs
+│   └── Room.cs
 │
 ├── BusinessLogic/
 │   ├── Controller/
-│   │   └── # Business rules, validation, and application logic
+│   │   ├── LoginController.cs
+│   │   └── RoomController.cs
 │   │
 │   └── Repository/
-│       └── # Database access and data operations
+│       ├── UserRepository.cs
+│       ├── RoomRepository.cs
+│       └── DatabaseInitializer.cs
 │
 ├── DB/
 │   ├── Table/
-│   │   └── # Table creation scripts
+│   │   ├── Users.sql
+│   │   └── Rooms.sql
 │   │
-│   ├── View/
-│   │   └── # Database view scripts
-│   │
-│   ├── StoredProc/
-│   │   └── # Stored procedure scripts
+│   ├── View/                          (empty for now)
+│   ├── StoredProc/                    (empty — SQLite has no stored procs)
 │   │
 │   └── PostScript/
-│       └── # Post-database setup scripts
+│       ├── SeedUsers.sql
+│       └── SeedRooms.sql
 │
 ├── UI/
-│   ├── App_Data/
-│   │   └── # SQLite database file
+│   ├── App_Data/                      (auto-created at runtime)
+│   │   └── HospitalDB.db
 │   │
-│   └── # Windows Forms application
+│   ├── LoginPage.cs
+│   ├── AdminMenuForm.cs
+│   ├── HospitalStaffMenuForm.cs
+│   ├── RoomManagementForm.cs
+│   ├── AddEditRoomForm.cs
+│   ├── Program.cs
+│   └── App.config
 │
 ├── assets/
-│   └── LoginDemo.gif
+│   ├── LoginDemo.gif
+│   └── RoomManagementDemo.gif
 │
 └── README.md
 ```
@@ -151,7 +168,8 @@ HospitalAdmissionAndBillingSystem/
 ┌───────────────────────────────────────────────────────────┐
 │                          UI                               │
 │                 Windows Forms Application                 │
-│    (LoginPage, AdminMenuForm, HospitalStaffMenuForm)      │
+│    (LoginPage, AdminMenuForm, HospitalStaffMenuForm,      │
+│     RoomManagementForm, AddEditRoomForm)                  │
 └───────────────────────────┬───────────────────────────────┘
                             │
                             │ calls
@@ -161,7 +179,8 @@ HospitalAdmissionAndBillingSystem/
 │                                                           │
 │   ┌───────────────────┐         ┌─────────────────────┐  │
 │   │    Controller     │────────▶│     Repository      │  │
-│   │  (LoginController)│         │  (UserRepository,   │  │
+│   │  (LoginController,│         │  (UserRepository,   │  │
+│   │   RoomController) │         │   RoomRepository,   │  │
 │   │                   │         │   DatabaseInitializer)│ │
 │   │  Business rules   │         │  Database access    │  │
 │   └─────────┬─────────┘         └──────────┬──────────┘  │
@@ -252,13 +271,13 @@ The system provides different access levels depending on the logged-in user's ro
 
 ### Admin
 
-The Admin account has access to administrative functions available through the Admin Main Menu.
+The Admin account has access to administrative functions available through the Admin Main Menu, including full CRUD for Room Management (add, edit, delete rooms).
 
 ### Hospital Staff
 
-The Hospital Staff account has access to hospital staff functions available through the Hospital Staff Main Menu.
+The Hospital Staff account has access to hospital staff functions available through the Hospital Staff Main Menu, including a read-only view of rooms with status filtering.
 
-The role is determined during login and is used to display the appropriate main menu.
+The role is determined during login and is used to display the appropriate main menu and control access to role-specific features.
 
 ---
 
@@ -291,7 +310,7 @@ Each feature is developed in its own branch before being reviewed and merged int
 
 ## 📌 Current Status
 
-The **Login and Role-Based Main Menu** module is currently completed.
+The **Login**, **Role-Based Main Menu**, and **Room Management** modules are currently completed.
 
 The remaining modules will be implemented progressively, following the project's feature-branch and pull-request workflow.
 
@@ -300,3 +319,4 @@ The remaining modules will be implemented progressively, following the project's
 ## 📄 License
 
 This project was developed as part of the **BT3101** academic requirements for **Group 4**.
+```

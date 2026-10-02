@@ -48,7 +48,9 @@
     <Folder Include="View\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="PostScript\SeedRooms.sql" />
     <Content Include="PostScript\SeedUsers.sql" />
+    <Content Include="Table\Rooms.sql" />
     <Content Include="Table\Users.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

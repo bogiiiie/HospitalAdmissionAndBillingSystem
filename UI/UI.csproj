@@ -54,6 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddEditRoomForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddEditRoomForm.Designer.cs">
+      <DependentUpon>AddEditRoomForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdminMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +80,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoomManagementForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RoomManagementForm.Designer.cs">
+      <DependentUpon>RoomManagementForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AdminMenuForm.resx">
       <DependentUpon>AdminMenuForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -92,6 +104,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="RoomManagementForm.resx">
+      <DependentUpon>RoomManagementForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

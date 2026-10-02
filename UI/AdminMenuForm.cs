@@ -45,5 +45,12 @@ namespace UI
             }
             this.Close();
         }
-    }
+
+		private void btnRoomMgmt_Click(object sender, EventArgs e)
+		{
+			RoomManagementForm roomForm = new RoomManagementForm(_loginPage, _username, _role);
+			roomForm.Show();
+			this.Hide();
+		}
+	}
 }
