@@ -111,6 +111,7 @@
 			this.btnRoomMgmt.TabIndex = 3;
 			this.btnRoomMgmt.Text = "Room Mgmt";
 			this.btnRoomMgmt.UseVisualStyleBackColor = false;
+			this.btnRoomMgmt.Click += new System.EventHandler(this.btnRoomMgmt_Click);
 			// 
 			// btnPatientInfo
 			// 
