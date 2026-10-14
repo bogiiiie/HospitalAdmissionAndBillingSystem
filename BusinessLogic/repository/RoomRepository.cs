@@ -132,14 +132,14 @@ namespace BusinessLogic.Repository
 		}
 
 		// ==========================================
-		// DELETE — Remove a room
+		// DELETE — Soft delete (mark Status as 'Deleted')
 		// ==========================================
 		public void DeleteRoom(string roomNumber)
 		{
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
-				string sql = "DELETE FROM Rooms WHERE RoomNumber = @RoomNumber;";
+				string sql = "UPDATE Rooms SET Status = 'Deleted' WHERE RoomNumber = @RoomNumber;";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
 				{
