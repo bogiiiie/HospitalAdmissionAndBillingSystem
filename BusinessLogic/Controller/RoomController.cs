@@ -106,9 +106,11 @@ namespace BusinessLogic.Controller
 			if (existing == null)
 				return "Room not found.";
 
-			// Cannot delete an occupied room
 			if (existing.Status == "Occupied")
 				return "Cannot delete an occupied room.";
+
+			if (existing.Status == "Deleted")
+				return "Room is already deleted.";
 
 			repository.DeleteRoom(number);
 			return "OK";

@@ -37,14 +37,20 @@ namespace UI
             }
         }
 
-        private void llblLogout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (_loginPage != null)
-            {
-                _loginPage.Show();
-            }
-            this.Close();
-        }
+		private void llblLogout_LinkClicked(object sender, EventArgs e)
+		{
+			DialogResult choice = MessageBox.Show(
+				"Are you sure you want to log out?",
+				"Logout",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question);
+
+			if (choice == DialogResult.Yes)
+			{
+				if (_loginPage != null) _loginPage.Show();
+				this.Close();
+			}
+		}
 
 		private void btnRoomMgmt_Click(object sender, EventArgs e)
 		{
