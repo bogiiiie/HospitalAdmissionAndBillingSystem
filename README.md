@@ -35,22 +35,6 @@ Track the project's tasks, progress, and development status through our GitHub K
 
 ---
 
-## 🎬 Demos
-
-### Login and Role-Based Main Menu
-
-<p align="center">
-  <img src="assets/LoginDemo.gif" alt="Login Demo" width="900">
-</p>
-
-### Room Management — CRUD and Status Filter
-
-<p align="center">
-  <img src="assets/RoomManagementDemo.gif" alt="Room Management Demo" width="900">
-</p>
-
----
-
 ## 👥 Team Roles
 
 | Member                   | GitHub                                                             | Role(s)                                                                     |
@@ -68,7 +52,7 @@ Track the project's tasks, progress, and development status through our GitHub K
 | -- | ---------------------------------- | ------------- |
 | 1  | Login & Main Menu (role-based)     | ✅ **Done**    |
 | 2  | Room Management                    | ✅ **Done**    |
-| 3  | Patient Information Maintenance    | ⬜ Not started |
+| 3  | Patient Information Maintenance    | ✅ **Done**    |
 | 4  | Patient Info Search                | ⬜ Not started |
 | 5  | Patient Room Search                | ⬜ Not started |
 | 6  | Admission                          | ⬜ Not started |
@@ -87,11 +71,15 @@ Track the project's tasks, progress, and development status through our GitHub K
 
 * **US-001 Role-Based Navigation** — Main Menu shows different tiles for Admin and Hospital Staff.
 * **US-002 Login** — SHA256 password hashing with SQLite database, automatically created on first run.
-* **US-003a Manage Rooms (Admin)** — Full CRUD with validation, unique room number enforcement, and blocked deletion of occupied rooms.
+* **US-003a Manage Rooms (Admin)** — Full CRUD with validation, unique room number enforcement, and blocked deletion of occupied rooms. Occupied rooms lock the Edit/Delete actions with a hover tooltip. Deleted rooms can be reactivated back to Available.
 * **US-003b View Room Availability (Staff)** — Read-only view with role-based UI hiding and status filter.
-* **Database Initialization** — `DatabaseInitializer.EnsureDatabase()` creates and seeds the Users and Rooms tables.
-* **UI Wiring** — `LoginPage` is connected to `LoginController`, and `RoomManagementForm` is connected to `RoomController`.
-* **Demo GIFs** — `assets/LoginDemo.gif` and `assets/RoomManagementDemo.gif` show the working modules.
+* **US-004a Register/Update Patients (Staff)** — Add and edit patient records with validation. Staff can deactivate patients (soft delete) but cannot permanently delete. Guardian/emergency contact fields included.
+* **US-004b Full Patient Record Management (Admin)** — Same access as Staff plus the ability to permanently delete records that have no admission or billing history, and to reactivate deactivated patients.
+* **Guardian Defaults** — Default guardian is "Self — Patient arrived alone" for conscious adults. Guardian is mandatory for minors and patients unable to provide information.
+* **Database Initialization** — `DatabaseInitializer.EnsureDatabase()` creates and seeds the Users, Rooms, and Patients tables by reading SQL scripts from `PostScript/*.sql`.
+* **Seed Data** — 2 users, 100 rooms, and 50 patients seeded on first run.
+* **UI Wiring** — `LoginPage` connected to `LoginController`; `RoomManagementForm` connected to `RoomController`; `PatientInformationForm` connected to `PatientController`.
+* **Persistent Header** — All module forms share the same header bar with logged-in user info, Main Menu button, and Logout button.
 
 ### In Progress
 
@@ -99,7 +87,6 @@ Track the project's tasks, progress, and development status through our GitHub K
 
 ### Not Started
 
-* **US-004a / US-004b** — Patient Information Maintenance
 * **US-005** — Patient Info Search
 * **US-006** — Patient Room Search
 * **US-007a / US-007b** — Admission
@@ -119,45 +106,53 @@ HospitalAdmissionAndBillingSystem/
 │
 ├── Model/
 │   ├── User.cs
-│   └── Room.cs
+│   ├── Room.cs
+│   └── Patient.cs
 │
 ├── BusinessLogic/
 │   ├── Controller/
 │   │   ├── LoginController.cs
-│   │   └── RoomController.cs
+│   │   ├── RoomController.cs
+│   │   └── PatientController.cs
 │   │
 │   └── Repository/
 │       ├── UserRepository.cs
 │       ├── RoomRepository.cs
+│       ├── PatientRepository.cs
 │       └── DatabaseInitializer.cs
 │
 ├── DB/
 │   ├── Table/
 │   │   ├── Users.sql
-│   │   └── Rooms.sql
+│   │   ├── Rooms.sql
+│   │   └── Patients.sql
 │   │
 │   ├── View/                          (empty for now)
 │   ├── StoredProc/                    (empty — SQLite has no stored procs)
 │   │
 │   └── PostScript/
 │       ├── SeedUsers.sql
-│       └── SeedRooms.sql
+│       ├── SeedRooms.sql
+│       └── SeedPatients.sql
 │
 ├── UI/
 │   ├── App_Data/                      (auto-created at runtime)
 │   │   └── HospitalDB.db
+│   │
+│   ├── PostScript/                    (linked from DB project, copied to bin)
+│   │   ├── SeedUsers.sql
+│   │   ├── SeedRooms.sql
+│   │   └── SeedPatients.sql
 │   │
 │   ├── LoginPage.cs
 │   ├── AdminMenuForm.cs
 │   ├── HospitalStaffMenuForm.cs
 │   ├── RoomManagementForm.cs
 │   ├── AddEditRoomForm.cs
+│   ├── PatientInformationForm.cs
+│   ├── AddEditPatientForm.cs
 │   ├── Program.cs
 │   └── App.config
-│
-├── assets/
-│   ├── LoginDemo.gif
-│   └── RoomManagementDemo.gif
 │
 └── README.md
 ```
@@ -169,7 +164,8 @@ HospitalAdmissionAndBillingSystem/
 │                          UI                               │
 │                 Windows Forms Application                 │
 │    (LoginPage, AdminMenuForm, HospitalStaffMenuForm,      │
-│     RoomManagementForm, AddEditRoomForm)                  │
+│     RoomManagementForm, AddEditRoomForm,                  │
+│     PatientInformationForm, AddEditPatientForm)           │
 └───────────────────────────┬───────────────────────────────┘
                             │
                             │ calls
@@ -180,7 +176,8 @@ HospitalAdmissionAndBillingSystem/
 │   ┌───────────────────┐         ┌─────────────────────┐  │
 │   │    Controller     │────────▶│     Repository      │  │
 │   │  (LoginController,│         │  (UserRepository,   │  │
-│   │   RoomController) │         │   RoomRepository,   │  │
+│   │   RoomController, │         │   RoomRepository,   │  │
+│   │   PatientController)│       │   PatientRepository,│  │
 │   │                   │         │   DatabaseInitializer)│ │
 │   │  Business rules   │         │  Database access    │  │
 │   └─────────┬─────────┘         └──────────┬──────────┘  │
@@ -259,6 +256,8 @@ The SQLite database will be automatically created and initialized on the first r
 DatabaseInitializer.EnsureDatabase();
 ```
 
+The initializer also reads seed data from the `PostScript/*.sql` files, which are linked into the UI project and copied to the output folder on build.
+
 ### 5. Log In
 
 Use one of the demo accounts provided at the top of this README.
@@ -271,11 +270,17 @@ The system provides different access levels depending on the logged-in user's ro
 
 ### Admin
 
-The Admin account has access to administrative functions available through the Admin Main Menu, including full CRUD for Room Management (add, edit, delete rooms).
+The Admin account has access to administrative functions available through the Admin Main Menu, including:
+
+* **Room Management** — Full CRUD (add, edit, delete, reactivate rooms).
+* **Patient Information** — Full add/edit/delete access. Admin can permanently delete a patient **only if they have no admission or billing history**, otherwise the record can only be deactivated. Admin can also reactivate deactivated patients.
 
 ### Hospital Staff
 
-The Hospital Staff account has access to hospital staff functions available through the Hospital Staff Main Menu, including a read-only view of rooms with status filtering.
+The Hospital Staff account has access to hospital staff functions available through the Hospital Staff Main Menu, including:
+
+* **Room Management** — Read-only view of rooms with status filtering.
+* **Patient Information** — Add and edit patient records. Staff can **deactivate** a patient (soft delete), but **cannot permanently delete** any record.
 
 The role is determined during login and is used to display the appropriate main menu and control access to role-specific features.
 
@@ -310,7 +315,7 @@ Each feature is developed in its own branch before being reviewed and merged int
 
 ## 📌 Current Status
 
-The **Login**, **Role-Based Main Menu**, and **Room Management** modules are currently completed.
+The **Login**, **Role-Based Main Menu**, **Room Management**, and **Patient Information Maintenance** modules are currently completed.
 
 The remaining modules will be implemented progressively, following the project's feature-branch and pull-request workflow.
 
@@ -319,4 +324,3 @@ The remaining modules will be implemented progressively, following the project's
 ## 📄 License
 
 This project was developed as part of the **BT3101** academic requirements for **Group 4**.
-```
