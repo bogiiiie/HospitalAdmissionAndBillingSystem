@@ -27,31 +27,13 @@ namespace BusinessLogic.Repository
 	/// </summary>
 	public static class DatabaseInitializer
 	{
-		// ------------------------------------------------------------
-		// EnsureDatabase
-		// Public method that Program.cs calls at startup.
-		// 1. Reads the connection string from App.config
-		// 2. Resolves |DataDirectory| to a real path
-		// 3. Makes sure the App_Data folder exists
-		// 4. Opens the .db file (creating it if it doesn't exist)
-		// 5. Creates the Users table if missing
-		// 6. Seeds admin01 and areyes if the table is empty
-		// ------------------------------------------------------------
 		public static void EnsureDatabase()
 		{
-			// Step 1: Get the connection string that was set in App.config.
-			// Example value:
-			//   Data Source=|DataDirectory|\App_Data\HospitalDB.db;Version=3;
+			// Step 1: Get the connection string from App.config
 			string connectionString = ConfigurationManager
 				.ConnectionStrings["HospitalDB"].ConnectionString;
 
-			// Step 2: Resolve |DataDirectory| manually.
-			// .NET replaces this placeholder only when OPENING a connection.
-			// Since we need the actual file path (to create the folder),
-			// we resolve it here ourselves.
-			//
-			// If |DataDirectory| isn't set (unusual), fall back to the
-			// application's base directory.
+			// Step 2: Resolve |DataDirectory| so we can create the folder if missing
 			string dataDirectory = AppDomain.CurrentDomain
 				.GetData("DataDirectory")?.ToString()
 				?? AppDomain.CurrentDomain.BaseDirectory;
@@ -59,109 +41,140 @@ namespace BusinessLogic.Repository
 			string resolvedConnectionString = connectionString
 				.Replace("|DataDirectory|", dataDirectory);
 
-			// Step 3: Parse the RESOLVED connection string to get the file path.
-			// The unresolved version still has "|DataDirectory|" which
-			// Path.GetDirectoryName can't handle.
+			// Step 3: Find the .db file path and make sure its folder exists
 			var builder = new SQLiteConnectionStringBuilder(resolvedConnectionString);
 			string dbPath = builder.DataSource;
-
-			// Step 4: Make sure the folder that holds the .db file exists.
-			// If App_Data doesn't exist yet, the app can't create the .db file.
 			string directory = Path.GetDirectoryName(dbPath);
 			if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
 			{
 				Directory.CreateDirectory(directory);
 			}
 
-			// Step 5: Open (or create) the SQLite database file.
-			// We use the ORIGINAL connection string here because SQLite
-			// knows how to resolve |DataDirectory| on its own.
+			// Step 4: Open (or create) the SQLite DB and set up tables + seed data
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
 
-				// ---- 5a: Create the Users table if it doesn't exist ----
+				// --------------------------------------------------------
+				// USERS
+				// --------------------------------------------------------
 				string createUsersTable = @"
-                    CREATE TABLE IF NOT EXISTS Users (
-                        UserID INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Username TEXT NOT NULL UNIQUE,
-                        PasswordHash TEXT NOT NULL,
-                        Role TEXT NOT NULL,
-                        IsActive INTEGER NOT NULL DEFAULT 1,
-                        CreatedAt TEXT NOT NULL DEFAULT (datetime('now'))
-                    );";
+					CREATE TABLE IF NOT EXISTS Users (
+						UserID INTEGER PRIMARY KEY AUTOINCREMENT,
+						Username TEXT NOT NULL UNIQUE,
+						PasswordHash TEXT NOT NULL,
+						Role TEXT NOT NULL,
+						IsActive INTEGER NOT NULL DEFAULT 1,
+						CreatedAt TEXT NOT NULL DEFAULT (datetime('now'))
+					);";
 
 				using (var cmd = new SQLiteCommand(createUsersTable, conn))
-				{
 					cmd.ExecuteNonQuery();
-				}
 
-				// ---- 5b: Seed the two test accounts if the table is empty ----
 				long userCount = 0;
-				string countSql = "SELECT COUNT(*) FROM Users;";
-
-				using (var cmd = new SQLiteCommand(countSql, conn))
-				{
+				using (var cmd = new SQLiteCommand("SELECT COUNT(*) FROM Users;", conn))
 					userCount = (long)cmd.ExecuteScalar();
-				}
 
 				if (userCount == 0)
 				{
-					string seedUsers = @"
-                        INSERT INTO Users (Username, PasswordHash, Role, IsActive) VALUES
-                        ('admin01',
-                         '240BE518FABD2724DDB6F04EEB1DA5967448D7E831C08C8FA822809F74C720A9',
-                         'Admin',
-                         1),
-                        ('areyes',
-                         '10176E7B7B24D317ACFCF8D2064CFD2F24E154F7B5A96603077D5EF813D6A6B6',
-                         'Hospital Staff',
-                         1);";
-
-					using (var cmd = new SQLiteCommand(seedUsers, conn))
-					{
-						cmd.ExecuteNonQuery();
-					}
+					RunSqlScript(conn, "SeedUsers.sql");
 				}
 
-				// ---- 5c: Create the Rooms table if it doesn't exist ----
+				// --------------------------------------------------------
+				// ROOMS
+				// --------------------------------------------------------
 				string createRoomsTable = @"
-											CREATE TABLE IF NOT EXISTS Rooms (
-												RoomID INTEGER PRIMARY KEY AUTOINCREMENT,
-												RoomNumber TEXT NOT NULL UNIQUE,
-												RoomType TEXT NOT NULL,
-												Rate REAL NOT NULL,
-												Status TEXT NOT NULL DEFAULT 'Available'
-											);";
+					CREATE TABLE IF NOT EXISTS Rooms (
+						RoomID INTEGER PRIMARY KEY AUTOINCREMENT,
+						RoomNumber TEXT NOT NULL UNIQUE,
+						RoomType TEXT NOT NULL,
+						Rate REAL NOT NULL,
+						Status TEXT NOT NULL DEFAULT 'Available'
+					);";
 
 				using (var cmd = new SQLiteCommand(createRoomsTable, conn))
-				{
 					cmd.ExecuteNonQuery();
-				}
 
-				// ---- 5d: Seed sample rooms if the table is empty ----
 				long roomCount = 0;
 				using (var cmd = new SQLiteCommand("SELECT COUNT(*) FROM Rooms;", conn))
-				{
 					roomCount = (long)cmd.ExecuteScalar();
-				}
 
 				if (roomCount == 0)
 				{
-					string seedRooms = @"
-						INSERT INTO Rooms (RoomNumber, RoomType, Rate, Status) VALUES
-							('201', 'Ward',         800.00,  'Available'),
-							('202', 'Private',      2500.00, 'Available'),
-							('203', 'Semi-Private', 1200.00, 'Maintenance'),
-							('204', 'Private',      1500.00, 'Available'),
-							('205', 'ICU',          4000.00, 'Available'),
-							('206', 'Ward',         800.00,  'Available');";
-
-					using (var cmd = new SQLiteCommand(seedRooms, conn))
-					{
-						cmd.ExecuteNonQuery();
-					}
+					RunSqlScript(conn, "SeedRooms.sql");
 				}
+
+				// --------------------------------------------------------
+				// PATIENTS
+				// Added guardian fields per the professor's feedback.
+				// IsActive = 0 means "deactivated" (soft removed) — kept
+				// so admission/billing history stays intact.
+				// --------------------------------------------------------
+				string createPatientsTable = @"
+					CREATE TABLE IF NOT EXISTS Patients (
+						PatientID INTEGER PRIMARY KEY AUTOINCREMENT,
+						PatientCode TEXT NOT NULL UNIQUE,
+						FirstName TEXT NOT NULL,
+						MiddleName TEXT,
+						LastName TEXT NOT NULL,
+						DateOfBirth TEXT NOT NULL,
+						Gender TEXT NOT NULL,
+						ContactNumber TEXT NOT NULL,
+						Address TEXT,
+						CivilStatus TEXT,
+						Occupation TEXT,
+						GuardianName TEXT,
+						GuardianRelationship TEXT,
+						GuardianContact TEXT,
+						GuardianAddress TEXT,
+						GuardianPresent INTEGER NOT NULL DEFAULT 0,
+						EmergencyContactName TEXT,
+						EmergencyContactNumber TEXT,
+						IsActive INTEGER NOT NULL DEFAULT 1,
+						CreatedAt TEXT NOT NULL DEFAULT (datetime('now'))
+					);";
+
+				using (var cmd = new SQLiteCommand(createPatientsTable, conn))
+					cmd.ExecuteNonQuery();
+
+				long patientCount = 0;
+				using (var cmd = new SQLiteCommand("SELECT COUNT(*) FROM Patients;", conn))
+					patientCount = (long)cmd.ExecuteScalar();
+
+				if (patientCount == 0)
+				{
+					RunSqlScript(conn, "SeedPatients.sql");
+				}
+			}
+		}
+
+		// ------------------------------------------------------------
+		// RunSqlScript
+		// Reads a .sql file from the PostScript folder next to the .exe
+		// and runs it against the given connection.
+		//
+		// The .sql files are linked from the DB project into the UI
+		// project with "Copy if newer", so at runtime they live at
+		// <exe folder>/PostScript/<filename>.
+		// ------------------------------------------------------------
+		private static void RunSqlScript(SQLiteConnection conn, string fileName)
+		{
+			string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+			string path = Path.Combine(baseDir, "PostScript", fileName);
+
+			if (!File.Exists(path))
+			{
+				throw new FileNotFoundException(
+					"SQL seed file not found: " + path +
+					"\nMake sure " + fileName +
+					" is linked into the UI project and set to 'Copy if newer'.");
+			}
+
+			string sql = File.ReadAllText(path);
+
+			using (var cmd = new SQLiteCommand(sql, conn))
+			{
+				cmd.ExecuteNonQuery();
 			}
 		}
 	}

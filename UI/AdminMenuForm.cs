@@ -58,5 +58,12 @@ namespace UI
 			roomForm.Show();
 			this.Hide();
 		}
+
+		private void btnPatientInfo_Click(object sender, EventArgs e)
+		{
+			PatientInformationForm form = new PatientInformationForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
 	}
 }
