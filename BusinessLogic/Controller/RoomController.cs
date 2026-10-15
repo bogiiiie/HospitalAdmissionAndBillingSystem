@@ -62,6 +62,7 @@ namespace BusinessLogic.Controller
 
 		// ==========================================
 		// UPDATE — Edit with validation
+		// Added a check so an occupied room cannot be edited.
 		// ==========================================
 		public string UpdateRoom(string number, string type, decimal rate, string status)
 		{
@@ -82,6 +83,10 @@ namespace BusinessLogic.Controller
 			if (existing == null)
 				return "Room not found.";
 
+			// Occupied rooms are locked — the patient must be discharged first
+			if (existing.Status == "Occupied")
+				return "Cannot edit an occupied room. Discharge the patient first.";
+
 			Room room = new Room
 			{
 				RoomNumber = number,
@@ -90,7 +95,12 @@ namespace BusinessLogic.Controller
 				Status = status
 			};
 
-			repository.UpdateRoom(room);
+			int rows = repository.UpdateRoom(room);
+
+			// Safety net — if the DB guard also blocked it (0 rows updated)
+			if (rows == 0)
+				return "Cannot edit an occupied room. Discharge the patient first.";
+
 			return "OK";
 		}
 
@@ -112,7 +122,12 @@ namespace BusinessLogic.Controller
 			if (existing.Status == "Deleted")
 				return "Room is already deleted.";
 
-			repository.DeleteRoom(number);
+			int rows = repository.DeleteRoom(number);
+
+			// Same idea — if the DB-level guard rejected the change
+			if (rows == 0)
+				return "Cannot delete an occupied room.";
+
 			return "OK";
 		}
 

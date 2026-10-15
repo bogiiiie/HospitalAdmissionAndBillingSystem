@@ -39,6 +39,11 @@ namespace UI
 			dgvRooms.AlternatingRowsDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
 			dgvRooms.RowsDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
 
+			// Wire the mouse enter/leave events so we can show a tooltip on
+			// disabled Edit/Delete buttons when a room is occupied.
+			dgvRooms.CellMouseEnter += dgvRooms_CellMouseEnter;
+			dgvRooms.CellMouseLeave += dgvRooms_CellMouseLeave;
+
 			lblUserInfo.Text = "Logged in as: " + _username + "   |   Role: " + _role;
 
 
@@ -185,6 +190,7 @@ namespace UI
 
 		// =============================================================
 		// CELL PAINTING — draws two buttons inside the Actions cell
+		// Disables them (gray) when the room is Occupied.
 		// =============================================================
 		private void dgvRooms_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
 		{
@@ -201,6 +207,7 @@ namespace UI
 			string roomNumber = dgvRooms.Rows[e.RowIndex].Cells["colRoomNumber"].Value.ToString();
 			Room room = controller.GetRoomByNumber(roomNumber);
 			bool isDeleted = (room != null && room.Status == "Deleted");
+			bool isOccupied = (room != null && room.Status == "Occupied");
 
 			// Paint the background first
 			e.PaintBackground(e.CellBounds, true);
@@ -230,8 +237,21 @@ namespace UI
 				buttonWidth,
 				buttonHeight);
 
-			// Draw Edit button (green)
-			using (var brush = new SolidBrush(Color.FromArgb(16, 185, 129)))
+			// Pick colors — gray when occupied, normal when not
+			Color editColor = isOccupied
+				? Color.FromArgb(203, 213, 225)   // slate-300 gray
+				: Color.FromArgb(16, 185, 129);   // emerald-500 green
+
+			Color deleteColor = isOccupied
+				? Color.FromArgb(203, 213, 225)   // same gray
+				: Color.FromArgb(239, 68, 68);    // red-500
+
+			Color textColor = isOccupied
+				? Color.FromArgb(100, 116, 139)   // slate-500 — softer text on gray
+				: Color.White;
+
+			// Draw Edit button
+			using (var brush = new SolidBrush(editColor))
 			{
 				e.Graphics.FillRectangle(brush, editRect);
 			}
@@ -240,11 +260,11 @@ namespace UI
 				"Edit",
 				new Font("Segoe UI", 9F, FontStyle.Bold),
 				editRect,
-				Color.White,
+				textColor,
 				TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
-			// Draw Delete button (red)
-			using (var brush = new SolidBrush(Color.FromArgb(239, 68, 68)))
+			// Draw Delete button
+			using (var brush = new SolidBrush(deleteColor))
 			{
 				e.Graphics.FillRectangle(brush, deleteRect);
 			}
@@ -253,14 +273,51 @@ namespace UI
 				"Delete",
 				new Font("Segoe UI", 9F, FontStyle.Bold),
 				deleteRect,
-				Color.White,
+				textColor,
 				TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
 			e.Handled = true;
 		}
 
 		// =============================================================
+		// CELL MOUSE ENTER / LEAVE — show a tooltip on disabled buttons
+		// Only fires for Occupied rooms in the Actions column.
+		// =============================================================
+		private void dgvRooms_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex < 0) return;
+			if (e.ColumnIndex < 0) return;
+			if (dgvRooms.Columns[e.ColumnIndex].Name != "colActions") return;
+			if (_role != "Admin") return;
+
+			string roomNumber = dgvRooms.Rows[e.RowIndex].Cells["colRoomNumber"].Value.ToString();
+			Room room = controller.GetRoomByNumber(roomNumber);
+
+			if (room != null && room.Status == "Occupied")
+			{
+				dgvRooms.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText =
+					"Cannot modify — room has an active patient.";
+			}
+			else
+			{
+				// Clear any leftover tooltip when not occupied
+				dgvRooms.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText = "";
+			}
+		}
+
+		private void dgvRooms_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+		{
+			// Clear the tooltip when the mouse leaves the cell
+			if (e.RowIndex < 0) return;
+			if (e.ColumnIndex < 0) return;
+			if (dgvRooms.Columns[e.ColumnIndex].Name != "colActions") return;
+
+			dgvRooms.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText = "";
+		}
+
+		// =============================================================
 		// CELL CLICK — detect which button was clicked
+		// Blocks clicks when the room is Occupied.
 		// =============================================================
 		private void dgvRooms_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
@@ -282,6 +339,17 @@ namespace UI
 			Room room = controller.GetRoomByNumber(roomNumber);
 			if (room == null) return;
 			if (room.Status == "Deleted") return;
+
+			// Occupied rooms are locked — both Edit and Delete are disabled
+			if (room.Status == "Occupied")
+			{
+				MessageBox.Show(
+					"Cannot modify an occupied room. Discharge the patient first.",
+					"Room Occupied",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+				return;
+			}
 
 			if (mousePos.X < midX)
 			{
