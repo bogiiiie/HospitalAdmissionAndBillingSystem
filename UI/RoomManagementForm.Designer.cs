@@ -28,9 +28,9 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.headerPanel = new System.Windows.Forms.Panel();
 			this.btnLogout = new System.Windows.Forms.Button();
 			this.lblUserInfo = new System.Windows.Forms.Label();
@@ -64,6 +64,7 @@
 			this.lblStatusFilter = new System.Windows.Forms.Label();
 			this.lblSubtitle = new System.Windows.Forms.Label();
 			this.lblTitle = new System.Windows.Forms.Label();
+			this.btnMainMenu = new System.Windows.Forms.Button();
 			this.headerPanel.SuspendLayout();
 			this.sidebarPanel.SuspendLayout();
 			this.contentPanel.SuspendLayout();
@@ -75,6 +76,7 @@
 			// headerPanel
 			// 
 			this.headerPanel.BackColor = System.Drawing.Color.White;
+			this.headerPanel.Controls.Add(this.btnMainMenu);
 			this.headerPanel.Controls.Add(this.btnLogout);
 			this.headerPanel.Controls.Add(this.lblUserInfo);
 			this.headerPanel.Controls.Add(this.lblBrand);
@@ -107,7 +109,7 @@
 			this.lblUserInfo.AutoSize = true;
 			this.lblUserInfo.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblUserInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblUserInfo.Location = new System.Drawing.Point(963, 23);
+			this.lblUserInfo.Location = new System.Drawing.Point(807, 23);
 			this.lblUserInfo.Name = "lblUserInfo";
 			this.lblUserInfo.Size = new System.Drawing.Size(271, 23);
 			this.lblUserInfo.TabIndex = 1;
@@ -368,9 +370,9 @@
 			// 
 			// cardPanel
 			// 
-			this.cardPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.cardPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.cardPanel.BackColor = System.Drawing.Color.White;
 			this.cardPanel.Controls.Add(this.dgvRooms);
 			this.cardPanel.Controls.Add(this.lblCount);
@@ -384,45 +386,45 @@
 			this.dgvRooms.AllowUserToAddRows = false;
 			this.dgvRooms.AllowUserToDeleteRows = false;
 			this.dgvRooms.AllowUserToResizeRows = false;
-			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(253)))));
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 12F);
-			dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
-			dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
-			this.dgvRooms.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-			this.dgvRooms.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(253)))));
+			dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 12F);
+			dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
+			dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+			dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+			dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
+			this.dgvRooms.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
+			this.dgvRooms.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.dgvRooms.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.dgvRooms.BackgroundColor = System.Drawing.Color.White;
 			this.dgvRooms.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.dgvRooms.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
 			this.dgvRooms.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-			dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-			dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
-			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-			this.dgvRooms.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
+			dataGridViewCellStyle11.Font = new System.Drawing.Font("Segoe UI", 9F);
+			dataGridViewCellStyle11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+			dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+			dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
+			dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+			this.dgvRooms.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
 			this.dgvRooms.ColumnHeadersHeight = 55;
 			this.dgvRooms.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.dgvRooms.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-			this.colRoomNumber,
-			this.colType,
-			this.colRate,
-			this.colStatus,
-			this.colActions});
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-			dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 12F);
-			dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
-			dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
-			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.dgvRooms.DefaultCellStyle = dataGridViewCellStyle3;
+            this.colRoomNumber,
+            this.colType,
+            this.colRate,
+            this.colStatus,
+            this.colActions});
+			dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle12.BackColor = System.Drawing.Color.White;
+			dataGridViewCellStyle12.Font = new System.Drawing.Font("Segoe UI", 9F);
+			dataGridViewCellStyle12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
+			dataGridViewCellStyle12.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+			dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+			dataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
+			dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.dgvRooms.DefaultCellStyle = dataGridViewCellStyle12;
 			this.dgvRooms.EnableHeadersVisualStyles = false;
 			this.dgvRooms.GridColor = System.Drawing.Color.White;
 			this.dgvRooms.Location = new System.Drawing.Point(0, 0);
@@ -496,8 +498,8 @@
 			// 
 			// toolbarPanel
 			// 
-			this.toolbarPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.toolbarPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.toolbarPanel.BackColor = System.Drawing.Color.White;
 			this.toolbarPanel.Controls.Add(this.btnAdd);
 			this.toolbarPanel.Controls.Add(this.cmbStatusFilter);
@@ -569,6 +571,23 @@
 			this.lblTitle.TabIndex = 0;
 			this.lblTitle.Text = "Room Management";
 			// 
+			// btnMainMenu
+			// 
+			this.btnMainMenu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnMainMenu.BackColor = System.Drawing.Color.White;
+			this.btnMainMenu.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnMainMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
+			this.btnMainMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnMainMenu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnMainMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
+			this.btnMainMenu.Location = new System.Drawing.Point(1104, 18);
+			this.btnMainMenu.Name = "btnMainMenu";
+			this.btnMainMenu.Size = new System.Drawing.Size(110, 32);
+			this.btnMainMenu.TabIndex = 3;
+			this.btnMainMenu.Text = "Main Menu";
+			this.btnMainMenu.UseVisualStyleBackColor = false;
+			this.btnMainMenu.Click += new System.EventHandler(this.btnMainMenu_Click);
+			// 
 			// RoomManagementForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -638,5 +657,6 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colActions;
 		private System.Windows.Forms.Label lblCount;
+		private System.Windows.Forms.Button btnMainMenu;
 	}
 }

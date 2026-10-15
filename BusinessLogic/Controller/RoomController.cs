@@ -141,5 +141,27 @@ namespace BusinessLogic.Controller
 
 			return repository.SearchRooms(keyword);
 		}
+
+		// ==========================================
+		// REACTIVATE — Restore a Deleted room to Available
+		// ==========================================
+		public string ReactivateRoom(string number)
+		{
+			if (string.IsNullOrWhiteSpace(number))
+				return "Room number is required.";
+
+			Room existing = repository.GetRoomByNumber(number);
+			if (existing == null)
+				return "Room not found.";
+
+			if (existing.Status != "Deleted")
+				return "Room is not deleted.";
+
+			int rows = repository.ReactivateRoom(number);
+			if (rows == 0)
+				return "Failed to reactivate room.";
+
+			return "OK";
+		}
 	}
 }

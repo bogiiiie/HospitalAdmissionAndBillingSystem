@@ -48,10 +48,12 @@
     <Folder Include="View\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="PostScript\SeedPatients.sql" />
     <Content Include="PostScript\SeedRooms.sql" />
     <Content Include="PostScript\SeedUsers.sql" />
-    <Content Include="Table\Rooms.sql" />
-    <Content Include="Table\Users.sql" />
+    <None Include="Table\Patients.sql" />
+    <None Include="Table\Rooms.sql" />
+    <None Include="Table\Users.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -197,6 +197,7 @@
 			this.btnPatientInfo.TabIndex = 3;
 			this.btnPatientInfo.Text = "👤\nPatient Information";
 			this.btnPatientInfo.UseVisualStyleBackColor = false;
+			this.btnPatientInfo.Click += new System.EventHandler(this.btnPatientInfo_Click);
 			// 
 			// btnPatientSearch
 			// 
