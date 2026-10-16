@@ -273,6 +273,7 @@
 			this.btnAdmissionLog.TabIndex = 7;
 			this.btnAdmissionLog.Text = "📜\nAdmission Log";
 			this.btnAdmissionLog.UseVisualStyleBackColor = false;
+			this.btnAdmissionLog.Click += new System.EventHandler(this.btnAdmissionLog_Click);
 			// 
 			// btnTreatmentBilling
 			// 

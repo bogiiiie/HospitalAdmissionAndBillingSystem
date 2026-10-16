@@ -72,11 +72,23 @@
     <Compile Include="AdminMenuForm.Designer.cs">
       <DependentUpon>AdminMenuForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AdmissionDetailsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdmissionDetailsDialog.Designer.cs">
+      <DependentUpon>AdmissionDetailsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdmissionForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AdmissionForm.Designer.cs">
       <DependentUpon>AdmissionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AdmissionLogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdmissionLogForm.Designer.cs">
+      <DependentUpon>AdmissionLogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EditAdmissionForm.cs">
       <SubType>Form</SubType>

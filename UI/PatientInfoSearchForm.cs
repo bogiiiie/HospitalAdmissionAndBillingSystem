@@ -96,7 +96,12 @@ namespace UI
 				form.Show();
 				this.Close();
 			};
-			btnNavAdmissionLog.Click += (s, e) => MessageBox.Show("Admission Log module coming soon.");
+			btnNavAdmissionLog.Click += (s, e) =>
+			{
+				AdmissionLogForm form = new AdmissionLogForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
 			btnNavTreatment.Click += (s, e) => MessageBox.Show("Treatment / Billing module coming soon.");
 			btnNavBilling.Click += (s, e) => MessageBox.Show("Billing module coming soon.");
 			btnNavDischarge.Click += (s, e) => MessageBox.Show("Discharge module coming soon.");
@@ -114,9 +119,7 @@ namespace UI
 				btnNavAdmission,
 			};
 
-			if (_role == "Admin")
-				visibleButtons.Add(btnNavAdmissionLog);
-
+			visibleButtons.Add(btnNavAdmissionLog);
 			visibleButtons.Add(btnNavTreatment);
 			visibleButtons.Add(btnNavBilling);
 			visibleButtons.Add(btnNavDischarge);

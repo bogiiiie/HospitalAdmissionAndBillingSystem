@@ -2,15 +2,8 @@
 {
 	partial class HospitalStaffMenuForm
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null))
@@ -22,10 +15,6 @@
 
 		#region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		private void InitializeComponent()
 		{
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -40,6 +29,7 @@
 			this.btnPatientSearch = new System.Windows.Forms.Button();
 			this.btnRoomSearch = new System.Windows.Forms.Button();
 			this.btnAdmission = new System.Windows.Forms.Button();
+			this.btnAdmissionLog = new System.Windows.Forms.Button();
 			this.btnTreatmentBilling = new System.Windows.Forms.Button();
 			this.btnBilling = new System.Windows.Forms.Button();
 			this.btnDischarge = new System.Windows.Forms.Button();
@@ -118,9 +108,9 @@
 			// 
 			// cardPanel
 			// 
-			this.cardPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.cardPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.cardPanel.BackColor = System.Drawing.Color.White;
 			this.cardPanel.Controls.Add(this.tilesPanel);
 			this.cardPanel.Location = new System.Drawing.Point(35, 110);
@@ -140,10 +130,11 @@
 			this.tilesPanel.Controls.Add(this.btnPatientSearch, 2, 0);
 			this.tilesPanel.Controls.Add(this.btnRoomSearch, 3, 0);
 			this.tilesPanel.Controls.Add(this.btnAdmission, 0, 1);
-			this.tilesPanel.Controls.Add(this.btnTreatmentBilling, 1, 1);
-			this.tilesPanel.Controls.Add(this.btnBilling, 2, 1);
-			this.tilesPanel.Controls.Add(this.btnDischarge, 3, 1);
-			this.tilesPanel.Controls.Add(this.btnDischargeSummary, 0, 2);
+			this.tilesPanel.Controls.Add(this.btnAdmissionLog, 1, 1);
+			this.tilesPanel.Controls.Add(this.btnTreatmentBilling, 2, 1);
+			this.tilesPanel.Controls.Add(this.btnBilling, 3, 1);
+			this.tilesPanel.Controls.Add(this.btnDischarge, 0, 2);
+			this.tilesPanel.Controls.Add(this.btnDischargeSummary, 1, 2);
 			this.tilesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tilesPanel.Location = new System.Drawing.Point(0, 0);
 			this.tilesPanel.Name = "tilesPanel";
@@ -250,6 +241,25 @@
 			this.btnAdmission.UseVisualStyleBackColor = false;
 			this.btnAdmission.Click += new System.EventHandler(this.btnAdmission_Click);
 			// 
+			// btnAdmissionLog
+			// 
+			this.btnAdmissionLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+			this.btnAdmissionLog.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnAdmissionLog.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.btnAdmissionLog.FlatAppearance.BorderSize = 0;
+			this.btnAdmissionLog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(254)))));
+			this.btnAdmissionLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnAdmissionLog.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnAdmissionLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(78)))), ((int)(((byte)(216)))));
+			this.btnAdmissionLog.Location = new System.Drawing.Point(349, 207);
+			this.btnAdmissionLog.Margin = new System.Windows.Forms.Padding(15);
+			this.btnAdmissionLog.Name = "btnAdmissionLog";
+			this.btnAdmissionLog.Size = new System.Drawing.Size(284, 142);
+			this.btnAdmissionLog.TabIndex = 8;
+			this.btnAdmissionLog.Text = "📜\nAdmission Log";
+			this.btnAdmissionLog.UseVisualStyleBackColor = false;
+			this.btnAdmissionLog.Click += new System.EventHandler(this.btnAdmissionLog_Click);
+			// 
 			// btnTreatmentBilling
 			// 
 			this.btnTreatmentBilling.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
@@ -260,7 +270,7 @@
 			this.btnTreatmentBilling.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnTreatmentBilling.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnTreatmentBilling.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(78)))), ((int)(((byte)(216)))));
-			this.btnTreatmentBilling.Location = new System.Drawing.Point(349, 207);
+			this.btnTreatmentBilling.Location = new System.Drawing.Point(663, 207);
 			this.btnTreatmentBilling.Margin = new System.Windows.Forms.Padding(15);
 			this.btnTreatmentBilling.Name = "btnTreatmentBilling";
 			this.btnTreatmentBilling.Size = new System.Drawing.Size(284, 142);
@@ -278,7 +288,7 @@
 			this.btnBilling.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnBilling.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnBilling.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(78)))), ((int)(((byte)(216)))));
-			this.btnBilling.Location = new System.Drawing.Point(663, 207);
+			this.btnBilling.Location = new System.Drawing.Point(977, 207);
 			this.btnBilling.Margin = new System.Windows.Forms.Padding(15);
 			this.btnBilling.Name = "btnBilling";
 			this.btnBilling.Size = new System.Drawing.Size(284, 142);
@@ -296,10 +306,10 @@
 			this.btnDischarge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnDischarge.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnDischarge.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(78)))), ((int)(((byte)(216)))));
-			this.btnDischarge.Location = new System.Drawing.Point(977, 207);
+			this.btnDischarge.Location = new System.Drawing.Point(35, 379);
 			this.btnDischarge.Margin = new System.Windows.Forms.Padding(15);
 			this.btnDischarge.Name = "btnDischarge";
-			this.btnDischarge.Size = new System.Drawing.Size(284, 142);
+			this.btnDischarge.Size = new System.Drawing.Size(284, 144);
 			this.btnDischarge.TabIndex = 12;
 			this.btnDischarge.Text = "🚪\nDischarge";
 			this.btnDischarge.UseVisualStyleBackColor = false;
@@ -314,7 +324,7 @@
 			this.btnDischargeSummary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnDischargeSummary.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnDischargeSummary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(78)))), ((int)(((byte)(216)))));
-			this.btnDischargeSummary.Location = new System.Drawing.Point(35, 379);
+			this.btnDischargeSummary.Location = new System.Drawing.Point(349, 379);
 			this.btnDischargeSummary.Margin = new System.Windows.Forms.Padding(15);
 			this.btnDischargeSummary.Name = "btnDischargeSummary";
 			this.btnDischargeSummary.Size = new System.Drawing.Size(284, 144);
@@ -383,6 +393,7 @@
 		private System.Windows.Forms.Button btnBilling;
 		private System.Windows.Forms.Button btnTreatmentBilling;
 		private System.Windows.Forms.Button btnAdmission;
+		private System.Windows.Forms.Button btnAdmissionLog;
 		private System.Windows.Forms.Button btnRoomSearch;
 		private System.Windows.Forms.Button btnPatientSearch;
 		private System.Windows.Forms.Button btnPatientInfo;

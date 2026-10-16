@@ -86,5 +86,12 @@ namespace UI
 			form.Show();
 			this.Close();
 		}
+
+		private void btnAdmissionLog_Click(object sender, EventArgs e)
+		{
+			AdmissionLogForm form = new AdmissionLogForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
 	}
 }
