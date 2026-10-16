@@ -216,6 +216,7 @@
 			this.btnPatientSearch.TabIndex = 4;
 			this.btnPatientSearch.Text = "🔍\nPatient Info Search";
 			this.btnPatientSearch.UseVisualStyleBackColor = false;
+			this.btnPatientSearch.Click += new System.EventHandler(this.btnPatientSearch_Click);
 			// 
 			// btnRoomSearch
 			// 

@@ -65,5 +65,12 @@ namespace UI
 			form.Show();
 			this.Close();
 		}
+
+		private void btnPatientSearch_Click(object sender, EventArgs e)
+		{
+			PatientInfoSearchForm form = new PatientInfoSearchForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
 	}
 }
