@@ -102,22 +102,23 @@ As a system user, I want to check room availability or find what room a patient 
 ---
 
 ## 🗂️ Solution Structure (Files Added / Modified)
+
+```
 HospitalAdmissionAndBillingSystem/
 │
 ├── UI/
-│ ├── PatientInfoSearchForm.cs ← NEW
-│ ├── PatientInfoSearchForm.Designer.cs ← NEW
-│ ├── PatientDetailsForm.cs ← NEW (read-only modal)
-│ ├── PatientDetailsForm.Designer.cs ← NEW
-│ ├── PatientRoomSearchForm.cs ← NEW
-│ ├── PatientRoomSearchForm.Designer.cs ← NEW
-│ │
-│ ├── RoomManagementForm.cs ← modified (sidebar wiring)
-│ ├── PatientInformationForm.cs ← modified (sidebar wiring)
-│ ├── AdminMenuForm.cs ← modified (tile)
-│ └── HospitalStaffMenuForm.cs ← modified (tile)
-
-text
+│   ├── PatientInfoSearchForm.cs            ← NEW
+│   ├── PatientInfoSearchForm.Designer.cs   ← NEW
+│   ├── PatientDetailsForm.cs               ← NEW (read-only modal)
+│   ├── PatientDetailsForm.Designer.cs      ← NEW
+│   ├── PatientRoomSearchForm.cs            ← NEW
+│   ├── PatientRoomSearchForm.Designer.cs   ← NEW
+│   │
+│   ├── RoomManagementForm.cs               ← modified (sidebar wiring)
+│   ├── PatientInformationForm.cs           ← modified (sidebar wiring)
+│   ├── AdminMenuForm.cs                    ← modified (tile)
+│   └── HospitalStaffMenuForm.cs            ← modified (tile)
+```
 
 No new models, no new controllers, no new repositories, no new tables — both modules reuse the existing `PatientController` and `RoomController`.
 
@@ -137,33 +138,34 @@ No new models, no new controllers, no new repositories, no new tables — both m
 ---
 
 ## 🏛️ Architecture Overview
-┌───────────────────────────────────────────────────────┐
-│ UI │
-│ PatientInfoSearchForm + PatientDetailsForm │
-│ PatientRoomSearchForm │
-└──────────────────────┬────────────────────────────────┘
-│ calls
-▼
-┌───────────────────────────────────────────────────────┐
-│ BusinessLogic │
-│ │
-│ ┌────────────────────┐ ┌────────────────────┐ │
-│ │ PatientController │ │ RoomController │ │
-│ └─────────┬──────────┘ └─────────┬──────────┘ │
-│ │ │ │
-│ ▼ ▼ │
-│ ┌────────────────────┐ ┌────────────────────┐ │
-│ │PatientRepository │ │RoomRepository │ │
-│ └─────────┬──────────┘ └─────────┬──────────┘ │
-└─────────────┼─────────────────────────┼──────────────┘
-│ │
-▼ ▼
-┌───────────────┐ ┌───────────────┐
-│ Patients │ │ Rooms │
-│ table │ │ table │
-└───────────────┘ └───────────────┘
 
-text
+```
+┌───────────────────────────────────────────────────────┐
+│                        UI                             │
+│  PatientInfoSearchForm + PatientDetailsForm           │
+│  PatientRoomSearchForm                                │
+└──────────────────────┬────────────────────────────────┘
+                       │ calls
+                       ▼
+┌───────────────────────────────────────────────────────┐
+│                   BusinessLogic                       │
+│                                                       │
+│   ┌────────────────────┐    ┌────────────────────┐   │
+│   │ PatientController  │    │  RoomController    │   │
+│   └─────────┬──────────┘    └─────────┬──────────┘   │
+│             │                         │              │
+│             ▼                         ▼              │
+│   ┌────────────────────┐    ┌────────────────────┐   │
+│   │PatientRepository   │    │RoomRepository      │   │
+│   └─────────┬──────────┘    └─────────┬──────────┘   │
+└─────────────┼─────────────────────────┼──────────────┘
+              │                         │
+              ▼                         ▼
+      ┌───────────────┐         ┌───────────────┐
+      │  Patients     │         │   Rooms       │
+      │  table        │         │   table       │
+      └───────────────┘         └───────────────┘
+```
 
 Both search forms are **pure read layers** on top of existing controllers. No state is created or modified.
 
@@ -192,56 +194,60 @@ Both search forms are **pure read layers** on top of existing controllers. No st
 | `btnLogout_Click` | Logout clicked | Confirms → returns to `LoginPage` |
 
 **Admission Status placeholder logic:**
+
 ```csharp
 // Until the Admission module exists, every patient is shown as "Not Admitted".
 string admissionStatus = "Not Admitted";
-UI/PatientDetailsForm.cs
-Purpose: Read-only modal that shows a patient's full record.
+```
 
-Namespace: UI
+### `UI/PatientDetailsForm.cs`
 
-Class: public partial class PatientDetailsForm : Form
+- **Purpose:** Read-only modal that shows a patient's full record.
+- **Namespace:** `UI`
+- **Class:** `public partial class PatientDetailsForm : Form`
+- **Constructor:** `PatientDetailsForm(Patient patient)` — pass the patient to display.
 
-Constructor: PatientDetailsForm(Patient patient) — pass the patient to display.
+| Method | Trigger | Action |
+|--------|---------|--------|
+| `PatientDetailsForm_Load` | Form opens | Sets all label values from the `Patient` object |
+| `btnClose_Click` | Close clicked | Closes the modal |
 
-Method	Trigger	Action
-PatientDetailsForm_Load	Form opens	Sets all label values from the Patient object
-btnClose_Click	Close clicked	Closes the modal
-Sections displayed:
+**Sections displayed:**
 
-Patient Information — First/Middle/Last Name, DOB, Gender, Age, Contact, Address, Civil Status, Occupation
+1. **Patient Information** — First/Middle/Last Name, DOB, Gender, Age, Contact, Address, Civil Status, Occupation
+2. **Guardian / Emergency Contact** — Guardian name, relationship, contact, address, present flag
+3. **Secondary Emergency Contact** — Emergency name, contact
 
-Guardian / Emergency Contact — Guardian name, relationship, contact, address, present flag
+All fields are **read-only labels** — no textboxes, no editing.
 
-Secondary Emergency Contact — Emergency name, contact
+### `UI/PatientRoomSearchForm.cs`
 
-All fields are read-only labels — no textboxes, no editing.
+- **Purpose:** Search UI for finding room availability and locating patients.
+- **Namespace:** `UI`
+- **Class:** `public partial class PatientRoomSearchForm : Form`
 
-UI/PatientRoomSearchForm.cs
-Purpose: Search UI for finding room availability and locating patients.
+| Method | Trigger | Action |
+|--------|---------|--------|
+| `PatientRoomSearchForm_Load` | Form opens | Sets user info, populates status filter, wires sidebar, runs initial search |
+| `RunSearch()` | internal | Fetches rooms, filters out Deleted, applies status filter, populates grid |
+| `btnSearch_Click` | Search button clicked | Calls `RunSearch()` |
+| `txtSearch_KeyDown` | Enter key in search box | Calls `RunSearch()` |
+| `cmbStatus_SelectedIndexChanged` | Status filter changed | Calls `RunSearch()` |
+| `ContainsDigit(string)` | internal helper | Determines if the keyword is a name vs. room number |
+| `btnMainMenu_Click` | Main Menu clicked | Routes to `AdminMenuForm` or `HospitalStaffMenuForm` |
+| `btnLogout_Click` | Logout clicked | Confirms → returns to `LoginPage` |
 
-Namespace: UI
+**Occupant placeholder logic:**
 
-Class: public partial class PatientRoomSearchForm : Form
-
-Method	Trigger	Action
-PatientRoomSearchForm_Load	Form opens	Sets user info, populates status filter, wires sidebar, runs initial search
-RunSearch()	internal	Fetches rooms, filters out Deleted, applies status filter, populates grid
-btnSearch_Click	Search button clicked	Calls RunSearch()
-txtSearch_KeyDown	Enter key in search box	Calls RunSearch()
-cmbStatus_SelectedIndexChanged	Status filter changed	Calls RunSearch()
-ContainsDigit(string)	internal helper	Determines if the keyword is a name vs. room number
-btnMainMenu_Click	Main Menu clicked	Routes to AdminMenuForm or HospitalStaffMenuForm
-btnLogout_Click	Logout clicked	Confirms → returns to LoginPage
-Occupant placeholder logic:
-
-csharp
+```csharp
 // TODO: Replace with real lookup once the Admissions table exists.
 // For now, show "—" for every room.
 string occupant = "—";
-Smart empty state:
+```
 
-csharp
+**Smart empty state:**
+
+```csharp
 if (rooms.Count == 0)
 {
     lblNoResults.Text = keywordLooksLikeName
@@ -250,9 +256,15 @@ if (rooms.Count == 0)
     lblNoResults.Visible = true;
     dgvRooms.Visible = false;
 }
-🔄 Data Flow
-Searching for a patient
-text
+```
+
+---
+
+## 🔄 Data Flow
+
+### Searching for a patient
+
+```
 User                 UI                    Controller            Repository           SQLite
  │                   │                         │                     │                 │
  │  types keyword ──►│                         │                     │                 │
@@ -268,8 +280,11 @@ User                 UI                    Controller            Repository     
  │  clicks row       │  GetPatientByCode ────► │                     │                 │
  │                   │◄── Patient ──────────── │                     │                 │
  │                   │  opens PatientDetails  │                     │                 │
-Searching for a room
-text
+```
+
+### Searching for a room
+
+```
 User                 UI                    Controller            Repository           SQLite
  │                   │                         │                     │                 │
  │  types keyword ──►│                         │                     │                 │
@@ -282,94 +297,119 @@ User                 UI                    Controller            Repository     
  │                   │  apply status filter    │                     │                 │
  │                   │  populate grid          │                     │                 │
  │  sees results ◄───│                         │                     │                 │
-🗄️ Database
-No new tables. Both search modules reuse:
+```
 
-Patients table (created by the Patient Information module)
+---
 
-Rooms table (created by Room Management)
+## 🗄️ Database
 
-Placeholder columns until the Admission module is built:
+**No new tables.** Both search modules reuse:
 
-PatientInfoSearchForm → Admission Status column shows "Not Admitted" for every patient
+- `Patients` table (created by the Patient Information module)
+- `Rooms` table (created by Room Management)
 
-PatientRoomSearchForm → Occupant column shows "—" for every room
+**Placeholder columns until the Admission module is built:**
 
-Both will become dynamic once the Admissions table is created in US-007.
+- `PatientInfoSearchForm` → Admission Status column shows "Not Admitted" for every patient
+- `PatientRoomSearchForm` → Occupant column shows "—" for every room
 
-👥 Team Contributions (Search Modules)
-Member	GitHub	Contribution
-Stephen William De Jesus	@bogiiiie	UI (PatientInfoSearchForm, PatientDetailsForm, PatientRoomSearchForm), code-behind logic, sidebar wiring, testing
-Lynet Cielo	@lynet-cielo-disputado	UI Designer (PatientInfoSearchForm.Designer.cs, PatientDetailsForm.Designer.cs, PatientRoomSearchForm.Designer.cs)
-Luster Tamanu Mangaliman	@lstrmangaliman-hue	Tester
-Neil Jerson Manalo	(pending)	Backend Developer
-✅ Progress Tracker
-Done
-US-005 Patient Info Search — Full search UI, filters, view details
+Both will become dynamic once the `Admissions` table is created in US-007.
 
-US-006 Patient Room Search — Full search UI, status filter, smart empty states
+---
 
-In Progress
-(Nothing currently)
+## 👥 Team Contributions (Search Modules)
 
-Not Started
-US-007a / US-007b — Admission
+| Member | GitHub | Contribution |
+|--------|--------|--------------|
+| Stephen William De Jesus | [@bogiiiie](https://github.com/bogiiiie) | UI (PatientInfoSearchForm, PatientDetailsForm, PatientRoomSearchForm), code-behind logic, sidebar wiring, testing |
+| Lynet Cielo | [@lynet-cielo-disputado](https://github.com/lynet-cielo-disputado) | UI Designer (PatientInfoSearchForm.Designer.cs, PatientDetailsForm.Designer.cs, PatientRoomSearchForm.Designer.cs) |
+| Luster Tamanu Mangaliman | [@lstrmangaliman-hue](https://github.com/lstrmangaliman-hue) | Tester |
+| Neil Jerson Manalo | (pending) | Backend Developer |
 
-US-008 — Admission Log History (Optional)
+---
 
-US-009 — Treatment/Billing Breakdown
+## ✅ Progress Tracker
 
-US-010 — Doctor/Nurse Assignment (Optional)
+### Done
 
-US-011a / US-011b — Billing
+- **US-005 Patient Info Search** — Full search UI, filters, view details
+- **US-006 Patient Room Search** — Full search UI, status filter, smart empty states
 
-US-012 — Discharge
+### In Progress
 
-US-013 — Discharge Summary
+- *(Nothing currently)*
 
-📋 Kanban Board
-🔗 View Group 4 Kanban Board
-🔑 Test Accounts
-Role	Username	Password
-Admin	admin01	admin123
-Hospital Staff	areyes	staff123
-Passwords are stored as SHA256 hashes, never in plain text.
+### Not Started
 
-🚀 How to Run
-Prerequisites
-Visual Studio with the .NET desktop development workload
+- **US-007a / US-007b** — Admission
+- **US-008** — Admission Log History (Optional)
+- **US-009** — Treatment/Billing Breakdown
+- **US-010** — Doctor/Nurse Assignment (Optional)
+- **US-011a / US-011b** — Billing
+- **US-012** — Discharge
+- **US-013** — Discharge Summary
 
-.NET Framework 4.7.2 (or higher)
+---
 
-Steps
-Clone the repository
+## 📋 Kanban Board
 
-Open HospitalAdmissionAndBillingSystem.slnx in Visual Studio
+### [🔗 View Group 4 Kanban Board](https://github.com/users/bogiiiie/projects/4)
 
-Restore NuGet packages — right-click solution → Restore NuGet Packages
+---
 
-Set UI as Startup Project — right-click UI → Set as Startup Project
+## 🔑 Test Accounts
 
-Set Platform target to x64 for UI and BusinessLogic
+| Role | Username | Password |
+|------|----------|----------|
+| Admin | `admin01` | `admin123` |
+| Hospital Staff | `areyes` | `staff123` |
 
-Press F5 to build and run
+Passwords are stored as **SHA256 hashes**, never in plain text.
 
-On first run, DatabaseInitializer.EnsureDatabase() creates HospitalDB.db and seeds the Users, Rooms, and Patients tables
+---
 
-Login with admin01 / admin123 → open Patient Info Search or Patient Room Search
+## 🚀 How to Run
 
-Optional — Inspect the database
-Install DB Browser for SQLite from https://sqlitebrowser.org/. Open:
+### Prerequisites
 
-text
+- Visual Studio with the **.NET desktop development** workload
+- .NET Framework **4.7.2** (or higher)
+
+### Steps
+
+1. **Clone** the repository
+2. **Open** `HospitalAdmissionAndBillingSystem.slnx` in Visual Studio
+3. **Restore NuGet packages** — right-click solution → **Restore NuGet Packages**
+4. **Set `UI` as Startup Project** — right-click `UI` → Set as Startup Project
+5. Set **Platform target** to **x64** for `UI` and `BusinessLogic`
+6. Press **`F5`** to build and run
+7. On first run, `DatabaseInitializer.EnsureDatabase()` creates `HospitalDB.db` and seeds the Users, Rooms, and Patients tables
+8. Login with `admin01` / `admin123` → open **Patient Info Search** or **Patient Room Search**
+
+### Optional — Inspect the database
+
+Install **DB Browser for SQLite** from https://sqlitebrowser.org/. Open:
+
+```
 HospitalAdmissionAndBillingSystem/UI/bin/Debug/App_Data/HospitalDB.db
-📋 Summary Table — File Purpose in One Line
-File	Purpose
-UI/PatientInfoSearchForm.cs	Search UI for patients (search + filters + grid + View Details)
-UI/PatientInfoSearchForm.Designer.cs	Layout for the patient search screen
-UI/PatientDetailsForm.cs	Read-only modal showing a patient's full record
-UI/PatientDetailsForm.Designer.cs	Layout for the read-only patient modal
-UI/PatientRoomSearchForm.cs	Search UI for rooms (search + status filter + grid)
-UI/PatientRoomSearchForm.Designer.cs	Layout for the room search screen
-📄 License
-This project was developed as part of the BT3101 academic requirements for Group 4.
+```
+
+---
+
+## 📋 Summary Table — File Purpose in One Line
+
+| File | Purpose |
+|------|---------|
+| `UI/PatientInfoSearchForm.cs` | Search UI for patients (search + filters + grid + View Details) |
+| `UI/PatientInfoSearchForm.Designer.cs` | Layout for the patient search screen |
+| `UI/PatientDetailsForm.cs` | Read-only modal showing a patient's full record |
+| `UI/PatientDetailsForm.Designer.cs` | Layout for the read-only patient modal |
+| `UI/PatientRoomSearchForm.cs` | Search UI for rooms (search + status filter + grid) |
+| `UI/PatientRoomSearchForm.Designer.cs` | Layout for the room search screen |
+
+---
+
+## 📄 License
+
+This project was developed as part of the **BT3101** academic requirements for **Group 4**.
+```
