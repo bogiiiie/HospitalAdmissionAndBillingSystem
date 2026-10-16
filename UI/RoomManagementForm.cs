@@ -101,7 +101,12 @@ namespace UI
 				form.Show();
 				this.Close();
 			};
-			btnNavAdmission.Click += (s, e) => MessageBox.Show("Admission module coming soon.");
+			btnNavAdmission.Click += (s, e) =>
+			{
+				AdmissionForm form = new AdmissionForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
 			btnNavAdmissionLog.Click += (s, e) => MessageBox.Show("Admission Log module coming soon.");
 			btnNavTreatment.Click += (s, e) => MessageBox.Show("Treatment / Billing module coming soon.");
 			btnNavBilling.Click += (s, e) => MessageBox.Show("Billing module coming soon.");

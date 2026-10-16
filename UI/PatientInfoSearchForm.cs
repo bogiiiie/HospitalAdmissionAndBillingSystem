@@ -10,6 +10,7 @@ namespace UI
 	public partial class PatientInfoSearchForm : Form
 	{
 		private readonly PatientController controller = new PatientController();
+		private readonly AdmissionController admissionController = new AdmissionController();
 		private readonly LoginPage _loginPage;
 		private readonly string _username;
 		private readonly string _role;
@@ -89,7 +90,12 @@ namespace UI
 				form.Show();
 				this.Close();
 			};
-			btnNavAdmission.Click += (s, e) => MessageBox.Show("Admission module coming soon.");
+			btnNavAdmission.Click += (s, e) =>
+			{
+				AdmissionForm form = new AdmissionForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
 			btnNavAdmissionLog.Click += (s, e) => MessageBox.Show("Admission Log module coming soon.");
 			btnNavTreatment.Click += (s, e) => MessageBox.Show("Treatment / Billing module coming soon.");
 			btnNavBilling.Click += (s, e) => MessageBox.Show("Billing module coming soon.");
@@ -153,18 +159,12 @@ namespace UI
 				results = results.FindAll(p => p.Gender == gender);
 			}
 
-			// Apply admission status filter
-			// NOTE: Until the Admission module is built, every patient is treated as "Not Admitted".
+			// Apply admission status filter — real lookup now
 			if (cmbAdmissionStatus.SelectedItem != null && cmbAdmissionStatus.SelectedItem.ToString() != "All")
 			{
 				string status = cmbAdmissionStatus.SelectedItem.ToString();
 
-				// Only "Not Admitted" matches — everyone else (Admitted / Discharged)
-				// produces an empty result set for now.
-				if (status != "Not Admitted")
-				{
-					results.Clear();
-				}
+				results = results.FindAll(p => admissionController.GetPatientStatus(p.PatientCode) == status);
 			}
 
 			// Populate grid
@@ -172,9 +172,8 @@ namespace UI
 
 			foreach (Patient p in results)
 			{
-				// TODO: Replace with real lookup once the Admissions table exists.
-				// For now, every patient is treated as "Not Admitted".
-				string admissionStatus = "Not Admitted";
+				// Real lookup — "Admitted" / "Discharged" / "Not Admitted"
+				string admissionStatus = admissionController.GetPatientStatus(p.PatientCode);
 
 				dgvSearchResults.Rows.Add(
 					p.PatientCode,

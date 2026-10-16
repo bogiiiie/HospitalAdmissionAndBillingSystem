@@ -79,5 +79,12 @@ namespace UI
 			form.Show();
 			this.Close();
 		}
+
+		private void btnAdmission_Click(object sender, EventArgs e)
+		{
+			AdmissionForm form = new AdmissionForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
 	}
 }

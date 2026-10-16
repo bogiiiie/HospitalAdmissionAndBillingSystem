@@ -136,6 +136,29 @@ namespace BusinessLogic.Repository
 		}
 
 		// ==========================================
+		// UPDATE STATUS ONLY — used by Admission / Discharge
+		// Bypasses the occupied-room guard because it is only
+		// ever called by trusted internal logic (admission → Occupied,
+		// discharge → Available).
+		// ==========================================
+		public int UpdateRoomStatus(string roomNumber, string status)
+		{
+			using (var conn = new SQLiteConnection(connectionString))
+			{
+				conn.Open();
+				string sql = "UPDATE Rooms SET Status = @Status " +
+							 "WHERE RoomNumber = @RoomNumber;";
+
+				using (var cmd = new SQLiteCommand(sql, conn))
+				{
+					cmd.Parameters.AddWithValue("@RoomNumber", roomNumber);
+					cmd.Parameters.AddWithValue("@Status", status);
+					return cmd.ExecuteNonQuery();
+				}
+			}
+		}
+
+		// ==========================================
 		// DELETE — Soft delete (mark Status as 'Deleted')
 		// Same guard as UpdateRoom so an occupied room
 		// can never be soft-deleted from here.

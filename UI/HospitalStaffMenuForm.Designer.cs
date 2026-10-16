@@ -248,6 +248,7 @@
 			this.btnAdmission.TabIndex = 7;
 			this.btnAdmission.Text = "📋\nAdmission";
 			this.btnAdmission.UseVisualStyleBackColor = false;
+			this.btnAdmission.Click += new System.EventHandler(this.btnAdmission_Click);
 			// 
 			// btnTreatmentBilling
 			// 

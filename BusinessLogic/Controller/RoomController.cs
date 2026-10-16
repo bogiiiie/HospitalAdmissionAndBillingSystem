@@ -105,6 +105,17 @@ namespace BusinessLogic.Controller
 		}
 
 		// ==========================================
+		// UPDATE STATUS ONLY — passthrough
+		// Used by the Admission and Discharge modules to flip
+		// a room between Available and Occupied without going
+		// through the full occupied-room guard.
+		// ==========================================
+		public int UpdateRoomStatus(string roomNumber, string status)
+		{
+			return repository.UpdateRoomStatus(roomNumber, status);
+		}
+
+		// ==========================================
 		// DELETE — Remove with validation
 		// ==========================================
 		public string DeleteRoom(string number)
