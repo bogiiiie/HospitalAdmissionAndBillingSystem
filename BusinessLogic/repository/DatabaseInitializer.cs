@@ -145,6 +145,57 @@ namespace BusinessLogic.Repository
 				{
 					RunSqlScript(conn, "SeedPatients.sql");
 				}
+
+				// --------------------------------------------------------
+				// ADMISSIONS
+				// Created by the Admission module (US-007).
+				// Stores one row per hospital stay.
+				// LockedRate captures the room's rate at admission time
+				// so later rate changes don't affect this stay's bill.
+				// --------------------------------------------------------
+				string createAdmissionsTable = @"
+					CREATE TABLE IF NOT EXISTS Admissions (
+						AdmissionID     INTEGER PRIMARY KEY AUTOINCREMENT,
+						AdmissionCode   TEXT NOT NULL UNIQUE,
+						PatientCode     TEXT NOT NULL,
+						RoomNumber      TEXT NOT NULL,
+						AdmissionDate   TEXT NOT NULL,
+						Diagnosis       TEXT NOT NULL,
+						LockedRate      REAL NOT NULL,
+						Status          TEXT NOT NULL DEFAULT 'Admitted',
+						AdmittedBy      TEXT NOT NULL,
+						DischargeDate   TEXT,
+						DischargeNotes  TEXT,
+						CreatedAt       TEXT NOT NULL DEFAULT (datetime('now'))
+					);";
+
+				using (var cmd = new SQLiteCommand(createAdmissionsTable, conn))
+				{
+					cmd.ExecuteNonQuery();
+				}
+
+				// --------------------------------------------------------
+				// ADMISSION ROOM HISTORY
+				// Tracks each room period within an admission so billing
+				// can split charges when a patient moves between rooms.
+				// The row with EndDate = NULL is the currently active period.
+				// --------------------------------------------------------
+				string createHistoryTable = @"
+					CREATE TABLE IF NOT EXISTS AdmissionRoomHistory (
+						HistoryID       INTEGER PRIMARY KEY AUTOINCREMENT,
+						AdmissionCode   TEXT NOT NULL,
+						RoomNumber      TEXT NOT NULL,
+						RoomType        TEXT NOT NULL,
+						Rate            REAL NOT NULL,
+						StartDate       TEXT NOT NULL,
+						EndDate         TEXT,
+						CreatedAt       TEXT NOT NULL DEFAULT (datetime('now'))
+					);";
+
+				using (var cmd = new SQLiteCommand(createHistoryTable, conn))
+				{
+					cmd.ExecuteNonQuery();
+				}
 			}
 		}
 

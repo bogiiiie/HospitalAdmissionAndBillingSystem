@@ -72,6 +72,18 @@
     <Compile Include="AdminMenuForm.Designer.cs">
       <DependentUpon>AdminMenuForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AdmissionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdmissionForm.Designer.cs">
+      <DependentUpon>AdmissionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditAdmissionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditAdmissionForm.Designer.cs">
+      <DependentUpon>EditAdmissionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HospitalStaffMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +114,12 @@
     <Compile Include="PatientInfoSearchForm.Designer.cs">
       <DependentUpon>PatientInfoSearchForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PatientPickerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatientPickerDialog.Designer.cs">
+      <DependentUpon>PatientPickerDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="PatientRoomSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +133,12 @@
     </Compile>
     <Compile Include="RoomManagementForm.Designer.cs">
       <DependentUpon>RoomManagementForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RoomPickerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RoomPickerDialog.Designer.cs">
+      <DependentUpon>RoomPickerDialog.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="AdminMenuForm.resx">
       <DependentUpon>AdminMenuForm.cs</DependentUpon>

@@ -51,6 +51,8 @@
     <Content Include="PostScript\SeedPatients.sql" />
     <Content Include="PostScript\SeedRooms.sql" />
     <Content Include="PostScript\SeedUsers.sql" />
+    <Content Include="Table\AdmissionRoomHistory.sql" />
+    <Content Include="Table\Admissions.sql" />
     <None Include="Table\Patients.sql" />
     <None Include="Table\Rooms.sql" />
     <None Include="Table\Users.sql" />

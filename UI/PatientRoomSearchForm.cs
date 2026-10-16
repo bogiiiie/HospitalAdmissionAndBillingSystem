@@ -10,6 +10,7 @@ namespace UI
 	public partial class PatientRoomSearchForm : Form
 	{
 		private readonly RoomController controller = new RoomController();
+		private readonly AdmissionController admissionController = new AdmissionController();
 		private readonly LoginPage _loginPage;
 		private readonly string _username;
 		private readonly string _role;
@@ -77,7 +78,12 @@ namespace UI
 				form.Show();
 				this.Close();
 			};
-			btnNavAdmission.Click += (s, e) => MessageBox.Show("Admission module coming soon.");
+			btnNavAdmission.Click += (s, e) =>
+			{
+				AdmissionForm form = new AdmissionForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
 			btnNavAdmissionLog.Click += (s, e) => MessageBox.Show("Admission Log module coming soon.");
 			btnNavTreatment.Click += (s, e) => MessageBox.Show("Treatment / Billing module coming soon.");
 			btnNavBilling.Click += (s, e) => MessageBox.Show("Billing module coming soon.");
@@ -132,10 +138,9 @@ namespace UI
 			string keyword = txtSearch.Text.Trim();
 			string statusFilter = cmbStatus.SelectedItem != null ? cmbStatus.SelectedItem.ToString() : "All";
 
-			// Get all rooms via controller
-			List<Room> rooms = string.IsNullOrWhiteSpace(keyword)
-				? controller.GetAllRooms()
-				: controller.SearchRooms(keyword);
+			// Get all rooms, then filter in memory so we can also match by occupant name.
+			// (RoomController.SearchRooms only searches RoomNumber/RoomType, not occupants.)
+			List<Room> rooms = controller.GetAllRooms();
 
 			// Filter out Deleted rooms — they never appear here
 			rooms = rooms.FindAll(r => r.Status != "Deleted");
@@ -146,29 +151,44 @@ namespace UI
 				rooms = rooms.FindAll(r => r.Status == statusFilter);
 			}
 
+			// Build a list of (Room, Occupant) so we only look up occupants once
+			var rows = new List<Tuple<Room, string>>();
+			foreach (Room r in rooms)
+			{
+				string occupant = admissionController.GetOccupantName(r.RoomNumber);
+				rows.Add(Tuple.Create(r, occupant));
+			}
+
+			// If a keyword was given, filter by room #, room type, OR occupant name
+			if (!string.IsNullOrWhiteSpace(keyword))
+			{
+				string lower = keyword.ToLower();
+				rows = rows.FindAll(tuple =>
+					tuple.Item1.RoomNumber.ToLower().Contains(lower) ||
+					tuple.Item1.RoomType.ToLower().Contains(lower) ||
+					tuple.Item2.ToLower().Contains(lower)
+				);
+			}
+
 			// If the keyword looks like a name (no digits) and no matches, offer the special message
 			bool keywordLooksLikeName = !string.IsNullOrWhiteSpace(keyword) && !ContainsDigit(keyword);
 
 			dgvRooms.Rows.Clear();
 
-			foreach (Room r in rooms)
+			foreach (var tuple in rows)
 			{
-				// TODO: Replace with real occupant lookup once the Admissions table exists.
-				// For now, show "—" for every room.
-				string occupant = "—";
-
 				dgvRooms.Rows.Add(
-					r.RoomNumber,
-					r.RoomType,
-					r.Status,
-					occupant
+					tuple.Item1.RoomNumber,
+					tuple.Item1.RoomType,
+					tuple.Item1.Status,
+					tuple.Item2
 				);
 			}
 
-			lblCount.Text = "Total Results: " + rooms.Count;
+			lblCount.Text = "Total Results: " + rows.Count;
 
 			// Decide which "no results" message to show
-			if (rooms.Count == 0)
+			if (rows.Count == 0)
 			{
 				lblNoResults.Text = keywordLooksLikeName
 					? "Patient is not currently admitted to a room."

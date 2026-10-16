@@ -221,26 +221,22 @@ namespace BusinessLogic.Repository
 
 		// ==========================================
 		// HAS HISTORY — Check for admission/billing links
-		// For now returns false since the Admissions table doesn't
-		// exist yet. Once the Admission module is built, uncomment
-		// the code below to actually block deletes for patients
-		// with history.
 		// ==========================================
 		public bool HasAdmissionHistory(string patientCode)
 		{
-			// TODO: Enable this check once the Admissions table exists.
-			// using (var conn = new SQLiteConnection(connectionString))
-			// {
-			//     conn.Open();
-			//     string sql = "SELECT COUNT(*) FROM Admissions WHERE PatientCode = @Code;";
-			//     using (var cmd = new SQLiteCommand(sql, conn))
-			//     {
-			//         cmd.Parameters.AddWithValue("@Code", patientCode);
-			//         long count = (long)cmd.ExecuteScalar();
-			//         return count > 0;
-			//     }
-			// }
-			return false;
+			// Backed by the real Admissions table.
+			// Admin permanent-delete will be blocked whenever this returns true.
+			using (var conn = new SQLiteConnection(connectionString))
+			{
+				conn.Open();
+				string sql = "SELECT COUNT(*) FROM Admissions WHERE PatientCode = @Code;";
+				using (var cmd = new SQLiteCommand(sql, conn))
+				{
+					cmd.Parameters.AddWithValue("@Code", patientCode);
+					long count = (long)cmd.ExecuteScalar();
+					return count > 0;
+				}
+			}
 		}
 
 		// ==========================================
