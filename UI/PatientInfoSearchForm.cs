@@ -52,6 +52,7 @@ namespace UI
 
 			cmbAdmissionStatus.Items.Clear();
 			cmbAdmissionStatus.Items.Add("All");
+			cmbAdmissionStatus.Items.Add("Not Admitted");
 			cmbAdmissionStatus.Items.Add("Admitted");
 			cmbAdmissionStatus.Items.Add("Discharged");
 			cmbAdmissionStatus.SelectedIndex = 0;
@@ -148,13 +149,14 @@ namespace UI
 			}
 
 			// Apply admission status filter
-			// NOTE: Until the Admission module is built, every patient is treated as "Discharged".
+			// NOTE: Until the Admission module is built, every patient is treated as "Not Admitted".
 			if (cmbAdmissionStatus.SelectedItem != null && cmbAdmissionStatus.SelectedItem.ToString() != "All")
 			{
 				string status = cmbAdmissionStatus.SelectedItem.ToString();
-				string currentStatus = "Discharged";   // placeholder — will become dynamic later
 
-				if (status != currentStatus)
+				// Only "Not Admitted" matches — everyone else (Admitted / Discharged)
+				// produces an empty result set for now.
+				if (status != "Not Admitted")
 				{
 					results.Clear();
 				}
@@ -165,8 +167,9 @@ namespace UI
 
 			foreach (Patient p in results)
 			{
-				// Placeholder for admission status — always Discharged for now
-				string admissionStatus = "Discharged";
+				// TODO: Replace with real lookup once the Admissions table exists.
+				// For now, every patient is treated as "Not Admitted".
+				string admissionStatus = "Not Admitted";
 
 				dgvSearchResults.Rows.Add(
 					p.PatientCode,
