@@ -200,6 +200,14 @@ namespace BusinessLogic.Controller
 		}
 
 		// ==========================================
+		// QUERY — Get all room periods for an admission (Policy B)
+		// ==========================================
+		public List<AdmissionRoomHistory> GetRoomHistory(string admissionCode)
+		{
+			return repository.GetRoomHistory(admissionCode);
+		}
+
+		// ==========================================
 		// BILLING HELPER — Total room charges for an admission
 		// Sums rate × days for each room period.
 		// Uses DateTime.Now for the currently-open period.
