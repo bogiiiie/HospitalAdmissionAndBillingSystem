@@ -72,5 +72,12 @@ namespace UI
 			form.Show();
 			this.Close();
 		}
+
+		private void btnRoomSearch_Click(object sender, EventArgs e)
+		{
+			PatientRoomSearchForm form = new PatientRoomSearchForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
 	}
 }

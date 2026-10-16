@@ -235,6 +235,7 @@
 			this.btnRoomSearch.TabIndex = 5;
 			this.btnRoomSearch.Text = "🔎\nPatient Room Search";
 			this.btnRoomSearch.UseVisualStyleBackColor = false;
+			this.btnRoomSearch.Click += new System.EventHandler(this.btnRoomSearch_Click);
 			// 
 			// btnAdmission
 			// 
