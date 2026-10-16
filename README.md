@@ -53,9 +53,9 @@ Track the project's tasks, progress, and development status through our GitHub K
 | 1  | Login & Main Menu (role-based)     | ✅ **Done**    |
 | 2  | Room Management                    | ✅ **Done**    |
 | 3  | Patient Information Maintenance    | ✅ **Done**    |
-| 4  | Patient Info Search                | ⬜ Not started |
-| 5  | Patient Room Search                | ⬜ Not started |
-| 6  | Admission                          | ⬜ Not started |
+| 4  | Patient Info Search                | ✅ **Done**    |
+| 5  | Patient Room Search                | ✅ **Done**    |
+| 6  | Admission                          | ✅ **Done**    |
 | 7  | Admission Log History (Optional)   | ⬜ Not started |
 | 8  | Treatment/Billing Breakdown        | ⬜ Not started |
 | 9  | Doctor/Nurse Assignment (Optional) | ⬜ Not started |
