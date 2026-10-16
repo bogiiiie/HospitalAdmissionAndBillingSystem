@@ -210,6 +210,7 @@
 			this.btnPatientSearch.TabIndex = 5;
 			this.btnPatientSearch.Text = "🔍\nPatient Info Search";
 			this.btnPatientSearch.UseVisualStyleBackColor = false;
+			this.btnPatientSearch.Click += new System.EventHandler(this.btnPatientSearch_Click);
 			// 
 			// btnRoomSearch
 			// 
@@ -228,6 +229,7 @@
 			this.btnRoomSearch.TabIndex = 6;
 			this.btnRoomSearch.Text = "🔎\nPatient Room Search";
 			this.btnRoomSearch.UseVisualStyleBackColor = false;
+			this.btnRoomSearch.Click += new System.EventHandler(this.btnRoomSearch_Click);
 			// 
 			// btnAdmission
 			// 

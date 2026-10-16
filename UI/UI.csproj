@@ -84,11 +84,29 @@
     <Compile Include="LoginPage.Designer.cs">
       <DependentUpon>LoginPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="PatientDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatientDetailsForm.Designer.cs">
+      <DependentUpon>PatientDetailsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PatientInformationForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PatientInformationForm.Designer.cs">
       <DependentUpon>PatientInformationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PatientInfoSearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatientInfoSearchForm.Designer.cs">
+      <DependentUpon>PatientInfoSearchForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PatientRoomSearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatientRoomSearchForm.Designer.cs">
+      <DependentUpon>PatientRoomSearchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

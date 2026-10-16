@@ -89,8 +89,18 @@ namespace UI
 			};
 
 			// Future modules — placeholders for now
-			btnNavPatientSearch.Click += (s, e) => MessageBox.Show("Patient Info Search module coming soon.");
-			btnNavRoomSearch.Click += (s, e) => MessageBox.Show("Patient Room Search module coming soon.");
+			btnNavPatientSearch.Click += (s, e) =>
+			{
+				PatientInfoSearchForm form = new PatientInfoSearchForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
+			btnNavRoomSearch.Click += (s, e) =>
+			{
+				PatientRoomSearchForm form = new PatientRoomSearchForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
 			btnNavAdmission.Click += (s, e) => MessageBox.Show("Admission module coming soon.");
 			btnNavAdmissionLog.Click += (s, e) => MessageBox.Show("Admission Log module coming soon.");
 			btnNavTreatment.Click += (s, e) => MessageBox.Show("Treatment / Billing module coming soon.");
