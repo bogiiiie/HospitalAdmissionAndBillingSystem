@@ -292,6 +292,7 @@
 			this.btnTreatmentBilling.TabIndex = 8;
 			this.btnTreatmentBilling.Text = "💊\nTreatment / Billing";
 			this.btnTreatmentBilling.UseVisualStyleBackColor = false;
+			this.btnTreatmentBilling.Click += new System.EventHandler(this.btnTreatmentBilling_Click);
 			// 
 			// btnDoctorAssign
 			// 

@@ -93,5 +93,12 @@ namespace UI
 			form.Show();
 			this.Close();
 		}
+
+		private void btnTreatmentBilling_Click(object sender, EventArgs e)
+		{
+			TreatmentBillingForm form = new TreatmentBillingForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
 	}
 }
