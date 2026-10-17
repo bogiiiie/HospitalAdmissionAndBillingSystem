@@ -25,6 +25,7 @@
 			this.btnNavSummary = new System.Windows.Forms.Button();
 			this.btnNavDischarge = new System.Windows.Forms.Button();
 			this.btnNavBilling = new System.Windows.Forms.Button();
+			this.btnNavDoctorNurse = new System.Windows.Forms.Button();
 			this.btnNavTreatment = new System.Windows.Forms.Button();
 			this.btnNavAdmissionLog = new System.Windows.Forms.Button();
 			this.btnNavAdmission = new System.Windows.Forms.Button();
@@ -151,6 +152,7 @@
 			this.sidebarPanel.Controls.Add(this.btnNavSummary);
 			this.sidebarPanel.Controls.Add(this.btnNavDischarge);
 			this.sidebarPanel.Controls.Add(this.btnNavBilling);
+			this.sidebarPanel.Controls.Add(this.btnNavDoctorNurse);
 			this.sidebarPanel.Controls.Add(this.btnNavTreatment);
 			this.sidebarPanel.Controls.Add(this.btnNavAdmissionLog);
 			this.sidebarPanel.Controls.Add(this.btnNavAdmission);
@@ -171,7 +173,7 @@
 			this.btnNavSummary.FlatAppearance.BorderSize = 0;
 			this.btnNavSummary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnNavSummary.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.btnNavSummary.Location = new System.Drawing.Point(12, 444);
+			this.btnNavSummary.Location = new System.Drawing.Point(12, 488);
 			this.btnNavSummary.Name = "btnNavSummary";
 			this.btnNavSummary.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
 			this.btnNavSummary.Size = new System.Drawing.Size(216, 42);
@@ -185,7 +187,7 @@
 			this.btnNavDischarge.FlatAppearance.BorderSize = 0;
 			this.btnNavDischarge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnNavDischarge.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.btnNavDischarge.Location = new System.Drawing.Point(12, 400);
+			this.btnNavDischarge.Location = new System.Drawing.Point(12, 444);
 			this.btnNavDischarge.Name = "btnNavDischarge";
 			this.btnNavDischarge.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
 			this.btnNavDischarge.Size = new System.Drawing.Size(216, 42);
@@ -199,12 +201,26 @@
 			this.btnNavBilling.FlatAppearance.BorderSize = 0;
 			this.btnNavBilling.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnNavBilling.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.btnNavBilling.Location = new System.Drawing.Point(12, 356);
+			this.btnNavBilling.Location = new System.Drawing.Point(12, 400);
 			this.btnNavBilling.Name = "btnNavBilling";
 			this.btnNavBilling.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
 			this.btnNavBilling.Size = new System.Drawing.Size(216, 42);
 			this.btnNavBilling.Text = "Billing";
 			this.btnNavBilling.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// btnNavDoctorNurse
+			// 
+			this.btnNavDoctorNurse.BackColor = System.Drawing.Color.White;
+			this.btnNavDoctorNurse.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnNavDoctorNurse.FlatAppearance.BorderSize = 0;
+			this.btnNavDoctorNurse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnNavDoctorNurse.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.btnNavDoctorNurse.Location = new System.Drawing.Point(12, 356);
+			this.btnNavDoctorNurse.Name = "btnNavDoctorNurse";
+			this.btnNavDoctorNurse.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+			this.btnNavDoctorNurse.Size = new System.Drawing.Size(216, 42);
+			this.btnNavDoctorNurse.Text = "Doctor / Nurse";
+			this.btnNavDoctorNurse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// btnNavTreatment
 			// 
@@ -640,6 +656,7 @@
 		private System.Windows.Forms.Button btnNavAdmission;
 		private System.Windows.Forms.Button btnNavAdmissionLog;
 		private System.Windows.Forms.Button btnNavTreatment;
+		private System.Windows.Forms.Button btnNavDoctorNurse;
 		private System.Windows.Forms.Button btnNavBilling;
 		private System.Windows.Forms.Button btnNavDischarge;
 		private System.Windows.Forms.Button btnNavSummary;

@@ -11,6 +11,7 @@ namespace UI
 	{
 		private readonly AdmissionController admissionController = new AdmissionController();
 		private readonly PatientController patientController = new PatientController();
+		private readonly TreatmentController treatmentController = new TreatmentController();
 
 		private readonly Admission _admission;
 
@@ -53,6 +54,14 @@ namespace UI
 				? "—"
 				: _admission.Diagnosis;
 
+			// ---- ASSIGNED STAFF ----
+			lblDoctorValue.Text = string.IsNullOrWhiteSpace(_admission.AttendingDoctor)
+				? "—"
+				: _admission.AttendingDoctor;
+			lblNurseValue.Text = string.IsNullOrWhiteSpace(_admission.AssignedNurse)
+				? "—"
+				: _admission.AssignedNurse;
+
 			// ---- ROOM HISTORY ----
 			List<AdmissionRoomHistory> history = admissionController.GetRoomHistory(_admission.AdmissionCode);
 			dgvHistory.Rows.Clear();
@@ -72,14 +81,18 @@ namespace UI
 				);
 			}
 
-			// ---- BILLING (Room charges only — Treatment module pending) ----
+			// ---- BILLING ----
 			decimal roomCharges = admissionController.CalculateRoomCharges(
 				_admission.AdmissionCode,
 				DateTime.Now);
 
+			// Fetch treatment subtotal
+			decimal treatmentCharges = treatmentController.CalculateSubtotal(_admission.AdmissionCode);
+			decimal total = roomCharges + treatmentCharges;
+
 			lblRoomChargesValue.Text = "₱" + roomCharges.ToString("N2");
-			lblTreatmentValue.Text = "(pending module)";
-			lblTotalValue.Text = "₱" + roomCharges.ToString("N2");
+			lblTreatmentValue.Text = "₱" + treatmentCharges.ToString("N2");
+			lblTotalValue.Text = "₱" + total.ToString("N2");
 		}
 
 		private void btnClose_Click(object sender, EventArgs e)

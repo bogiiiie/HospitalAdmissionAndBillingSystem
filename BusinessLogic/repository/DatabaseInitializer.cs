@@ -164,6 +164,8 @@ namespace BusinessLogic.Repository
 						LockedRate      REAL NOT NULL,
 						Status          TEXT NOT NULL DEFAULT 'Admitted',
 						AdmittedBy      TEXT NOT NULL,
+						AttendingDoctor TEXT,
+						AssignedNurse   TEXT,
 						DischargeDate   TEXT,
 						DischargeNotes  TEXT,
 						CreatedAt       TEXT NOT NULL DEFAULT (datetime('now'))
@@ -193,6 +195,25 @@ namespace BusinessLogic.Repository
 					);";
 
 				using (var cmd = new SQLiteCommand(createHistoryTable, conn))
+				{
+					cmd.ExecuteNonQuery();
+				}
+
+				// --------------------------------------------------------
+				// STAFF ASSIGNMENT HISTORY
+				// --------------------------------------------------------
+				string createStaffHistoryTable = @"
+					CREATE TABLE IF NOT EXISTS StaffAssignmentHistory (
+						HistoryID       INTEGER PRIMARY KEY AUTOINCREMENT,
+						AdmissionCode   TEXT NOT NULL,
+						Role            TEXT NOT NULL,
+						StaffName       TEXT NOT NULL,
+						AssignedDate    TEXT NOT NULL,
+						Reason          TEXT,
+						CreatedAt       TEXT NOT NULL DEFAULT (datetime('now'))
+					);";
+
+				using (var cmd = new SQLiteCommand(createStaffHistoryTable, conn))
 				{
 					cmd.ExecuteNonQuery();
 				}

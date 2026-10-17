@@ -96,6 +96,12 @@
     <Compile Include="AdmissionPickerDialog.Designer.cs">
       <DependentUpon>AdmissionPickerDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="DoctorNurseAssignmentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DoctorNurseAssignmentForm.Designer.cs">
+      <DependentUpon>DoctorNurseAssignmentForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditAdmissionForm.cs">
       <SubType>Form</SubType>
     </Compile>

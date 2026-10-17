@@ -46,6 +46,7 @@
     <Compile Include="Patient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Room.cs" />
+    <Compile Include="StaffAssignment.cs" />
     <Compile Include="Treatment.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>

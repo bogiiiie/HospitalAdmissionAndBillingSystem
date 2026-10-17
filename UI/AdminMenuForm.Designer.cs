@@ -311,6 +311,7 @@
 			this.btnDoctorAssign.TabIndex = 9;
 			this.btnDoctorAssign.Text = "👨‍⚕️\nDoctor / Nurse";
 			this.btnDoctorAssign.UseVisualStyleBackColor = false;
+			this.btnDoctorAssign.Click += new System.EventHandler(this.btnDoctorAssign_Click);
 			// 
 			// btnBilling
 			// 
