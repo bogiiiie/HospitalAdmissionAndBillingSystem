@@ -16,5 +16,7 @@ namespace Model
 		public DateTime? DischargeDate { get; set; }      // NULL until discharged
 		public string DischargeNotes { get; set; }        // NULL until discharged
 		public DateTime CreatedAt { get; set; }
+		public string AttendingDoctor { get; set; }
+		public string AssignedNurse { get; set; }
 	}
 }

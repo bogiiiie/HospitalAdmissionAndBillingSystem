@@ -100,5 +100,12 @@ namespace UI
 			form.Show();
 			this.Close();
 		}
+
+		private void btnDoctorAssign_Click(object sender, EventArgs e)
+		{
+			DoctorNurseAssignmentForm form = new DoctorNurseAssignmentForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
 	}
 }

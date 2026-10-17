@@ -42,6 +42,7 @@
 			this.btnNavDischarge = new System.Windows.Forms.Button();
 			this.btnNavBilling = new System.Windows.Forms.Button();
 			this.btnNavTreatment = new System.Windows.Forms.Button();
+			this.btnNavDoctorNurse = new System.Windows.Forms.Button();
 			this.btnNavAdmissionLog = new System.Windows.Forms.Button();
 			this.btnNavAdmission = new System.Windows.Forms.Button();
 			this.btnNavRoomSearch = new System.Windows.Forms.Button();
@@ -162,6 +163,7 @@
 			this.sidebarPanel.Controls.Add(this.btnNavDischarge);
 			this.sidebarPanel.Controls.Add(this.btnNavBilling);
 			this.sidebarPanel.Controls.Add(this.btnNavTreatment);
+			this.sidebarPanel.Controls.Add(this.btnNavDoctorNurse);
 			this.sidebarPanel.Controls.Add(this.btnNavAdmissionLog);
 			this.sidebarPanel.Controls.Add(this.btnNavAdmission);
 			this.sidebarPanel.Controls.Add(this.btnNavRoomSearch);
@@ -184,11 +186,11 @@
 			this.btnNavSummary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnNavSummary.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnNavSummary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-			this.btnNavSummary.Location = new System.Drawing.Point(12, 444);
+			this.btnNavSummary.Location = new System.Drawing.Point(12, 488);
 			this.btnNavSummary.Name = "btnNavSummary";
 			this.btnNavSummary.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
 			this.btnNavSummary.Size = new System.Drawing.Size(216, 42);
-			this.btnNavSummary.TabIndex = 10;
+			this.btnNavSummary.TabIndex = 11;
 			this.btnNavSummary.Text = "Discharge Summary";
 			this.btnNavSummary.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnNavSummary.UseVisualStyleBackColor = false;
@@ -202,11 +204,11 @@
 			this.btnNavDischarge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnNavDischarge.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnNavDischarge.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-			this.btnNavDischarge.Location = new System.Drawing.Point(12, 400);
+			this.btnNavDischarge.Location = new System.Drawing.Point(12, 444);
 			this.btnNavDischarge.Name = "btnNavDischarge";
 			this.btnNavDischarge.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
 			this.btnNavDischarge.Size = new System.Drawing.Size(216, 42);
-			this.btnNavDischarge.TabIndex = 9;
+			this.btnNavDischarge.TabIndex = 10;
 			this.btnNavDischarge.Text = "Discharge";
 			this.btnNavDischarge.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnNavDischarge.UseVisualStyleBackColor = false;
@@ -220,11 +222,11 @@
 			this.btnNavBilling.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnNavBilling.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnNavBilling.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-			this.btnNavBilling.Location = new System.Drawing.Point(12, 356);
+			this.btnNavBilling.Location = new System.Drawing.Point(12, 400);
 			this.btnNavBilling.Name = "btnNavBilling";
 			this.btnNavBilling.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
 			this.btnNavBilling.Size = new System.Drawing.Size(216, 42);
-			this.btnNavBilling.TabIndex = 8;
+			this.btnNavBilling.TabIndex = 9;
 			this.btnNavBilling.Text = "Billing";
 			this.btnNavBilling.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnNavBilling.UseVisualStyleBackColor = false;
@@ -238,14 +240,32 @@
 			this.btnNavTreatment.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnNavTreatment.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnNavTreatment.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-			this.btnNavTreatment.Location = new System.Drawing.Point(12, 312);
+			this.btnNavTreatment.Location = new System.Drawing.Point(12, 356);
 			this.btnNavTreatment.Name = "btnNavTreatment";
 			this.btnNavTreatment.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
 			this.btnNavTreatment.Size = new System.Drawing.Size(216, 42);
-			this.btnNavTreatment.TabIndex = 7;
+			this.btnNavTreatment.TabIndex = 8;
 			this.btnNavTreatment.Text = "Treatment / Billing";
 			this.btnNavTreatment.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnNavTreatment.UseVisualStyleBackColor = false;
+			// 
+			// btnNavDoctorNurse
+			// 
+			this.btnNavDoctorNurse.BackColor = System.Drawing.Color.White;
+			this.btnNavDoctorNurse.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnNavDoctorNurse.FlatAppearance.BorderSize = 0;
+			this.btnNavDoctorNurse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+			this.btnNavDoctorNurse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnNavDoctorNurse.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnNavDoctorNurse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
+			this.btnNavDoctorNurse.Location = new System.Drawing.Point(12, 312);
+			this.btnNavDoctorNurse.Name = "btnNavDoctorNurse";
+			this.btnNavDoctorNurse.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+			this.btnNavDoctorNurse.Size = new System.Drawing.Size(216, 42);
+			this.btnNavDoctorNurse.TabIndex = 7;
+			this.btnNavDoctorNurse.Text = "Doctor / Nurse";
+			this.btnNavDoctorNurse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.btnNavDoctorNurse.UseVisualStyleBackColor = false;
 			// 
 			// btnNavAdmissionLog
 			// 
@@ -661,6 +681,7 @@
 		private System.Windows.Forms.Button btnNavRoomSearch;
 		private System.Windows.Forms.Button btnNavAdmission;
 		private System.Windows.Forms.Button btnNavAdmissionLog;
+		private System.Windows.Forms.Button btnNavDoctorNurse;
 		private System.Windows.Forms.Button btnNavTreatment;
 		private System.Windows.Forms.Button btnNavBilling;
 		private System.Windows.Forms.Button btnNavDischarge;

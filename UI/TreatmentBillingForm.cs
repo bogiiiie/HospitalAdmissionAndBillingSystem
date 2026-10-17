@@ -156,6 +156,10 @@ namespace UI
 			btnNavRoomSearch.Click += (s, e) => { new PatientRoomSearchForm(_loginPage, _username, _role).Show(); this.Close(); };
 			btnNavAdmission.Click += (s, e) => { new AdmissionForm(_loginPage, _username, _role).Show(); this.Close(); };
 			btnNavAdmissionLog.Click += (s, e) => { new AdmissionLogForm(_loginPage, _username, _role).Show(); this.Close(); };
+
+			// Link the new button
+			btnNavDoctorNurse.Click += (s, e) => { new DoctorNurseAssignmentForm(_loginPage, _username, _role).Show(); this.Close(); };
+
 			btnNavBilling.Click += (s, e) => MessageBox.Show("Billing module coming soon.");
 			btnNavDischarge.Click += (s, e) => MessageBox.Show("Discharge module coming soon.");
 			btnNavSummary.Click += (s, e) => MessageBox.Show("Discharge Summary module coming soon.");
@@ -170,10 +174,16 @@ namespace UI
 				btnNavDischarge, btnNavSummary
 			};
 
+			// Add Doctor/Nurse only for Admin
+			if (_role == "Admin")
+			{
+				visibleButtons.Insert(7, btnNavDoctorNurse); // Insert after Treatment
+			}
+
 			btnNavRoom.Visible = false; btnNavPatient.Visible = false; btnNavPatientSearch.Visible = false;
 			btnNavRoomSearch.Visible = false; btnNavAdmission.Visible = false; btnNavAdmissionLog.Visible = false;
-			btnNavTreatment.Visible = false; btnNavBilling.Visible = false; btnNavDischarge.Visible = false;
-			btnNavSummary.Visible = false;
+			btnNavTreatment.Visible = false; btnNavDoctorNurse.Visible = false; btnNavBilling.Visible = false;
+			btnNavDischarge.Visible = false; btnNavSummary.Visible = false;
 
 			int y = 48;
 			foreach (var btn in visibleButtons)

@@ -94,6 +94,12 @@ namespace UI
 				form.Show();
 				this.Close();
 			};
+			btnNavDoctorNurse.Click += (s, e) =>
+			{
+				DoctorNurseAssignmentForm form = new DoctorNurseAssignmentForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
 			btnNavTreatment.Click += (s, e) =>
 			{
 				TreatmentBillingForm form = new TreatmentBillingForm(_loginPage, _username, _role);
@@ -118,6 +124,13 @@ namespace UI
 
 			// Admission Log is Admin-only
 			visibleButtons.Add(btnNavAdmissionLog);
+
+			// Doctor / Nurse is Admin-only
+			if (_role == "Admin")
+			{
+				visibleButtons.Add(btnNavDoctorNurse);
+			}
+
 			visibleButtons.Add(btnNavTreatment);
 			visibleButtons.Add(btnNavBilling);
 			visibleButtons.Add(btnNavDischarge);
@@ -130,6 +143,7 @@ namespace UI
 			btnNavRoomSearch.Visible = false;
 			btnNavAdmission.Visible = false;
 			btnNavAdmissionLog.Visible = false;
+			btnNavDoctorNurse.Visible = false;
 			btnNavTreatment.Visible = false;
 			btnNavBilling.Visible = false;
 			btnNavDischarge.Visible = false;

@@ -178,6 +178,22 @@ namespace BusinessLogic.Repository
 			}
 		}
 
+		public void UpdateStaffAssignment(string admissionCode, string doctor, string nurse)
+		{
+			using (var conn = new SQLiteConnection(connectionString))
+			{
+				conn.Open();
+				string sql = "UPDATE Admissions SET AttendingDoctor = @Doc, AssignedNurse = @Nurse WHERE AdmissionCode = @Code;";
+				using (var cmd = new SQLiteCommand(sql, conn))
+				{
+					cmd.Parameters.AddWithValue("@Code", admissionCode);
+					cmd.Parameters.AddWithValue("@Doc", (object)doctor ?? DBNull.Value);
+					cmd.Parameters.AddWithValue("@Nurse", (object)nurse ?? DBNull.Value);
+					cmd.ExecuteNonQuery();
+				}
+			}
+		}
+
 		// ==========================================
 		// QUERY — Does this patient have an active admission?
 		// ==========================================
@@ -257,6 +273,8 @@ namespace BusinessLogic.Repository
 				LockedRate = Convert.ToDecimal(reader["LockedRate"]),
 				Status = reader["Status"].ToString(),
 				AdmittedBy = reader["AdmittedBy"].ToString(),
+				AttendingDoctor = reader["AttendingDoctor"] == DBNull.Value ? null : reader["AttendingDoctor"].ToString(),
+				AssignedNurse = reader["AssignedNurse"] == DBNull.Value ? null : reader["AssignedNurse"].ToString(),
 				DischargeDate = reader["DischargeDate"] == DBNull.Value
 					? (DateTime?)null
 					: DateTime.Parse(reader["DischargeDate"].ToString()),
