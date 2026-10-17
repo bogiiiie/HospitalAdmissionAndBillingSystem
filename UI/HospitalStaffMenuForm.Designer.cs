@@ -119,9 +119,9 @@
 			// 
 			// cardPanel
 			// 
-			this.cardPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.cardPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.cardPanel.BackColor = System.Drawing.Color.White;
 			this.cardPanel.Controls.Add(this.tilesPanel);
 			this.cardPanel.Location = new System.Drawing.Point(35, 110);
@@ -288,6 +288,7 @@
 			this.btnTreatmentBilling.TabIndex = 9;
 			this.btnTreatmentBilling.Text = "💊\nTreatment / Billing";
 			this.btnTreatmentBilling.UseVisualStyleBackColor = false;
+			this.btnTreatmentBilling.Click += new System.EventHandler(this.btnTreatmentBilling_Click);
 			// 
 			// btnBilling
 			// 

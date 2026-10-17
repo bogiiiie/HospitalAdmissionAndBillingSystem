@@ -196,6 +196,30 @@ namespace BusinessLogic.Repository
 				{
 					cmd.ExecuteNonQuery();
 				}
+
+				// --------------------------------------------------------
+				// TREATMENTS
+				// Created by the Treatment/Billing Breakdown module (US-009).
+				// Stores individual services or medications billed
+				// to a patient's active admission.
+				// --------------------------------------------------------
+				string createTreatmentsTable = @"
+					CREATE TABLE IF NOT EXISTS Treatments (
+						TreatmentID     INTEGER PRIMARY KEY AUTOINCREMENT,
+						AdmissionCode   TEXT NOT NULL,
+						ServiceName     TEXT NOT NULL,
+						TreatmentDate   TEXT NOT NULL,
+						Quantity        INTEGER NOT NULL,
+						UnitCost        REAL NOT NULL,
+						TotalCost       REAL NOT NULL,
+						RecordedBy      TEXT NOT NULL,
+						CreatedAt       TEXT NOT NULL DEFAULT (datetime('now'))
+					);";
+
+				using (var cmd = new SQLiteCommand(createTreatmentsTable, conn))
+				{
+					cmd.ExecuteNonQuery();
+				}
 			}
 		}
 
