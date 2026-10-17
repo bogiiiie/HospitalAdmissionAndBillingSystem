@@ -34,10 +34,6 @@
 			this.panelHeader = new System.Windows.Forms.Panel();
 			this.lblHeader = new System.Windows.Forms.Label();
 			this.panelBody = new System.Windows.Forms.Panel();
-			this.lblDoctorLabel = new System.Windows.Forms.Label();
-			this.lblDoctorValue = new System.Windows.Forms.Label();
-			this.lblNurseLabel = new System.Windows.Forms.Label();
-			this.lblNurseValue = new System.Windows.Forms.Label();
 			this.lblSectionPatient = new System.Windows.Forms.Label();
 			this.lblPatientLabel = new System.Windows.Forms.Label();
 			this.lblPatientValue = new System.Windows.Forms.Label();
@@ -52,6 +48,10 @@
 			this.lblByValue = new System.Windows.Forms.Label();
 			this.lblDiagnosisLabel = new System.Windows.Forms.Label();
 			this.lblDiagnosisValue = new System.Windows.Forms.Label();
+			this.lblDoctorLabel = new System.Windows.Forms.Label();
+			this.lblDoctorValue = new System.Windows.Forms.Label();
+			this.lblNurseLabel = new System.Windows.Forms.Label();
+			this.lblNurseValue = new System.Windows.Forms.Label();
 			this.lblSectionHistory = new System.Windows.Forms.Label();
 			this.dgvHistory = new System.Windows.Forms.DataGridView();
 			this.colRoomNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -64,6 +64,10 @@
 			this.lblRoomChargesValue = new System.Windows.Forms.Label();
 			this.lblTreatmentLabel = new System.Windows.Forms.Label();
 			this.lblTreatmentValue = new System.Windows.Forms.Label();
+			this.lblDiscountLabel = new System.Windows.Forms.Label();
+			this.lblDiscountValue = new System.Windows.Forms.Label();
+			this.lblPaymentStatusLabel = new System.Windows.Forms.Label();
+			this.lblPaymentStatusValue = new System.Windows.Forms.Label();
 			this.lblTotalLabel = new System.Windows.Forms.Label();
 			this.lblTotalValue = new System.Windows.Forms.Label();
 			this.panelFooter = new System.Windows.Forms.Panel();
@@ -97,10 +101,14 @@
 			// 
 			// panelBody
 			// 
-			this.panelBody.AutoScroll = true;
+			this.panelBody.AutoScroll = true; // 👈 THIS MAKES IT SCROLLABLE
 			this.panelBody.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
 			this.panelBody.Controls.Add(this.lblTotalValue);
 			this.panelBody.Controls.Add(this.lblTotalLabel);
+			this.panelBody.Controls.Add(this.lblPaymentStatusValue);
+			this.panelBody.Controls.Add(this.lblPaymentStatusLabel);
+			this.panelBody.Controls.Add(this.lblDiscountValue);
+			this.panelBody.Controls.Add(this.lblDiscountLabel);
 			this.panelBody.Controls.Add(this.lblTreatmentValue);
 			this.panelBody.Controls.Add(this.lblTreatmentLabel);
 			this.panelBody.Controls.Add(this.lblRoomChargesValue);
@@ -129,7 +137,7 @@
 			this.panelBody.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelBody.Location = new System.Drawing.Point(0, 60);
 			this.panelBody.Name = "panelBody";
-			this.panelBody.Size = new System.Drawing.Size(900, 680);
+			this.panelBody.Size = new System.Drawing.Size(900, 570);
 			this.panelBody.TabIndex = 1;
 			// 
 			// lblSectionPatient
@@ -313,9 +321,9 @@
 			this.lblNurseLabel.AutoSize = true;
 			this.lblNurseLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			this.lblNurseLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblNurseLabel.Location = new System.Drawing.Point(450, 275);
+			this.lblNurseLabel.Location = new System.Drawing.Point(500, 275);
 			this.lblNurseLabel.Name = "lblNurseLabel";
-			this.lblNurseLabel.Size = new System.Drawing.Size(150, 23);
+			this.lblNurseLabel.Size = new System.Drawing.Size(140, 23);
 			this.lblNurseLabel.TabIndex = 16;
 			this.lblNurseLabel.Text = "Assigned Nurse:";
 			// 
@@ -324,7 +332,7 @@
 			this.lblNurseValue.AutoSize = true;
 			this.lblNurseValue.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.lblNurseValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
-			this.lblNurseValue.Location = new System.Drawing.Point(580, 276);
+			this.lblNurseValue.Location = new System.Drawing.Point(650, 276);
 			this.lblNurseValue.Name = "lblNurseValue";
 			this.lblNurseValue.Size = new System.Drawing.Size(80, 23);
 			this.lblNurseValue.TabIndex = 17;
@@ -335,7 +343,7 @@
 			this.lblSectionHistory.AutoSize = true;
 			this.lblSectionHistory.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
 			this.lblSectionHistory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(64)))), ((int)(((byte)(175)))));
-			this.lblSectionHistory.Location = new System.Drawing.Point(40, 335);
+			this.lblSectionHistory.Location = new System.Drawing.Point(40, 320);
 			this.lblSectionHistory.Name = "lblSectionHistory";
 			this.lblSectionHistory.Size = new System.Drawing.Size(240, 23);
 			this.lblSectionHistory.TabIndex = 18;
@@ -384,7 +392,7 @@
 			this.dgvHistory.DefaultCellStyle = dataGridViewCellStyle3;
 			this.dgvHistory.EnableHeadersVisualStyles = false;
 			this.dgvHistory.GridColor = System.Drawing.Color.White;
-			this.dgvHistory.Location = new System.Drawing.Point(40, 365);
+			this.dgvHistory.Location = new System.Drawing.Point(40, 350);
 			this.dgvHistory.MultiSelect = false;
 			this.dgvHistory.Name = "dgvHistory";
 			this.dgvHistory.ReadOnly = true;
@@ -392,7 +400,7 @@
 			this.dgvHistory.RowHeadersWidth = 51;
 			this.dgvHistory.RowTemplate.Height = 36;
 			this.dgvHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dgvHistory.Size = new System.Drawing.Size(820, 130);
+			this.dgvHistory.Size = new System.Drawing.Size(820, 120);
 			this.dgvHistory.TabIndex = 19;
 			// 
 			// colRoomNumber
@@ -440,9 +448,9 @@
 			this.lblSectionBilling.AutoSize = true;
 			this.lblSectionBilling.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
 			this.lblSectionBilling.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(64)))), ((int)(((byte)(175)))));
-			this.lblSectionBilling.Location = new System.Drawing.Point(40, 515);
+			this.lblSectionBilling.Location = new System.Drawing.Point(40, 490);
 			this.lblSectionBilling.Name = "lblSectionBilling";
-			this.lblSectionBilling.Size = new System.Drawing.Size(320, 23);
+			this.lblSectionBilling.Size = new System.Drawing.Size(200, 23);
 			this.lblSectionBilling.TabIndex = 20;
 			this.lblSectionBilling.Text = "── BILLING ──";
 			// 
@@ -451,7 +459,7 @@
 			this.lblRoomChargesLabel.AutoSize = true;
 			this.lblRoomChargesLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			this.lblRoomChargesLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblRoomChargesLabel.Location = new System.Drawing.Point(40, 550);
+			this.lblRoomChargesLabel.Location = new System.Drawing.Point(40, 525);
 			this.lblRoomChargesLabel.Name = "lblRoomChargesLabel";
 			this.lblRoomChargesLabel.Size = new System.Drawing.Size(140, 23);
 			this.lblRoomChargesLabel.TabIndex = 21;
@@ -462,7 +470,7 @@
 			this.lblRoomChargesValue.AutoSize = true;
 			this.lblRoomChargesValue.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.lblRoomChargesValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
-			this.lblRoomChargesValue.Location = new System.Drawing.Point(260, 551);
+			this.lblRoomChargesValue.Location = new System.Drawing.Point(260, 526);
 			this.lblRoomChargesValue.Name = "lblRoomChargesValue";
 			this.lblRoomChargesValue.Size = new System.Drawing.Size(80, 23);
 			this.lblRoomChargesValue.TabIndex = 22;
@@ -473,7 +481,7 @@
 			this.lblTreatmentLabel.AutoSize = true;
 			this.lblTreatmentLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			this.lblTreatmentLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblTreatmentLabel.Location = new System.Drawing.Point(40, 580);
+			this.lblTreatmentLabel.Location = new System.Drawing.Point(40, 555);
 			this.lblTreatmentLabel.Name = "lblTreatmentLabel";
 			this.lblTreatmentLabel.Size = new System.Drawing.Size(145, 23);
 			this.lblTreatmentLabel.TabIndex = 23;
@@ -482,34 +490,78 @@
 			// lblTreatmentValue
 			// 
 			this.lblTreatmentValue.AutoSize = true;
-			this.lblTreatmentValue.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Italic);
-			this.lblTreatmentValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
-			this.lblTreatmentValue.Location = new System.Drawing.Point(260, 581);
+			this.lblTreatmentValue.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.lblTreatmentValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
+			this.lblTreatmentValue.Location = new System.Drawing.Point(260, 556);
 			this.lblTreatmentValue.Name = "lblTreatmentValue";
-			this.lblTreatmentValue.Size = new System.Drawing.Size(170, 23);
+			this.lblTreatmentValue.Size = new System.Drawing.Size(80, 23);
 			this.lblTreatmentValue.TabIndex = 24;
-			this.lblTreatmentValue.Text = "(pending module)";
+			this.lblTreatmentValue.Text = "₱0.00";
+			// 
+			// lblDiscountLabel
+			// 
+			this.lblDiscountLabel.AutoSize = true;
+			this.lblDiscountLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+			this.lblDiscountLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblDiscountLabel.Location = new System.Drawing.Point(40, 585);
+			this.lblDiscountLabel.Name = "lblDiscountLabel";
+			this.lblDiscountLabel.Size = new System.Drawing.Size(90, 23);
+			this.lblDiscountLabel.TabIndex = 25;
+			this.lblDiscountLabel.Text = "Discount:";
+			// 
+			// lblDiscountValue
+			// 
+			this.lblDiscountValue.AutoSize = true;
+			this.lblDiscountValue.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.lblDiscountValue.ForeColor = System.Drawing.Color.Red;
+			this.lblDiscountValue.Location = new System.Drawing.Point(260, 586);
+			this.lblDiscountValue.Name = "lblDiscountValue";
+			this.lblDiscountValue.Size = new System.Drawing.Size(80, 23);
+			this.lblDiscountValue.TabIndex = 26;
+			this.lblDiscountValue.Text = "—";
+			// 
+			// lblPaymentStatusLabel
+			// 
+			this.lblPaymentStatusLabel.AutoSize = true;
+			this.lblPaymentStatusLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+			this.lblPaymentStatusLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblPaymentStatusLabel.Location = new System.Drawing.Point(450, 585);
+			this.lblPaymentStatusLabel.Name = "lblPaymentStatusLabel";
+			this.lblPaymentStatusLabel.Size = new System.Drawing.Size(66, 23);
+			this.lblPaymentStatusLabel.TabIndex = 27;
+			this.lblPaymentStatusLabel.Text = "Status:";
+			// 
+			// lblPaymentStatusValue
+			// 
+			this.lblPaymentStatusValue.AutoSize = true;
+			this.lblPaymentStatusValue.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+			this.lblPaymentStatusValue.ForeColor = System.Drawing.Color.Gray;
+			this.lblPaymentStatusValue.Location = new System.Drawing.Point(550, 586);
+			this.lblPaymentStatusValue.Name = "lblPaymentStatusValue";
+			this.lblPaymentStatusValue.Size = new System.Drawing.Size(100, 23);
+			this.lblPaymentStatusValue.TabIndex = 28;
+			this.lblPaymentStatusValue.Text = "Not Billed";
 			// 
 			// lblTotalLabel
 			// 
 			this.lblTotalLabel.AutoSize = true;
 			this.lblTotalLabel.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
 			this.lblTotalLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
-			this.lblTotalLabel.Location = new System.Drawing.Point(40, 615);
+			this.lblTotalLabel.Location = new System.Drawing.Point(40, 625);
 			this.lblTotalLabel.Name = "lblTotalLabel";
 			this.lblTotalLabel.Size = new System.Drawing.Size(160, 25);
-			this.lblTotalLabel.TabIndex = 25;
-			this.lblTotalLabel.Text = "Total (so far):";
+			this.lblTotalLabel.TabIndex = 29;
+			this.lblTotalLabel.Text = "Total:";
 			// 
 			// lblTotalValue
 			// 
 			this.lblTotalValue.AutoSize = true;
 			this.lblTotalValue.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
 			this.lblTotalValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
-			this.lblTotalValue.Location = new System.Drawing.Point(260, 616);
+			this.lblTotalValue.Location = new System.Drawing.Point(260, 626);
 			this.lblTotalValue.Name = "lblTotalValue";
 			this.lblTotalValue.Size = new System.Drawing.Size(80, 25);
-			this.lblTotalValue.TabIndex = 26;
+			this.lblTotalValue.TabIndex = 30;
 			this.lblTotalValue.Text = "₱0.00";
 			// 
 			// panelFooter
@@ -517,7 +569,7 @@
 			this.panelFooter.BackColor = System.Drawing.Color.White;
 			this.panelFooter.Controls.Add(this.btnClose);
 			this.panelFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panelFooter.Location = new System.Drawing.Point(0, 740);
+			this.panelFooter.Location = new System.Drawing.Point(0, 630);
 			this.panelFooter.Name = "panelFooter";
 			this.panelFooter.Size = new System.Drawing.Size(900, 70);
 			this.panelFooter.TabIndex = 2;
@@ -543,7 +595,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-			this.ClientSize = new System.Drawing.Size(900, 810);
+			this.ClientSize = new System.Drawing.Size(900, 700); // Reduced from 810 to fit standard screens
 			this.Controls.Add(this.panelBody);
 			this.Controls.Add(this.panelFooter);
 			this.Controls.Add(this.panelHeader);
@@ -551,7 +603,7 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(916, 849);
+			this.MinimumSize = new System.Drawing.Size(916, 739);
 			this.Name = "AdmissionDetailsDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Admission Details";
@@ -601,6 +653,10 @@
 		private System.Windows.Forms.Label lblRoomChargesValue;
 		private System.Windows.Forms.Label lblTreatmentLabel;
 		private System.Windows.Forms.Label lblTreatmentValue;
+		private System.Windows.Forms.Label lblDiscountLabel;
+		private System.Windows.Forms.Label lblDiscountValue;
+		private System.Windows.Forms.Label lblPaymentStatusLabel;
+		private System.Windows.Forms.Label lblPaymentStatusValue;
 		private System.Windows.Forms.Label lblTotalLabel;
 		private System.Windows.Forms.Label lblTotalValue;
 		private System.Windows.Forms.Panel panelFooter;

@@ -241,6 +241,34 @@ namespace BusinessLogic.Repository
 				{
 					cmd.ExecuteNonQuery();
 				}
+
+				// --------------------------------------------------------
+				// BILLS
+				// Created by the Billing module (US-011).
+				// --------------------------------------------------------
+				string createBillsTable = @"
+					CREATE TABLE IF NOT EXISTS Bills (
+						BillID              INTEGER PRIMARY KEY AUTOINCREMENT,
+						BillCode            TEXT NOT NULL UNIQUE,
+						AdmissionCode       TEXT NOT NULL,
+						RoomCharges         REAL NOT NULL,
+						TreatmentCharges    REAL NOT NULL,
+						DiscountType        TEXT,
+						DiscountValue       REAL DEFAULT 0,
+						DiscountReason      TEXT,
+						DiscountComputed    REAL NOT NULL DEFAULT 0,
+						TotalDue            REAL NOT NULL,
+						AmountPaid          REAL NOT NULL DEFAULT 0,
+						Change              REAL NOT NULL DEFAULT 0,
+						Status              TEXT NOT NULL DEFAULT 'Draft',
+						ProcessedBy         TEXT NOT NULL,
+						CreatedAt           TEXT NOT NULL DEFAULT (datetime('now'))
+					);";
+
+				using (var cmd = new SQLiteCommand(createBillsTable, conn))
+				{
+					cmd.ExecuteNonQuery();
+				}
 			}
 		}
 

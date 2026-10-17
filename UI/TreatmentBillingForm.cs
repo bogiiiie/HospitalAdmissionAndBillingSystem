@@ -156,11 +156,13 @@ namespace UI
 			btnNavRoomSearch.Click += (s, e) => { new PatientRoomSearchForm(_loginPage, _username, _role).Show(); this.Close(); };
 			btnNavAdmission.Click += (s, e) => { new AdmissionForm(_loginPage, _username, _role).Show(); this.Close(); };
 			btnNavAdmissionLog.Click += (s, e) => { new AdmissionLogForm(_loginPage, _username, _role).Show(); this.Close(); };
-
-			// Link the new button
 			btnNavDoctorNurse.Click += (s, e) => { new DoctorNurseAssignmentForm(_loginPage, _username, _role).Show(); this.Close(); };
-
-			btnNavBilling.Click += (s, e) => MessageBox.Show("Billing module coming soon.");
+			btnNavBilling.Click += (s, e) =>
+			{
+				BillingForm form = new BillingForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
 			btnNavDischarge.Click += (s, e) => MessageBox.Show("Discharge module coming soon.");
 			btnNavSummary.Click += (s, e) => MessageBox.Show("Discharge Summary module coming soon.");
 		}

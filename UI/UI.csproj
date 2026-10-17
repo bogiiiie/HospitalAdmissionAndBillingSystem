@@ -96,6 +96,12 @@
     <Compile Include="AdmissionPickerDialog.Designer.cs">
       <DependentUpon>AdmissionPickerDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="BillingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BillingForm.Designer.cs">
+      <DependentUpon>BillingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DoctorNurseAssignmentForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +178,9 @@
     </Compile>
     <EmbeddedResource Include="AdminMenuForm.resx">
       <DependentUpon>AdminMenuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BillingForm.resx">
+      <DependentUpon>BillingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="HospitalStaffMenuForm.resx">
       <DependentUpon>HospitalStaffMenuForm.cs</DependentUpon>

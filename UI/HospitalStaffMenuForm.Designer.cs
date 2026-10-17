@@ -307,6 +307,7 @@
 			this.btnBilling.TabIndex = 11;
 			this.btnBilling.Text = "💵\nBilling";
 			this.btnBilling.UseVisualStyleBackColor = false;
+			this.btnBilling.Click += new System.EventHandler(this.btnBilling_Click);
 			// 
 			// btnDischarge
 			// 

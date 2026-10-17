@@ -12,7 +12,7 @@ namespace UI
 		private readonly AdmissionController admissionController = new AdmissionController();
 		private readonly PatientController patientController = new PatientController();
 		private readonly TreatmentController treatmentController = new TreatmentController();
-
+		private readonly BillController billController = new BillController(); // Added
 		private readonly Admission _admission;
 
 		// Pass the admission to display
@@ -82,17 +82,46 @@ namespace UI
 			}
 
 			// ---- BILLING ----
-			decimal roomCharges = admissionController.CalculateRoomCharges(
-				_admission.AdmissionCode,
-				DateTime.Now);
+			Bill bill = billController.GetBill(_admission.AdmissionCode);
 
-			// Fetch treatment subtotal
-			decimal treatmentCharges = treatmentController.CalculateSubtotal(_admission.AdmissionCode);
-			decimal total = roomCharges + treatmentCharges;
+			if (bill != null)
+			{
+				// A bill exists (either Draft or Paid)
+				lblRoomChargesValue.Text = "₱" + bill.RoomCharges.ToString("N2");
+				lblTreatmentValue.Text = "₱" + bill.TreatmentCharges.ToString("N2");
 
-			lblRoomChargesValue.Text = "₱" + roomCharges.ToString("N2");
-			lblTreatmentValue.Text = "₱" + treatmentCharges.ToString("N2");
-			lblTotalValue.Text = "₱" + total.ToString("N2");
+				if (bill.DiscountComputed > 0)
+				{
+					lblDiscountValue.Text = "- ₱" + bill.DiscountComputed.ToString("N2") + " (" + bill.DiscountReason + ")";
+				}
+				else
+				{
+					lblDiscountValue.Text = "₱0.00";
+				}
+
+				lblTotalValue.Text = "₱" + bill.TotalDue.ToString("N2");
+
+				// Show the status
+				lblPaymentStatusValue.Text = bill.Status.ToUpper();
+				if (bill.Status == "Paid")
+					lblPaymentStatusValue.ForeColor = Color.Green;
+				else
+					lblPaymentStatusValue.ForeColor = Color.Orange;
+			}
+			else
+			{
+				// No bill generated yet — calculate the base charges on the fly
+				decimal roomCharges = admissionController.CalculateRoomCharges(_admission.AdmissionCode, DateTime.Now);
+				decimal treatmentCharges = treatmentController.CalculateSubtotal(_admission.AdmissionCode);
+				decimal total = roomCharges + treatmentCharges;
+
+				lblRoomChargesValue.Text = "₱" + roomCharges.ToString("N2");
+				lblTreatmentValue.Text = "₱" + treatmentCharges.ToString("N2");
+				lblDiscountValue.Text = "—";
+				lblTotalValue.Text = "₱" + total.ToString("N2");
+				lblPaymentStatusValue.Text = "Not Billed";
+				lblPaymentStatusValue.ForeColor = Color.Gray;
+			}
 		}
 
 		private void btnClose_Click(object sender, EventArgs e)

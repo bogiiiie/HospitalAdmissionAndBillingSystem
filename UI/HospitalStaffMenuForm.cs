@@ -100,5 +100,12 @@ namespace UI
 			form.Show();
 			this.Close();
 		}
+
+		private void btnBilling_Click(object sender, EventArgs e)
+		{
+			BillingForm form = new BillingForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
 	}
 }
