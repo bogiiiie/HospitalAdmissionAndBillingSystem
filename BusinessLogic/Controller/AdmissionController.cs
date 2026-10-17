@@ -229,5 +229,38 @@ namespace BusinessLogic.Controller
 
 			return total;
 		}
+
+		// ==========================================
+		// DISCHARGE — Validate and process discharge
+		// ==========================================
+		public string DischargePatient(string admissionCode, DateTime dischargeDate, string notes)
+		{
+			if (string.IsNullOrWhiteSpace(admissionCode))
+				return "Please select an admission.";
+
+			Admission adm = repository.GetAdmissionByCode(admissionCode);
+			if (adm == null)
+				return "Admission not found.";
+			if (adm.Status == "Discharged")
+				return "This patient is already discharged.";
+
+			// Check Billing Status
+			BillController billController = new BillController();
+			Bill bill = billController.GetBill(admissionCode);
+			if (bill == null || bill.Status != "Paid")
+				return "Patient must have no outstanding balance before discharge.";
+
+			// Process Discharge
+			repository.DischargePatient(admissionCode, adm.RoomNumber, dischargeDate, notes);
+			return "OK";
+		}
+
+		// ==========================================
+		// Display all discharged admissions (for reporting)
+		// ==========================================
+		public List<Admission> GetDischargedAdmissions()
+		{
+			return repository.GetDischargedAdmissions();
+		}
 	}
 }

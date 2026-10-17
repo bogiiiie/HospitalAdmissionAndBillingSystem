@@ -326,6 +326,7 @@
 			this.btnDischarge.TabIndex = 12;
 			this.btnDischarge.Text = "🚪\nDischarge";
 			this.btnDischarge.UseVisualStyleBackColor = false;
+			this.btnDischarge.Click += new System.EventHandler(this.btnDischarge_Click);
 			// 
 			// btnDischargeSummary
 			// 
@@ -344,6 +345,7 @@
 			this.btnDischargeSummary.TabIndex = 13;
 			this.btnDischargeSummary.Text = "📄\nDischarge Summary";
 			this.btnDischargeSummary.UseVisualStyleBackColor = false;
+			this.btnDischargeSummary.Click += new System.EventHandler(this.btnDischargeSummary_Click);
 			// 
 			// lblSubtitle
 			// 
