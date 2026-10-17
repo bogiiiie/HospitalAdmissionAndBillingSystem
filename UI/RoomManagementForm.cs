@@ -124,7 +124,12 @@ namespace UI
 				form.Show();
 				this.Close();
 			};
-			btnNavBilling.Click += (s, e) => MessageBox.Show("Billing module coming soon.");
+			btnNavBilling.Click += (s, e) =>
+			{
+				BillingForm form = new BillingForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
 			btnNavDischarge.Click += (s, e) => MessageBox.Show("Discharge module coming soon.");
 			btnNavSummary.Click += (s, e) => MessageBox.Show("Discharge Summary module coming soon.");
 		}
@@ -140,10 +145,8 @@ namespace UI
 				btnNavPatientSearch,
 				btnNavRoomSearch,
 				btnNavAdmission,
+				btnNavAdmissionLog // Visible for both Admin and Staff
 			};
-
-			// Admission Log is Admin-only (per the requirements PDF)
-			visibleButtons.Add(btnNavAdmissionLog);
 
 			// Doctor / Nurse is Admin-only
 			if (_role == "Admin")
@@ -152,7 +155,7 @@ namespace UI
 			}
 
 			visibleButtons.Add(btnNavTreatment);
-			visibleButtons.Add(btnNavBilling);
+			visibleButtons.Add(btnNavBilling); // <-- Only add it HERE
 			visibleButtons.Add(btnNavDischarge);
 			visibleButtons.Add(btnNavSummary);
 

@@ -100,7 +100,12 @@ namespace UI
 				form.Show();
 				this.Close();
 			};
-			btnNavBilling.Click += (s, e) => MessageBox.Show("Billing module coming soon.");
+			btnNavBilling.Click += (s, e) =>
+			{
+				BillingForm form = new BillingForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
 			btnNavDischarge.Click += (s, e) => MessageBox.Show("Discharge module coming soon.");
 			btnNavSummary.Click += (s, e) => MessageBox.Show("Discharge Summary module coming soon.");
 		}
