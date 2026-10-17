@@ -6,6 +6,7 @@
 // ============================================================
 
 using System;                       // Gives us Convert, DateTime, etc.
+using System.Collections.Generic;
 using System.Configuration;         // Gives us ConfigurationManager (reads App.config)
 using System.Data.SQLite;           // Gives us SQLiteConnection, SQLiteCommand, SQLiteDataReader
 using Model;                        // Gives us the User class from the Model project
@@ -122,12 +123,44 @@ namespace BusinessLogic.Repository
 			return user;
 		}
 
-		// ------------------------------------------------------------
-		// FUTURE METHODS (for reference - not yet implemented)
-		// ------------------------------------------------------------
-		// public void AddUser(User user)          { /* INSERT INTO Users ... */ }
-		// public void UpdateUser(User user)       { /* UPDATE Users SET ... */ }
-		// public void DeactivateUser(int userId)  { /* UPDATE Users SET IsActive = 0 ... */ }
-		// public bool UsernameExists(string u)    { /* SELECT COUNT(*) FROM Users ... */ }
+		public List<User> GetAllUsers()
+		{
+			List<User> users = new List<User>();
+			using (var conn = new SQLiteConnection(connectionString))
+			{
+				conn.Open();
+				string sql = "SELECT * FROM Users ORDER BY Username;";
+				using (var cmd = new SQLiteCommand(sql, conn))
+				using (var reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						users.Add(new User
+						{
+							UserID = Convert.ToInt32(reader["UserID"]),
+							Username = reader["Username"].ToString(),
+							Role = reader["Role"].ToString(),
+							IsActive = Convert.ToInt32(reader["IsActive"]) == 1
+						});
+					}
+				}
+			}
+			return users;
+		}
+
+		public void UpdatePassword(string username, string newPasswordHash)
+		{
+			using (var conn = new SQLiteConnection(connectionString))
+			{
+				conn.Open();
+				string sql = "UPDATE Users SET PasswordHash = @Hash WHERE Username = @User;";
+				using (var cmd = new SQLiteCommand(sql, conn))
+				{
+					cmd.Parameters.AddWithValue("@Hash", newPasswordHash);
+					cmd.Parameters.AddWithValue("@User", username);
+					cmd.ExecuteNonQuery();
+				}
+			}
+		}
 	}
 }

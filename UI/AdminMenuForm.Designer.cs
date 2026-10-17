@@ -387,6 +387,7 @@
 			this.btnUserMgmt.TabIndex = 13;
 			this.btnUserMgmt.Text = "⚙️\nUser Management";
 			this.btnUserMgmt.UseVisualStyleBackColor = false;
+			this.btnUserMgmt.Click += new System.EventHandler(this.btnUserMgmt_Click);
 			// 
 			// lblSubtitle
 			// 

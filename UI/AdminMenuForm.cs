@@ -128,5 +128,12 @@ namespace UI
 			form.Show();
 			this.Close();
 		}
+
+		private void btnUserMgmt_Click(object sender, EventArgs e)
+		{
+			UserManagementForm form = new UserManagementForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
 	}
 }
