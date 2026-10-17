@@ -379,5 +379,81 @@ namespace BusinessLogic.Repository
 				CreatedAt = DateTime.Parse(reader["CreatedAt"].ToString())
 			};
 		}
+
+		// ==========================================
+		// UPDATE — Discharge the patient
+		// Updates admission, closes room history, frees the room.
+		// ==========================================
+		public void DischargePatient(string admissionCode, string roomNumber, DateTime dischargeDate, string notes)
+		{
+			using (var conn = new SQLiteConnection(connectionString))
+			{
+				conn.Open();
+				using (var trans = conn.BeginTransaction())
+				{
+					try
+					{
+						// 1. Update Admission
+						string sqlAdm = @"UPDATE Admissions SET 
+											Status = 'Discharged', 
+											DischargeDate = @Date, 
+											DischargeNotes = @Notes 
+										  WHERE AdmissionCode = @Code;";
+						using (var cmd = new SQLiteCommand(sqlAdm, conn))
+						{
+							cmd.Parameters.AddWithValue("@Code", admissionCode);
+							cmd.Parameters.AddWithValue("@Date", dischargeDate.ToString("yyyy-MM-dd HH:mm:ss"));
+							cmd.Parameters.AddWithValue("@Notes", (object)notes ?? DBNull.Value);
+							cmd.ExecuteNonQuery();
+						}
+
+						// 2. Close Room History
+						string sqlHist = @"UPDATE AdmissionRoomHistory SET EndDate = @Date 
+										   WHERE AdmissionCode = @Code AND EndDate IS NULL;";
+						using (var cmd = new SQLiteCommand(sqlHist, conn))
+						{
+							cmd.Parameters.AddWithValue("@Code", admissionCode);
+							cmd.Parameters.AddWithValue("@Date", dischargeDate.ToString("yyyy-MM-dd HH:mm:ss"));
+							cmd.ExecuteNonQuery();
+						}
+
+						// 3. Free the Room
+						string sqlRoom = "UPDATE Rooms SET Status = 'Available' WHERE RoomNumber = @Room;";
+						using (var cmd = new SQLiteCommand(sqlRoom, conn))
+						{
+							cmd.Parameters.AddWithValue("@Room", roomNumber);
+							cmd.ExecuteNonQuery();
+						}
+
+						trans.Commit();
+					}
+					catch
+					{
+						trans.Rollback();
+						throw;
+					}
+				}
+			}
+		}
+
+		// ==========================================
+		// GET — Get the list of discharged admissions
+		// ==========================================
+		public List<Admission> GetDischargedAdmissions()
+		{
+			List<Admission> list = new List<Admission>();
+			using (var conn = new SQLiteConnection(connectionString))
+			{
+				conn.Open();
+				string sql = "SELECT * FROM Admissions WHERE Status = 'Discharged' ORDER BY AdmissionID DESC;";
+				using (var cmd = new SQLiteCommand(sql, conn))
+				using (var reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+						list.Add(MapReaderToAdmission(reader));
+				}
+			}
+			return list;
+		}
 	}
 }

@@ -113,8 +113,18 @@ namespace UI
 				form.Show();
 				this.Close();
 			};
-			btnNavDischarge.Click += (s, e) => MessageBox.Show("Discharge module coming soon.");
-			btnNavSummary.Click += (s, e) => MessageBox.Show("Discharge Summary module coming soon.");
+			btnNavDischarge.Click += (s, e) =>
+			{
+				DischargeForm form = new DischargeForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
+			btnNavSummary.Click += (s, e) =>
+			{
+				DischargeSummaryForm form = new DischargeSummaryForm(_loginPage, _username, _role);
+				form.Show();
+				this.Close();
+			};
 		}
 
 		private void ApplyRoleToSidebar()
@@ -267,10 +277,19 @@ namespace UI
 			if (e.RowIndex < 0) return;
 
 			string code = dgvAdmissions.Rows[e.RowIndex].Cells["colAdmissionCode"].Value.ToString();
+			string status = dgvAdmissions.Rows[e.RowIndex].Cells["colStatus"].Value.ToString();
 			Admission adm = admissionController.GetAdmissionByCode(code);
 			if (adm == null) return;
 
-			new AdmissionDetailsDialog(adm).ShowDialog(this);
+			if (status == "Discharged")
+			{
+				DischargeSummaryForm summary = new DischargeSummaryForm(_loginPage, _username, _role, code);
+				summary.ShowDialog(this);
+			}
+			else
+			{
+				new AdmissionDetailsDialog(adm).ShowDialog(this);
+			}
 		}
 
 		// =============================================================

@@ -107,5 +107,19 @@ namespace UI
 			form.Show();
 			this.Close();
 		}
+
+		private void btnDischarge_Click(object sender, EventArgs e)
+		{
+			DischargeForm form = new DischargeForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
+
+		private void btnDischargeSummary_Click(object sender, EventArgs e)
+		{
+			DischargeSummaryForm form = new DischargeSummaryForm(_loginPage, _username, _role);
+			form.Show();
+			this.Close();
+		}
 	}
 }
