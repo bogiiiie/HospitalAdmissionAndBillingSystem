@@ -35,6 +35,14 @@ Track the project's tasks, progress, and development status through our GitHub K
 
 ---
 
+## 🎥 Demo Video
+
+Watch a full walkthrough of the system in action:
+
+[![Hospital Admission and Billing System — Demo](https://img.youtube.com/vi/_S4evQe2iWA/0.jpg)](https://youtu.be/_S4evQe2iWA)
+
+---
+
 ## 👥 Team Roles
 
 | Member                   | GitHub                                                             | Role(s)                                                                     |
