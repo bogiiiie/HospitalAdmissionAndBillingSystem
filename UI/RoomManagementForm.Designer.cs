@@ -2,15 +2,8 @@
 {
 	partial class RoomManagementForm
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null))
@@ -20,12 +13,6 @@
 			base.Dispose(disposing);
 		}
 
-		#region Windows Form Designer generated code
-
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		private void InitializeComponent()
 		{
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -57,6 +44,7 @@
 			this.colRoomNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colType = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colCapacity = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.lblCount = new System.Windows.Forms.Label();
 			this.toolbarPanel = new System.Windows.Forms.Panel();
@@ -453,6 +441,7 @@
 			this.colRoomNumber,
 			this.colType,
 			this.colRate,
+			this.colCapacity,
 			this.colStatus});
 			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
@@ -480,7 +469,7 @@
 			// colRoomNumber
 			// 
 			this.colRoomNumber.DataPropertyName = "RoomNumber";
-			this.colRoomNumber.FillWeight = 20F;
+			this.colRoomNumber.FillWeight = 15F;
 			this.colRoomNumber.HeaderText = "Room #";
 			this.colRoomNumber.MinimumWidth = 6;
 			this.colRoomNumber.Name = "colRoomNumber";
@@ -489,7 +478,7 @@
 			// colType
 			// 
 			this.colType.DataPropertyName = "RoomType";
-			this.colType.FillWeight = 30F;
+			this.colType.FillWeight = 25F;
 			this.colType.HeaderText = "Type";
 			this.colType.MinimumWidth = 6;
 			this.colType.Name = "colType";
@@ -498,16 +487,25 @@
 			// colRate
 			// 
 			this.colRate.DataPropertyName = "Rate";
-			this.colRate.FillWeight = 25F;
+			this.colRate.FillWeight = 20F;
 			this.colRate.HeaderText = "Rate / Day";
 			this.colRate.MinimumWidth = 6;
 			this.colRate.Name = "colRate";
 			this.colRate.ReadOnly = true;
 			// 
+			// colCapacity
+			// 
+			this.colCapacity.DataPropertyName = "Capacity";
+			this.colCapacity.FillWeight = 20F;
+			this.colCapacity.HeaderText = "Beds (Avail/Total)";
+			this.colCapacity.MinimumWidth = 6;
+			this.colCapacity.Name = "colCapacity";
+			this.colCapacity.ReadOnly = true;
+			// 
 			// colStatus
 			// 
 			this.colStatus.DataPropertyName = "Status";
-			this.colStatus.FillWeight = 25F;
+			this.colStatus.FillWeight = 20F;
 			this.colStatus.HeaderText = "Status";
 			this.colStatus.MinimumWidth = 6;
 			this.colStatus.Name = "colStatus";
@@ -689,8 +687,6 @@
 
 		}
 
-		#endregion
-
 		private System.Windows.Forms.Panel headerPanel;
 		private System.Windows.Forms.Label lblBrand;
 		private System.Windows.Forms.Label lblUserInfo;
@@ -722,6 +718,7 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn colRoomNumber;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colType;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colRate;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colCapacity;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
 		private System.Windows.Forms.Label lblCount;
 		private System.Windows.Forms.Button btnMainMenu;

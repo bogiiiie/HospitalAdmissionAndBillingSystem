@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using BusinessLogic.Controller;
+using BusinessLogic.Repository;
 using Model;
 
 namespace UI
@@ -10,6 +11,7 @@ namespace UI
 	public partial class RoomManagementForm : Form
 	{
 		private readonly RoomController controller = new RoomController();
+		private readonly BedRepository bedRepo = new BedRepository(); // NEW
 		private readonly LoginPage _loginPage;
 		private readonly string _username;
 		private readonly string _role;
@@ -210,11 +212,14 @@ namespace UI
 
 			foreach (Room room in rooms)
 			{
-				// Actions cell is removed
+				// Get available beds
+				int availableBeds = bedRepo.GetAvailableBedCount(room.RoomNumber);
+
 				dgvRooms.Rows.Add(
 					room.RoomNumber,
 					room.RoomType,
 					"P" + room.Rate.ToString("N0") + "/day",
+					availableBeds + " / " + room.Capacity, // NEW
 					room.Status
 				);
 			}

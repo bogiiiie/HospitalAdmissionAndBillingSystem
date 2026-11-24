@@ -10,6 +10,7 @@ namespace BusinessLogic.Controller
 		private readonly AdmissionRepository repository = new AdmissionRepository();
 		private readonly PatientRepository patientRepo = new PatientRepository();
 		private readonly RoomRepository roomRepo = new RoomRepository();
+		private readonly BedRepository bedRepo = new BedRepository(); // NEW
 
 		// ==========================================
 		// READ
@@ -31,10 +32,9 @@ namespace BusinessLogic.Controller
 
 		// ==========================================
 		// CREATE — Admit a patient
-		// Full validation chain runs in order.
-		// Returns "OK" on success, or an error message.
+		// Added bedName to the parameters.
 		// ==========================================
-		public string AddAdmission(string patientCode, string roomNumber,
+		public string AddAdmission(string patientCode, string roomNumber, string bedName,
 								   string diagnosis, string admittedBy)
 		{
 			// 1. Patient must be selected
@@ -54,9 +54,9 @@ namespace BusinessLogic.Controller
 			if (repository.HasActiveAdmission(patientCode))
 				return "This patient already has an active admission.";
 
-			// 5. Room must be selected
-			if (string.IsNullOrWhiteSpace(roomNumber))
-				return "Please select a room.";
+			// 5. Room and Bed must be selected
+			if (string.IsNullOrWhiteSpace(roomNumber) || string.IsNullOrWhiteSpace(bedName))
+				return "Please select a room and bed.";
 
 			// 6. Room must still exist
 			Room room = roomRepo.GetRoomByNumber(roomNumber);
@@ -67,7 +67,11 @@ namespace BusinessLogic.Controller
 			if (room.Status != "Available")
 				return "Selected room is unavailable. Please choose another room.";
 
-			// 8. Diagnosis must not be empty
+			// 8. Bed must be Available (NEW)
+			if (!bedRepo.IsBedAvailable(roomNumber, bedName))
+				return "Selected bed is no longer available.";
+
+			// 9. Diagnosis must not be empty
 			if (string.IsNullOrWhiteSpace(diagnosis))
 				return "Diagnosis is required.";
 
@@ -77,9 +81,10 @@ namespace BusinessLogic.Controller
 				AdmissionCode = repository.GenerateNextAdmissionCode(),
 				PatientCode = patientCode,
 				RoomNumber = roomNumber,
+				BedName = bedName, // NEW
 				AdmissionDate = DateTime.Now,
 				Diagnosis = diagnosis.Trim(),
-				LockedRate = room.Rate,      // ← snapshot the rate
+				LockedRate = room.Rate,
 				Status = "Admitted",
 				AdmittedBy = admittedBy
 			};
@@ -91,21 +96,34 @@ namespace BusinessLogic.Controller
 			repository.AddRoomHistory(
 				adm.AdmissionCode,
 				room.RoomNumber,
+				adm.BedName, // NEW
 				room.RoomType,
 				room.Rate,
 				adm.AdmissionDate);
 
-			// Flip the room to Occupied
-			roomRepo.UpdateRoomStatus(roomNumber, "Occupied");
+			// Flip the bed to Occupied
+			bedRepo.UpdateBedStatus(roomNumber, bedName, "Occupied");
+
+			// Check if the room is now full
+			int occupiedBeds = bedRepo.GetOccupiedBedCount(roomNumber);
+			if (occupiedBeds >= room.Capacity)
+			{
+				// All beds are full, room becomes Occupied
+				roomRepo.UpdateRoomStatus(roomNumber, "Occupied");
+			}
+			else
+			{
+				// Still has empty beds, room remains Available
+				roomRepo.UpdateRoomStatus(roomNumber, "Available");
+			}
 
 			return "OK";
 		}
 
 		// ==========================================
-		// UPDATE — Admin override: change room + diagnosis
-		// Returns "OK" or an error message.
+		// UPDATE — Admin override: change room/bed + diagnosis
 		// ==========================================
-		public string UpdateAdmission(string admissionCode, string newRoomNumber, string diagnosis)
+		public string UpdateAdmission(string admissionCode, string newRoomNumber, string newBedName, string diagnosis)
 		{
 			if (string.IsNullOrWhiteSpace(admissionCode))
 				return "Admission code is required.";
@@ -117,17 +135,17 @@ namespace BusinessLogic.Controller
 			if (existing.Status != "Admitted")
 				return "Cannot edit a discharged admission.";
 
-			if (string.IsNullOrWhiteSpace(newRoomNumber))
-				return "Please select a new room.";
+			if (string.IsNullOrWhiteSpace(newRoomNumber) || string.IsNullOrWhiteSpace(newBedName))
+				return "Please select a new room and bed.";
 
 			if (string.IsNullOrWhiteSpace(diagnosis))
 				return "Diagnosis is required.";
 
-			// If the room is unchanged, only update diagnosis
-			bool roomChanged = !string.Equals(existing.RoomNumber, newRoomNumber,
-											 StringComparison.OrdinalIgnoreCase);
+			// If the bed is unchanged, only update diagnosis
+			bool bedChanged = !string.Equals(existing.RoomNumber, newRoomNumber, StringComparison.OrdinalIgnoreCase) ||
+							  !string.Equals(existing.BedName, newBedName, StringComparison.OrdinalIgnoreCase);
 
-			if (roomChanged)
+			if (bedChanged)
 			{
 				// New room must exist and be Available
 				Room newRoom = roomRepo.GetRoomByNumber(newRoomNumber);
@@ -135,28 +153,41 @@ namespace BusinessLogic.Controller
 					return "Selected room not found.";
 				if (newRoom.Status != "Available")
 					return "Selected room is unavailable.";
+				if (!bedRepo.IsBedAvailable(newRoomNumber, newBedName))
+					return "Selected bed is unavailable."; // NEW
 
 				// Close the current room-history period
 				repository.CloseCurrentRoomHistory(existing.AdmissionCode, DateTime.Now);
 
-				// Open a new room-history period for the new room
+				// Open a new room-history period for the new room/bed
 				repository.AddRoomHistory(
 					existing.AdmissionCode,
 					newRoom.RoomNumber,
+					newBedName, // NEW
 					newRoom.RoomType,
 					newRoom.Rate,
 					DateTime.Now);
 
-				// Free the old room
-				roomRepo.UpdateRoomStatus(existing.RoomNumber, "Available");
+				// Free the old bed
+				bedRepo.UpdateBedStatus(existing.RoomNumber, existing.BedName, "Available");
+
+				// Check if the old room is now fully empty
+				if (bedRepo.GetOccupiedBedCount(existing.RoomNumber) == 0)
+				{
+					roomRepo.UpdateRoomStatus(existing.RoomNumber, "Available");
+				}
+
+				// Occupy the new bed
+				bedRepo.UpdateBedStatus(newRoomNumber, newBedName, "Occupied");
 
 				// Occupy the new room
 				roomRepo.UpdateRoomStatus(newRoomNumber, "Occupied");
 
-				// Update the admission row (current room + diagnosis + current rate)
+				// Update the admission row
 				existing.RoomNumber = newRoomNumber;
+				existing.BedName = newBedName; // NEW
 				existing.Diagnosis = diagnosis.Trim();
-				existing.LockedRate = newRoom.Rate;   // current rate (kept for display)
+				existing.LockedRate = newRoom.Rate;
 			}
 			else
 			{
@@ -169,7 +200,6 @@ namespace BusinessLogic.Controller
 
 		// ==========================================
 		// QUERY — Get admission status for a patient
-		// Returns "Admitted" / "Discharged" / "Not Admitted"
 		// ==========================================
 		public string GetPatientStatus(string patientCode)
 		{
@@ -183,12 +213,11 @@ namespace BusinessLogic.Controller
 		}
 
 		// ==========================================
-		// QUERY — Get the name of the patient in a room
-		// Returns full name, or "—" if the room is empty.
+		// QUERY — Get the name of the patient in a bed
 		// ==========================================
-		public string GetOccupantName(string roomNumber)
+		public string GetOccupantName(string roomNumber, string bedName) // NEW
 		{
-			string patientCode = repository.GetOccupant(roomNumber);
+			string patientCode = repository.GetOccupant(roomNumber, bedName);
 			if (string.IsNullOrEmpty(patientCode))
 				return "—";
 
@@ -200,7 +229,7 @@ namespace BusinessLogic.Controller
 		}
 
 		// ==========================================
-		// QUERY — Get all room periods for an admission (Policy B)
+		// QUERY — Get all room periods for an admission
 		// ==========================================
 		public List<AdmissionRoomHistory> GetRoomHistory(string admissionCode)
 		{
@@ -209,8 +238,6 @@ namespace BusinessLogic.Controller
 
 		// ==========================================
 		// BILLING HELPER — Total room charges for an admission
-		// Sums rate × days for each room period.
-		// Uses DateTime.Now for the currently-open period.
 		// ==========================================
 		public decimal CalculateRoomCharges(string admissionCode, DateTime asOf)
 		{
@@ -222,7 +249,7 @@ namespace BusinessLogic.Controller
 			{
 				DateTime end = h.EndDate ?? asOf;
 				double days = Math.Ceiling((end - h.StartDate).TotalDays);
-				if (days < 1) days = 1;   // at least 1 day charge
+				if (days < 1) days = 1;
 
 				total += h.Rate * (decimal)days;
 			}
@@ -251,7 +278,7 @@ namespace BusinessLogic.Controller
 				return "Patient must have no outstanding balance before discharge.";
 
 			// Process Discharge
-			repository.DischargePatient(admissionCode, adm.RoomNumber, dischargeDate, notes);
+			repository.DischargePatient(admissionCode, adm.RoomNumber, adm.BedName, dischargeDate, notes); // NEW
 			return "OK";
 		}
 

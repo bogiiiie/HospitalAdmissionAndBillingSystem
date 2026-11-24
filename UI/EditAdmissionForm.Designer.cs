@@ -11,6 +11,8 @@
 		/// Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+
+
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null))
@@ -26,25 +28,26 @@
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
+
 		private void InitializeComponent()
 		{
 			this.panelHeader = new System.Windows.Forms.Panel();
 			this.lblHeader = new System.Windows.Forms.Label();
 			this.panelBody = new System.Windows.Forms.Panel();
-			this.lblTitle = new System.Windows.Forms.Label();
-			this.lblPatientLabel = new System.Windows.Forms.Label();
-			this.txtPatient = new System.Windows.Forms.TextBox();
-			this.lblCurrentRoomLabel = new System.Windows.Forms.Label();
-			this.txtCurrentRoom = new System.Windows.Forms.TextBox();
-			this.lblDateLabel = new System.Windows.Forms.Label();
-			this.txtAdmissionDate = new System.Windows.Forms.TextBox();
-			this.lblDiagnosisLabel = new System.Windows.Forms.Label();
-			this.txtDiagnosis = new System.Windows.Forms.TextBox();
-			this.lblSectionRoom = new System.Windows.Forms.Label();
-			this.lblNewRoomLabel = new System.Windows.Forms.Label();
-			this.txtNewRoom = new System.Windows.Forms.TextBox();
 			this.btnFindRoom = new System.Windows.Forms.Button();
+			this.txtNewRoom = new System.Windows.Forms.TextBox();
+			this.lblNewRoomLabel = new System.Windows.Forms.Label();
+			this.lblSectionRoom = new System.Windows.Forms.Label();
+			this.txtDiagnosis = new System.Windows.Forms.TextBox();
+			this.lblDiagnosisLabel = new System.Windows.Forms.Label();
+			this.txtAdmissionDate = new System.Windows.Forms.TextBox();
+			this.lblDateLabel = new System.Windows.Forms.Label();
+			this.txtCurrentRoom = new System.Windows.Forms.TextBox();
+			this.lblCurrentRoomLabel = new System.Windows.Forms.Label();
+			this.txtPatient = new System.Windows.Forms.TextBox();
+			this.lblPatientLabel = new System.Windows.Forms.Label();
 			this.lblHelperNote = new System.Windows.Forms.Label();
+			this.lblTitle = new System.Windows.Forms.Label();
 			this.panelFooter = new System.Windows.Forms.Panel();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnSave = new System.Windows.Forms.Button();
@@ -98,138 +101,6 @@
 			this.panelBody.Size = new System.Drawing.Size(900, 635);
 			this.panelBody.TabIndex = 1;
 			// 
-			// lblTitle
-			// 
-			this.lblTitle.AutoSize = true;
-			this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-			this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
-			this.lblTitle.Location = new System.Drawing.Point(40, 30);
-			this.lblTitle.Name = "lblTitle";
-			this.lblTitle.Size = new System.Drawing.Size(280, 37);
-			this.lblTitle.TabIndex = 0;
-			this.lblTitle.Text = "Edit Admission — ADM-0001";
-			// 
-			// lblPatientLabel
-			// 
-			this.lblPatientLabel.AutoSize = true;
-			this.lblPatientLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-			this.lblPatientLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblPatientLabel.Location = new System.Drawing.Point(40, 95);
-			this.lblPatientLabel.Name = "lblPatientLabel";
-			this.lblPatientLabel.Size = new System.Drawing.Size(190, 23);
-			this.lblPatientLabel.TabIndex = 1;
-			this.lblPatientLabel.Text = "Patient (read-only)";
-			// 
-			// txtPatient
-			// 
-			this.txtPatient.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-			this.txtPatient.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtPatient.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.txtPatient.Location = new System.Drawing.Point(40, 122);
-			this.txtPatient.Name = "txtPatient";
-			this.txtPatient.ReadOnly = true;
-			this.txtPatient.Size = new System.Drawing.Size(500, 30);
-			this.txtPatient.TabIndex = 2;
-			// 
-			// lblCurrentRoomLabel
-			// 
-			this.lblCurrentRoomLabel.AutoSize = true;
-			this.lblCurrentRoomLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-			this.lblCurrentRoomLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblCurrentRoomLabel.Location = new System.Drawing.Point(40, 175);
-			this.lblCurrentRoomLabel.Name = "lblCurrentRoomLabel";
-			this.lblCurrentRoomLabel.Size = new System.Drawing.Size(220, 23);
-			this.lblCurrentRoomLabel.TabIndex = 3;
-			this.lblCurrentRoomLabel.Text = "Current Room (read-only)";
-			// 
-			// txtCurrentRoom
-			// 
-			this.txtCurrentRoom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-			this.txtCurrentRoom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtCurrentRoom.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.txtCurrentRoom.Location = new System.Drawing.Point(40, 202);
-			this.txtCurrentRoom.Name = "txtCurrentRoom";
-			this.txtCurrentRoom.ReadOnly = true;
-			this.txtCurrentRoom.Size = new System.Drawing.Size(500, 30);
-			this.txtCurrentRoom.TabIndex = 4;
-			// 
-			// lblDateLabel
-			// 
-			this.lblDateLabel.AutoSize = true;
-			this.lblDateLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-			this.lblDateLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblDateLabel.Location = new System.Drawing.Point(40, 255);
-			this.lblDateLabel.Name = "lblDateLabel";
-			this.lblDateLabel.Size = new System.Drawing.Size(220, 23);
-			this.lblDateLabel.TabIndex = 5;
-			this.lblDateLabel.Text = "Admission Date (read-only)";
-			// 
-			// txtAdmissionDate
-			// 
-			this.txtAdmissionDate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-			this.txtAdmissionDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtAdmissionDate.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.txtAdmissionDate.Location = new System.Drawing.Point(40, 282);
-			this.txtAdmissionDate.Name = "txtAdmissionDate";
-			this.txtAdmissionDate.ReadOnly = true;
-			this.txtAdmissionDate.Size = new System.Drawing.Size(500, 30);
-			this.txtAdmissionDate.TabIndex = 6;
-			// 
-			// lblDiagnosisLabel
-			// 
-			this.lblDiagnosisLabel.AutoSize = true;
-			this.lblDiagnosisLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-			this.lblDiagnosisLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblDiagnosisLabel.Location = new System.Drawing.Point(40, 335);
-			this.lblDiagnosisLabel.Name = "lblDiagnosisLabel";
-			this.lblDiagnosisLabel.Size = new System.Drawing.Size(200, 23);
-			this.lblDiagnosisLabel.TabIndex = 7;
-			this.lblDiagnosisLabel.Text = "Diagnosis (editable) *";
-			// 
-			// txtDiagnosis
-			// 
-			this.txtDiagnosis.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtDiagnosis.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.txtDiagnosis.Location = new System.Drawing.Point(40, 362);
-			this.txtDiagnosis.Multiline = true;
-			this.txtDiagnosis.Name = "txtDiagnosis";
-			this.txtDiagnosis.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.txtDiagnosis.Size = new System.Drawing.Size(820, 70);
-			this.txtDiagnosis.TabIndex = 8;
-			// 
-			// lblSectionRoom
-			// 
-			this.lblSectionRoom.AutoSize = true;
-			this.lblSectionRoom.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-			this.lblSectionRoom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(64)))), ((int)(((byte)(175)))));
-			this.lblSectionRoom.Location = new System.Drawing.Point(40, 460);
-			this.lblSectionRoom.Name = "lblSectionRoom";
-			this.lblSectionRoom.Size = new System.Drawing.Size(320, 23);
-			this.lblSectionRoom.TabIndex = 9;
-			this.lblSectionRoom.Text = "── CHANGE ROOM ASSIGNMENT ──";
-			// 
-			// lblNewRoomLabel
-			// 
-			this.lblNewRoomLabel.AutoSize = true;
-			this.lblNewRoomLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-			this.lblNewRoomLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblNewRoomLabel.Location = new System.Drawing.Point(40, 500);
-			this.lblNewRoomLabel.Name = "lblNewRoomLabel";
-			this.lblNewRoomLabel.Size = new System.Drawing.Size(320, 23);
-			this.lblNewRoomLabel.TabIndex = 10;
-			this.lblNewRoomLabel.Text = "New Room (leave blank to keep current)";
-			// 
-			// txtNewRoom
-			// 
-			this.txtNewRoom.BackColor = System.Drawing.Color.White;
-			this.txtNewRoom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtNewRoom.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.txtNewRoom.Location = new System.Drawing.Point(40, 527);
-			this.txtNewRoom.Name = "txtNewRoom";
-			this.txtNewRoom.ReadOnly = true;
-			this.txtNewRoom.Size = new System.Drawing.Size(600, 30);
-			this.txtNewRoom.TabIndex = 11;
-			// 
 			// btnFindRoom
 			// 
 			this.btnFindRoom.BackColor = System.Drawing.Color.White;
@@ -243,9 +114,130 @@
 			this.btnFindRoom.Name = "btnFindRoom";
 			this.btnFindRoom.Size = new System.Drawing.Size(210, 34);
 			this.btnFindRoom.TabIndex = 12;
-			this.btnFindRoom.Text = "🔍  Find Room";
+			this.btnFindRoom.Text = "🔍  Find Bed";
 			this.btnFindRoom.UseVisualStyleBackColor = false;
 			this.btnFindRoom.Click += new System.EventHandler(this.btnFindRoom_Click);
+			// 
+			// txtNewRoom
+			// 
+			this.txtNewRoom.BackColor = System.Drawing.Color.White;
+			this.txtNewRoom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtNewRoom.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.txtNewRoom.Location = new System.Drawing.Point(40, 527);
+			this.txtNewRoom.Name = "txtNewRoom";
+			this.txtNewRoom.ReadOnly = true;
+			this.txtNewRoom.Size = new System.Drawing.Size(600, 30);
+			this.txtNewRoom.TabIndex = 11;
+			// 
+			// lblNewRoomLabel
+			// 
+			this.lblNewRoomLabel.AutoSize = true;
+			this.lblNewRoomLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+			this.lblNewRoomLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblNewRoomLabel.Location = new System.Drawing.Point(40, 500);
+			this.lblNewRoomLabel.Name = "lblNewRoomLabel";
+			this.lblNewRoomLabel.Size = new System.Drawing.Size(320, 23);
+			this.lblNewRoomLabel.TabIndex = 10;
+			this.lblNewRoomLabel.Text = "New Room / Bed (leave blank to keep current)";
+			// 
+			// lblSectionRoom
+			// 
+			this.lblSectionRoom.AutoSize = true;
+			this.lblSectionRoom.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+			this.lblSectionRoom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(64)))), ((int)(((byte)(175)))));
+			this.lblSectionRoom.Location = new System.Drawing.Point(40, 460);
+			this.lblSectionRoom.Name = "lblSectionRoom";
+			this.lblSectionRoom.Size = new System.Drawing.Size(320, 23);
+			this.lblSectionRoom.TabIndex = 9;
+			this.lblSectionRoom.Text = "── CHANGE ROOM ASSIGNMENT ──";
+			// 
+			// txtDiagnosis
+			// 
+			this.txtDiagnosis.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtDiagnosis.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.txtDiagnosis.Location = new System.Drawing.Point(40, 362);
+			this.txtDiagnosis.Multiline = true;
+			this.txtDiagnosis.Name = "txtDiagnosis";
+			this.txtDiagnosis.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.txtDiagnosis.Size = new System.Drawing.Size(820, 70);
+			this.txtDiagnosis.TabIndex = 8;
+			// 
+			// lblDiagnosisLabel
+			// 
+			this.lblDiagnosisLabel.AutoSize = true;
+			this.lblDiagnosisLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+			this.lblDiagnosisLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblDiagnosisLabel.Location = new System.Drawing.Point(40, 335);
+			this.lblDiagnosisLabel.Name = "lblDiagnosisLabel";
+			this.lblDiagnosisLabel.Size = new System.Drawing.Size(200, 23);
+			this.lblDiagnosisLabel.TabIndex = 7;
+			this.lblDiagnosisLabel.Text = "Diagnosis (editable) *";
+			// 
+			// txtAdmissionDate
+			// 
+			this.txtAdmissionDate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+			this.txtAdmissionDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtAdmissionDate.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.txtAdmissionDate.Location = new System.Drawing.Point(40, 282);
+			this.txtAdmissionDate.Name = "txtAdmissionDate";
+			this.txtAdmissionDate.ReadOnly = true;
+			this.txtAdmissionDate.Size = new System.Drawing.Size(500, 30);
+			this.txtAdmissionDate.TabIndex = 6;
+			// 
+			// lblDateLabel
+			// 
+			this.lblDateLabel.AutoSize = true;
+			this.lblDateLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+			this.lblDateLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblDateLabel.Location = new System.Drawing.Point(40, 255);
+			this.lblDateLabel.Name = "lblDateLabel";
+			this.lblDateLabel.Size = new System.Drawing.Size(220, 23);
+			this.lblDateLabel.TabIndex = 5;
+			this.lblDateLabel.Text = "Admission Date (read-only)";
+			// 
+			// txtCurrentRoom
+			// 
+			this.txtCurrentRoom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+			this.txtCurrentRoom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtCurrentRoom.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.txtCurrentRoom.Location = new System.Drawing.Point(40, 202);
+			this.txtCurrentRoom.Name = "txtCurrentRoom";
+			this.txtCurrentRoom.ReadOnly = true;
+			this.txtCurrentRoom.Size = new System.Drawing.Size(500, 30);
+			this.txtCurrentRoom.TabIndex = 4;
+			// 
+			// lblCurrentRoomLabel
+			// 
+			this.lblCurrentRoomLabel.AutoSize = true;
+			this.lblCurrentRoomLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+			this.lblCurrentRoomLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblCurrentRoomLabel.Location = new System.Drawing.Point(40, 175);
+			this.lblCurrentRoomLabel.Name = "lblCurrentRoomLabel";
+			this.lblCurrentRoomLabel.Size = new System.Drawing.Size(250, 23);
+			this.lblCurrentRoomLabel.TabIndex = 3;
+			this.lblCurrentRoomLabel.Text = "Current Room / Bed (read-only)";
+			// 
+			// txtPatient
+			// 
+			this.txtPatient.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+			this.txtPatient.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtPatient.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.txtPatient.Location = new System.Drawing.Point(40, 122);
+			this.txtPatient.Name = "txtPatient";
+			this.txtPatient.ReadOnly = true;
+			this.txtPatient.Size = new System.Drawing.Size(500, 30);
+			this.txtPatient.TabIndex = 2;
+			// 
+			// lblPatientLabel
+			// 
+			this.lblPatientLabel.AutoSize = true;
+			this.lblPatientLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+			this.lblPatientLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblPatientLabel.Location = new System.Drawing.Point(40, 95);
+			this.lblPatientLabel.Name = "lblPatientLabel";
+			this.lblPatientLabel.Size = new System.Drawing.Size(190, 23);
+			this.lblPatientLabel.TabIndex = 1;
+			this.lblPatientLabel.Text = "Patient (read-only)";
 			// 
 			// lblHelperNote
 			// 
@@ -256,7 +248,18 @@
 			this.lblHelperNote.Name = "lblHelperNote";
 			this.lblHelperNote.Size = new System.Drawing.Size(700, 20);
 			this.lblHelperNote.TabIndex = 13;
-			this.lblHelperNote.Text = "Old room becomes Available, new room becomes Occupied, and the new rate is locked in.";
+			this.lblHelperNote.Text = "Old bed becomes Available, new bed becomes Occupied, and the new rate is locked in.";
+			// 
+			// lblTitle
+			// 
+			this.lblTitle.AutoSize = true;
+			this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
+			this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+			this.lblTitle.Location = new System.Drawing.Point(40, 30);
+			this.lblTitle.Name = "lblTitle";
+			this.lblTitle.Size = new System.Drawing.Size(280, 37);
+			this.lblTitle.TabIndex = 0;
+			this.lblTitle.Text = "Edit Admission — ADM-0001";
 			// 
 			// panelFooter
 			// 

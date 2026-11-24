@@ -91,7 +91,7 @@ namespace BusinessLogic.Repository
 		}
 
 		// ==========================================
-		// READ — Generate next admission code (ADM-0001, ADM-0002, ...)
+		// READ — Generate next admission code
 		// ==========================================
 		public string GenerateNextAdmissionCode()
 		{
@@ -109,10 +109,10 @@ namespace BusinessLogic.Repository
 
 					if (result != null && result != DBNull.Value)
 					{
-						string last = result.ToString();          // e.g. "ADM-0007"
+						string last = result.ToString();
 						string numeric = last.Replace("ADM-", "");
 						int next = int.Parse(numeric) + 1;
-						code = "ADM-" + next.ToString("D4");      // "ADM-0008"
+						code = "ADM-" + next.ToString("D4");
 					}
 				}
 			}
@@ -129,10 +129,10 @@ namespace BusinessLogic.Repository
 			{
 				conn.Open();
 				string sql = @"INSERT INTO Admissions
-					(AdmissionCode, PatientCode, RoomNumber, AdmissionDate,
+					(AdmissionCode, PatientCode, RoomNumber, BedName, AdmissionDate,
 					 Diagnosis, LockedRate, Status, AdmittedBy)
 					VALUES
-					(@AdmissionCode, @PatientCode, @RoomNumber, @AdmissionDate,
+					(@AdmissionCode, @PatientCode, @RoomNumber, @BedName, @AdmissionDate,
 					 @Diagnosis, @LockedRate, @Status, @AdmittedBy);";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
@@ -140,6 +140,7 @@ namespace BusinessLogic.Repository
 					cmd.Parameters.AddWithValue("@AdmissionCode", adm.AdmissionCode);
 					cmd.Parameters.AddWithValue("@PatientCode", adm.PatientCode);
 					cmd.Parameters.AddWithValue("@RoomNumber", adm.RoomNumber);
+					cmd.Parameters.AddWithValue("@BedName", adm.BedName); // NEW
 					cmd.Parameters.AddWithValue("@AdmissionDate", adm.AdmissionDate.ToString("yyyy-MM-dd HH:mm:ss"));
 					cmd.Parameters.AddWithValue("@Diagnosis", adm.Diagnosis);
 					cmd.Parameters.AddWithValue("@LockedRate", adm.LockedRate);
@@ -152,8 +153,7 @@ namespace BusinessLogic.Repository
 		}
 
 		// ==========================================
-		// UPDATE — Edit an existing admission (Admin override)
-		// Used to change room assignment and/or diagnosis.
+		// UPDATE — Edit an existing admission
 		// ==========================================
 		public void UpdateAdmission(Admission adm)
 		{
@@ -162,6 +162,7 @@ namespace BusinessLogic.Repository
 				conn.Open();
 				string sql = @"UPDATE Admissions SET
 						RoomNumber  = @RoomNumber,
+						BedName     = @BedName,
 						Diagnosis   = @Diagnosis,
 						LockedRate  = @LockedRate
 					WHERE AdmissionCode = @AdmissionCode;";
@@ -170,6 +171,7 @@ namespace BusinessLogic.Repository
 				{
 					cmd.Parameters.AddWithValue("@AdmissionCode", adm.AdmissionCode);
 					cmd.Parameters.AddWithValue("@RoomNumber", adm.RoomNumber);
+					cmd.Parameters.AddWithValue("@BedName", adm.BedName); // NEW
 					cmd.Parameters.AddWithValue("@Diagnosis", adm.Diagnosis);
 					cmd.Parameters.AddWithValue("@LockedRate", adm.LockedRate);
 
@@ -234,19 +236,20 @@ namespace BusinessLogic.Repository
 		}
 
 		// ==========================================
-		// QUERY — Get who is currently in a room (patient code or null)
+		// QUERY — Get who is currently in a bed
 		// ==========================================
-		public string GetOccupant(string roomNumber)
+		public string GetOccupant(string roomNumber, string bedName)
 		{
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
 				string sql = "SELECT PatientCode FROM Admissions " +
-							 "WHERE RoomNumber = @Room AND Status = 'Admitted' LIMIT 1;";
+							 "WHERE RoomNumber = @Room AND BedName = @Bed AND Status = 'Admitted' LIMIT 1;";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
 				{
 					cmd.Parameters.AddWithValue("@Room", roomNumber);
+					cmd.Parameters.AddWithValue("@Bed", bedName); // NEW
 					object result = cmd.ExecuteScalar();
 
 					if (result == null || result == DBNull.Value)
@@ -268,6 +271,7 @@ namespace BusinessLogic.Repository
 				AdmissionCode = reader["AdmissionCode"].ToString(),
 				PatientCode = reader["PatientCode"].ToString(),
 				RoomNumber = reader["RoomNumber"].ToString(),
+				BedName = reader["BedName"].ToString(), // NEW
 				AdmissionDate = DateTime.Parse(reader["AdmissionDate"].ToString()),
 				Diagnosis = reader["Diagnosis"].ToString(),
 				LockedRate = Convert.ToDecimal(reader["LockedRate"]),
@@ -288,21 +292,22 @@ namespace BusinessLogic.Repository
 		// ==========================================
 		// HISTORY — Insert a new room period
 		// ==========================================
-		public void AddRoomHistory(string admissionCode, string roomNumber,
+		public void AddRoomHistory(string admissionCode, string roomNumber, string bedName,
 								   string roomType, decimal rate, DateTime startDate)
 		{
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
 				string sql = @"INSERT INTO AdmissionRoomHistory
-					(AdmissionCode, RoomNumber, RoomType, Rate, StartDate)
+					(AdmissionCode, RoomNumber, BedName, RoomType, Rate, StartDate)
 					VALUES
-					(@AdmissionCode, @RoomNumber, @RoomType, @Rate, @StartDate);";
+					(@AdmissionCode, @RoomNumber, @BedName, @RoomType, @Rate, @StartDate);";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
 				{
 					cmd.Parameters.AddWithValue("@AdmissionCode", admissionCode);
 					cmd.Parameters.AddWithValue("@RoomNumber", roomNumber);
+					cmd.Parameters.AddWithValue("@BedName", bedName); // NEW
 					cmd.Parameters.AddWithValue("@RoomType", roomType);
 					cmd.Parameters.AddWithValue("@Rate", rate);
 					cmd.Parameters.AddWithValue("@StartDate", startDate.ToString("yyyy-MM-dd HH:mm:ss"));
@@ -313,7 +318,6 @@ namespace BusinessLogic.Repository
 
 		// ==========================================
 		// HISTORY — Close the currently-open room period
-		// (the one with EndDate IS NULL)
 		// ==========================================
 		public void CloseCurrentRoomHistory(string admissionCode, DateTime endDate)
 		{
@@ -370,6 +374,7 @@ namespace BusinessLogic.Repository
 				HistoryID = Convert.ToInt32(reader["HistoryID"]),
 				AdmissionCode = reader["AdmissionCode"].ToString(),
 				RoomNumber = reader["RoomNumber"].ToString(),
+				BedName = reader["BedName"].ToString(), // NEW
 				RoomType = reader["RoomType"].ToString(),
 				Rate = Convert.ToDecimal(reader["Rate"]),
 				StartDate = DateTime.Parse(reader["StartDate"].ToString()),
@@ -382,9 +387,9 @@ namespace BusinessLogic.Repository
 
 		// ==========================================
 		// UPDATE — Discharge the patient
-		// Updates admission, closes room history, frees the room.
+		// Updates admission, closes room history, frees the bed.
 		// ==========================================
-		public void DischargePatient(string admissionCode, string roomNumber, DateTime dischargeDate, string notes)
+		public void DischargePatient(string admissionCode, string roomNumber, string bedName, DateTime dischargeDate, string notes)
 		{
 			using (var conn = new SQLiteConnection(connectionString))
 			{
@@ -417,12 +422,33 @@ namespace BusinessLogic.Repository
 							cmd.ExecuteNonQuery();
 						}
 
-						// 3. Free the Room
-						string sqlRoom = "UPDATE Rooms SET Status = 'Available' WHERE RoomNumber = @Room;";
-						using (var cmd = new SQLiteCommand(sqlRoom, conn))
+						// 3. Free the Bed
+						string sqlBed = "UPDATE Beds SET Status = 'Available' WHERE RoomNumber = @Room AND BedName = @Bed;";
+						using (var cmd = new SQLiteCommand(sqlBed, conn))
 						{
 							cmd.Parameters.AddWithValue("@Room", roomNumber);
+							cmd.Parameters.AddWithValue("@Bed", bedName); // NEW
 							cmd.ExecuteNonQuery();
+						}
+
+						// 4. Check if the Room still has occupied beds
+						string sqlCheckBeds = "SELECT COUNT(*) FROM Beds WHERE RoomNumber = @Room AND Status = 'Occupied';";
+						int occupiedCount = 0;
+						using (var cmd = new SQLiteCommand(sqlCheckBeds, conn))
+						{
+							cmd.Parameters.AddWithValue("@Room", roomNumber);
+							occupiedCount = Convert.ToInt32(cmd.ExecuteScalar());
+						}
+
+						// 5. If no beds are occupied, set Room to Available
+						if (occupiedCount == 0)
+						{
+							string sqlRoom = "UPDATE Rooms SET Status = 'Available' WHERE RoomNumber = @Room;";
+							using (var cmd = new SQLiteCommand(sqlRoom, conn))
+							{
+								cmd.Parameters.AddWithValue("@Room", roomNumber);
+								cmd.ExecuteNonQuery();
+							}
 						}
 
 						trans.Commit();

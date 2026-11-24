@@ -1,11 +1,7 @@
-﻿using System.Windows.Forms;
-namespace UI
+﻿namespace UI
 {
 	partial class AddEditRoomForm
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
 		protected override void Dispose(bool disposing)
@@ -17,12 +13,6 @@ namespace UI
 			base.Dispose(disposing);
 		}
 
-		#region Windows Form Designer generated code
-
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		private void InitializeComponent()
 		{
 			this.panelHeader = new System.Windows.Forms.Panel();
@@ -35,6 +25,8 @@ namespace UI
 			this.cmbRoomType = new System.Windows.Forms.ComboBox();
 			this.lblRate = new System.Windows.Forms.Label();
 			this.txtRate = new System.Windows.Forms.TextBox();
+			this.lblCapacity = new System.Windows.Forms.Label();
+			this.numCapacity = new System.Windows.Forms.NumericUpDown();
 			this.lblStatus = new System.Windows.Forms.Label();
 			this.cmbStatus = new System.Windows.Forms.ComboBox();
 			this.btnSave = new System.Windows.Forms.Button();
@@ -42,6 +34,7 @@ namespace UI
 			this.panelHeader.SuspendLayout();
 			this.tableLayoutPanel.SuspendLayout();
 			this.panel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numCapacity)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// panelHeader
@@ -91,15 +84,17 @@ namespace UI
 			this.panel1.Controls.Add(this.btnSave);
 			this.panel1.Controls.Add(this.cmbStatus);
 			this.panel1.Controls.Add(this.lblStatus);
+			this.panel1.Controls.Add(this.numCapacity);
+			this.panel1.Controls.Add(this.lblCapacity);
 			this.panel1.Controls.Add(this.txtRate);
 			this.panel1.Controls.Add(this.lblRate);
 			this.panel1.Controls.Add(this.cmbRoomType);
 			this.panel1.Controls.Add(this.lblRoomType);
 			this.panel1.Controls.Add(this.txtRoomNumber);
 			this.panel1.Controls.Add(this.lblRoomNumber);
-			this.panel1.Location = new System.Drawing.Point(433, 105);
+			this.panel1.Location = new System.Drawing.Point(433, 52);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(500, 490);
+			this.panel1.Size = new System.Drawing.Size(500, 580);
 			this.panel1.TabIndex = 0;
 			// 
 			// lblRoomNumber
@@ -107,7 +102,7 @@ namespace UI
 			this.lblRoomNumber.AutoSize = true;
 			this.lblRoomNumber.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblRoomNumber.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblRoomNumber.Location = new System.Drawing.Point(40, 100);
+			this.lblRoomNumber.Location = new System.Drawing.Point(40, 40);
 			this.lblRoomNumber.Name = "lblRoomNumber";
 			this.lblRoomNumber.Size = new System.Drawing.Size(128, 17);
 			this.lblRoomNumber.TabIndex = 1;
@@ -117,7 +112,7 @@ namespace UI
 			// 
 			this.txtRoomNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtRoomNumber.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.txtRoomNumber.Location = new System.Drawing.Point(40, 125);
+			this.txtRoomNumber.Location = new System.Drawing.Point(40, 65);
 			this.txtRoomNumber.Name = "txtRoomNumber";
 			this.txtRoomNumber.Size = new System.Drawing.Size(420, 27);
 			this.txtRoomNumber.TabIndex = 2;
@@ -127,7 +122,7 @@ namespace UI
 			this.lblRoomType.AutoSize = true;
 			this.lblRoomType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblRoomType.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblRoomType.Location = new System.Drawing.Point(40, 175);
+			this.lblRoomType.Location = new System.Drawing.Point(40, 115);
 			this.lblRoomType.Name = "lblRoomType";
 			this.lblRoomType.Size = new System.Drawing.Size(82, 17);
 			this.lblRoomType.TabIndex = 3;
@@ -144,7 +139,7 @@ namespace UI
 			"Private",
 			"Semi-Private",
 			"ICU"});
-			this.cmbRoomType.Location = new System.Drawing.Point(40, 200);
+			this.cmbRoomType.Location = new System.Drawing.Point(40, 140);
 			this.cmbRoomType.Name = "cmbRoomType";
 			this.cmbRoomType.Size = new System.Drawing.Size(420, 25);
 			this.cmbRoomType.TabIndex = 4;
@@ -154,7 +149,7 @@ namespace UI
 			this.lblRate.AutoSize = true;
 			this.lblRate.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblRate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblRate.Location = new System.Drawing.Point(40, 250);
+			this.lblRate.Location = new System.Drawing.Point(40, 190);
 			this.lblRate.Name = "lblRate";
 			this.lblRate.Size = new System.Drawing.Size(87, 17);
 			this.lblRate.TabIndex = 5;
@@ -164,17 +159,39 @@ namespace UI
 			// 
 			this.txtRate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtRate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.txtRate.Location = new System.Drawing.Point(40, 275);
+			this.txtRate.Location = new System.Drawing.Point(40, 215);
 			this.txtRate.Name = "txtRate";
 			this.txtRate.Size = new System.Drawing.Size(420, 27);
 			this.txtRate.TabIndex = 6;
+			// 
+			// lblCapacity
+			// 
+			this.lblCapacity.AutoSize = true;
+			this.lblCapacity.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblCapacity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblCapacity.Location = new System.Drawing.Point(40, 265);
+			this.lblCapacity.Name = "lblCapacity";
+			this.lblCapacity.Size = new System.Drawing.Size(130, 17);
+			this.lblCapacity.TabIndex = 11;
+			this.lblCapacity.Text = "Number of Beds *";
+			// 
+			// numCapacity
+			// 
+			this.numCapacity.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.numCapacity.Location = new System.Drawing.Point(40, 290);
+			this.numCapacity.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+			this.numCapacity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+			this.numCapacity.Name = "numCapacity";
+			this.numCapacity.Size = new System.Drawing.Size(420, 27);
+			this.numCapacity.TabIndex = 12;
+			this.numCapacity.Value = new decimal(new int[] { 1, 0, 0, 0 });
 			// 
 			// lblStatus
 			// 
 			this.lblStatus.AutoSize = true;
 			this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblStatus.Location = new System.Drawing.Point(40, 325);
+			this.lblStatus.Location = new System.Drawing.Point(40, 340);
 			this.lblStatus.Name = "lblStatus";
 			this.lblStatus.Size = new System.Drawing.Size(54, 17);
 			this.lblStatus.TabIndex = 7;
@@ -190,7 +207,7 @@ namespace UI
 			"Available",
 			"Occupied",
 			"Maintenance"});
-			this.cmbStatus.Location = new System.Drawing.Point(40, 350);
+			this.cmbStatus.Location = new System.Drawing.Point(40, 365);
 			this.cmbStatus.Name = "cmbStatus";
 			this.cmbStatus.Size = new System.Drawing.Size(420, 25);
 			this.cmbStatus.TabIndex = 8;
@@ -203,7 +220,7 @@ namespace UI
 			this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnSave.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnSave.ForeColor = System.Drawing.Color.White;
-			this.btnSave.Location = new System.Drawing.Point(40, 415);
+			this.btnSave.Location = new System.Drawing.Point(40, 470);
 			this.btnSave.Name = "btnSave";
 			this.btnSave.Size = new System.Drawing.Size(200, 42);
 			this.btnSave.TabIndex = 9;
@@ -220,7 +237,7 @@ namespace UI
 			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnCancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-			this.btnCancel.Location = new System.Drawing.Point(260, 415);
+			this.btnCancel.Location = new System.Drawing.Point(260, 470);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(200, 42);
 			this.btnCancel.TabIndex = 10;
@@ -248,11 +265,10 @@ namespace UI
 			this.tableLayoutPanel.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numCapacity)).EndInit();
 			this.ResumeLayout(false);
 
 		}
-
-		#endregion
 
 		private System.Windows.Forms.Panel panelHeader;
 		private System.Windows.Forms.Label lblHeader;
@@ -264,6 +280,8 @@ namespace UI
 		private System.Windows.Forms.ComboBox cmbRoomType;
 		private System.Windows.Forms.Label lblRate;
 		private System.Windows.Forms.TextBox txtRate;
+		private System.Windows.Forms.Label lblCapacity;
+		private System.Windows.Forms.NumericUpDown numCapacity;
 		private System.Windows.Forms.Label lblStatus;
 		private System.Windows.Forms.ComboBox cmbStatus;
 		private System.Windows.Forms.Button btnSave;

@@ -89,10 +89,26 @@ namespace BusinessLogic.Repository
 						RoomNumber TEXT NOT NULL UNIQUE,
 						RoomType TEXT NOT NULL,
 						Rate REAL NOT NULL,
+						Capacity INTEGER NOT NULL DEFAULT 1,
 						Status TEXT NOT NULL DEFAULT 'Available'
 					);";
 
 				using (var cmd = new SQLiteCommand(createRoomsTable, conn))
+					cmd.ExecuteNonQuery();
+
+				// --------------------------------------------------------
+				// BEDS (NEW)
+				// --------------------------------------------------------
+				string createBedsTable = @"
+					CREATE TABLE IF NOT EXISTS Beds (
+						BedID INTEGER PRIMARY KEY AUTOINCREMENT,
+						RoomNumber TEXT NOT NULL,
+						BedName TEXT NOT NULL,
+						Status TEXT NOT NULL DEFAULT 'Available',
+						FOREIGN KEY(RoomNumber) REFERENCES Rooms(RoomNumber)
+					);";
+
+				using (var cmd = new SQLiteCommand(createBedsTable, conn))
 					cmd.ExecuteNonQuery();
 
 				long roomCount = 0;
@@ -102,6 +118,7 @@ namespace BusinessLogic.Repository
 				if (roomCount == 0)
 				{
 					RunSqlScript(conn, "SeedRooms.sql");
+					GenerateBedsForAllRooms(conn); // NEW: Auto-generate beds
 				}
 
 				// --------------------------------------------------------
@@ -159,6 +176,7 @@ namespace BusinessLogic.Repository
 						AdmissionCode   TEXT NOT NULL UNIQUE,
 						PatientCode     TEXT NOT NULL,
 						RoomNumber      TEXT NOT NULL,
+						BedName         TEXT NOT NULL,
 						AdmissionDate   TEXT NOT NULL,
 						Diagnosis       TEXT NOT NULL,
 						LockedRate      REAL NOT NULL,
@@ -187,6 +205,7 @@ namespace BusinessLogic.Repository
 						HistoryID       INTEGER PRIMARY KEY AUTOINCREMENT,
 						AdmissionCode   TEXT NOT NULL,
 						RoomNumber      TEXT NOT NULL,
+						BedName         TEXT NOT NULL,
 						RoomType        TEXT NOT NULL,
 						Rate            REAL NOT NULL,
 						StartDate       TEXT NOT NULL,
@@ -268,6 +287,42 @@ namespace BusinessLogic.Repository
 				using (var cmd = new SQLiteCommand(createBillsTable, conn))
 				{
 					cmd.ExecuteNonQuery();
+				}
+			}
+		}
+
+		// ------------------------------------------------------------
+		// NEW: GenerateBedsForAllRooms
+		// Automatically reads the Capacity of every room and generates
+		// individual bed records (e.g., A, B, C, D) for the Beds table.
+		// ------------------------------------------------------------
+		private static void GenerateBedsForAllRooms(SQLiteConnection conn)
+		{
+			string selectRooms = "SELECT RoomNumber, Capacity FROM Rooms;";
+			using (var cmd = new SQLiteCommand(selectRooms, conn))
+			using (var reader = cmd.ExecuteReader())
+			{
+				var rooms = new System.Collections.Generic.List<(string roomNum, int cap)>();
+				while (reader.Read())
+				{
+					rooms.Add((reader.GetString(0), reader.GetInt32(1)));
+				}
+				reader.Close();
+
+				foreach (var room in rooms)
+				{
+					for (int i = 0; i < room.cap; i++)
+					{
+						// Generate letters A, B, C, D for beds
+						char bedLetter = (char)('A' + i);
+						string insertBed = "INSERT INTO Beds (RoomNumber, BedName, Status) VALUES (@room, @bed, 'Available');";
+						using (var insertCmd = new SQLiteCommand(insertBed, conn))
+						{
+							insertCmd.Parameters.AddWithValue("@room", room.roomNum);
+							insertCmd.Parameters.AddWithValue("@bed", bedLetter.ToString());
+							insertCmd.ExecuteNonQuery();
+						}
+					}
 				}
 			}
 		}
