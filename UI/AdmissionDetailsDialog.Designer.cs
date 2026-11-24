@@ -71,6 +71,7 @@
 			this.lblTotalLabel = new System.Windows.Forms.Label();
 			this.lblTotalValue = new System.Windows.Forms.Label();
 			this.panelFooter = new System.Windows.Forms.Panel();
+			this.btnPrint = new System.Windows.Forms.Button();
 			this.btnClose = new System.Windows.Forms.Button();
 			this.panelHeader.SuspendLayout();
 			this.panelBody.SuspendLayout();
@@ -101,7 +102,7 @@
 			// 
 			// panelBody
 			// 
-			this.panelBody.AutoScroll = true; // 👈 THIS MAKES IT SCROLLABLE
+			this.panelBody.AutoScroll = true;
 			this.panelBody.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
 			this.panelBody.Controls.Add(this.lblTotalValue);
 			this.panelBody.Controls.Add(this.lblTotalLabel);
@@ -567,12 +568,29 @@
 			// panelFooter
 			// 
 			this.panelFooter.BackColor = System.Drawing.Color.White;
+			this.panelFooter.Controls.Add(this.btnPrint);
 			this.panelFooter.Controls.Add(this.btnClose);
 			this.panelFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.panelFooter.Location = new System.Drawing.Point(0, 630);
 			this.panelFooter.Name = "panelFooter";
 			this.panelFooter.Size = new System.Drawing.Size(900, 70);
 			this.panelFooter.TabIndex = 2;
+			// 
+			// btnPrint
+			// 
+			this.btnPrint.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(114)))), ((int)(((byte)(128)))));
+			this.btnPrint.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnPrint.FlatAppearance.BorderSize = 0;
+			this.btnPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnPrint.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+			this.btnPrint.ForeColor = System.Drawing.Color.White;
+			this.btnPrint.Location = new System.Drawing.Point(210, 15);
+			this.btnPrint.Name = "btnPrint";
+			this.btnPrint.Size = new System.Drawing.Size(150, 40);
+			this.btnPrint.TabIndex = 1;
+			this.btnPrint.Text = "Print Details";
+			this.btnPrint.UseVisualStyleBackColor = false;
+			this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
 			// 
 			// btnClose
 			// 
@@ -595,7 +613,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-			this.ClientSize = new System.Drawing.Size(900, 700); // Reduced from 810 to fit standard screens
+			this.ClientSize = new System.Drawing.Size(900, 700);
 			this.Controls.Add(this.panelBody);
 			this.Controls.Add(this.panelFooter);
 			this.Controls.Add(this.panelHeader);
@@ -661,5 +679,6 @@
 		private System.Windows.Forms.Label lblTotalValue;
 		private System.Windows.Forms.Panel panelFooter;
 		private System.Windows.Forms.Button btnClose;
+		private System.Windows.Forms.Button btnPrint;
 	}
 }

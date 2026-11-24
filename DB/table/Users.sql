@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS Users (
     UserID INTEGER PRIMARY KEY AUTOINCREMENT,
     Username TEXT NOT NULL UNIQUE,
     PasswordHash TEXT NOT NULL,
+    FullName TEXT NOT NULL,          -- NEW: Actual name of the user
     Role TEXT NOT NULL,              -- 'Admin' or 'Hospital Staff'
     IsActive INTEGER NOT NULL DEFAULT 1,
     CreatedAt TEXT NOT NULL DEFAULT (datetime('now'))

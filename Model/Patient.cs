@@ -4,30 +4,29 @@ namespace Model
 {
 	public class Patient
 	{
-		public int PatientID { get; set; }              // internal DB id (auto-increment)
-		public string PatientCode { get; set; }         // display ID like "P-0001"
+		public int PatientID { get; set; }
+		public string PatientCode { get; set; }
 		public string FirstName { get; set; }
-		public string MiddleName { get; set; }          // optional
+		public string MiddleName { get; set; }
 		public string LastName { get; set; }
 		public DateTime DateOfBirth { get; set; }
-		public string Gender { get; set; }              // Male / Female / Other
+		public string Gender { get; set; }
 		public string ContactNumber { get; set; }
-		public string Address { get; set; }             // optional
-		public string CivilStatus { get; set; }         // optional
-		public string Occupation { get; set; }          // optional
+		public string Address { get; set; }
+		public string CivilStatus { get; set; }
+		public string Occupation { get; set; }
 
-		// Guardian / emergency contact fields
 		public string GuardianName { get; set; }
 		public string GuardianRelationship { get; set; }
 		public string GuardianContact { get; set; }
 		public string GuardianAddress { get; set; }
 		public bool GuardianPresent { get; set; }
 
-		// Secondary emergency contact (optional)
 		public string EmergencyContactName { get; set; }
 		public string EmergencyContactNumber { get; set; }
 
-		public bool IsActive { get; set; }              // true = active, false = deactivated
+		public bool IsFullyRegistered { get; set; } // NEW
+		public bool IsActive { get; set; }
 		public DateTime CreatedAt { get; set; }
 
 		// Convenience property — "Last, First Middle" for grid display

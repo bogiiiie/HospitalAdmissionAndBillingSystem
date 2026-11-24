@@ -66,7 +66,10 @@ namespace BusinessLogic.Repository
 				// Why '@Username' and not the literal value?
 				//   To prevent SQL injection. The parameter is treated as
 				//   text, not code. This is the safe way to write SQL in C#.
-				string sql = "SELECT UserID, Username, PasswordHash, Role, IsActive, CreatedAt " +
+				//
+				// NOTE: FullName was added to the SELECT so the UI can
+				//       display the user's real name instead of just the username.
+				string sql = "SELECT UserID, Username, PasswordHash, FullName, Role, IsActive, CreatedAt " +
 							 "FROM Users WHERE Username = @Username LIMIT 1;";
 
 				// Create a command object that will carry this SQL to SQLite.
@@ -101,6 +104,7 @@ namespace BusinessLogic.Repository
 								// Text columns -> convert to string
 								Username = reader["Username"].ToString(),
 								PasswordHash = reader["PasswordHash"].ToString(),
+								FullName = reader["FullName"].ToString(), // NEW
 								Role = reader["Role"].ToString(),
 
 								// SQLite stores booleans as 0 (false) or 1 (true).
@@ -123,22 +127,33 @@ namespace BusinessLogic.Repository
 			return user;
 		}
 
+		// ------------------------------------------------------------
+		// GetAllUsers
+		// Output: a list of all users, ordered by Username.
+		// Purpose: Used by admin screens that list/manage accounts.
+		//          PasswordHash and CreatedAt are intentionally NOT
+		//          loaded here — the list view doesn't need them.
+		// ------------------------------------------------------------
 		public List<User> GetAllUsers()
 		{
 			List<User> users = new List<User>();
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
+				// SELECT * is safe here because we map only what we need.
+				// ORDER BY Username keeps the list alphabetical for the UI.
 				string sql = "SELECT * FROM Users ORDER BY Username;";
 				using (var cmd = new SQLiteCommand(sql, conn))
 				using (var reader = cmd.ExecuteReader())
 				{
+					// Loop through every row and add it to the list.
 					while (reader.Read())
 					{
 						users.Add(new User
 						{
 							UserID = Convert.ToInt32(reader["UserID"]),
 							Username = reader["Username"].ToString(),
+							FullName = reader["FullName"].ToString(), // NEW
 							Role = reader["Role"].ToString(),
 							IsActive = Convert.ToInt32(reader["IsActive"]) == 1
 						});
@@ -148,16 +163,25 @@ namespace BusinessLogic.Repository
 			return users;
 		}
 
+		// ------------------------------------------------------------
+		// UpdatePassword
+		// Input:  a username + the ALREADY-HASHED new password
+		// Purpose: Change a user's password hash.
+		//          IMPORTANT: the caller must hash the password first.
+		//          This method never sees plaintext.
+		// ------------------------------------------------------------
 		public void UpdatePassword(string username, string newPasswordHash)
 		{
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
+				// Parameterized UPDATE — @Hash and @User are bound safely.
 				string sql = "UPDATE Users SET PasswordHash = @Hash WHERE Username = @User;";
 				using (var cmd = new SQLiteCommand(sql, conn))
 				{
 					cmd.Parameters.AddWithValue("@Hash", newPasswordHash);
 					cmd.Parameters.AddWithValue("@User", username);
+					// ExecuteNonQuery: we don't expect rows back, just the update.
 					cmd.ExecuteNonQuery();
 				}
 			}

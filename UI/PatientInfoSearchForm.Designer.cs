@@ -11,6 +11,7 @@
 		/// Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null))
@@ -53,6 +54,7 @@
 			this.sidebarBorder = new System.Windows.Forms.Panel();
 			this.contentPanel = new System.Windows.Forms.Panel();
 			this.detailsPanel = new System.Windows.Forms.Panel();
+			this.btnPrint = new System.Windows.Forms.Button();
 			this.btnViewDetails = new System.Windows.Forms.Button();
 			this.cardPanel = new System.Windows.Forms.Panel();
 			this.lblNoResults = new System.Windows.Forms.Label();
@@ -63,11 +65,13 @@
 			this.colGender = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colAdmissionStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.toolbarPanel = new System.Windows.Forms.Panel();
+			this.btnSearch = new System.Windows.Forms.Button();
 			this.cmbAdmissionStatus = new System.Windows.Forms.ComboBox();
 			this.lblAdmissionStatus = new System.Windows.Forms.Label();
+			this.cmbRegStatus = new System.Windows.Forms.ComboBox();
+			this.lblRegStatus = new System.Windows.Forms.Label();
 			this.cmbGender = new System.Windows.Forms.ComboBox();
 			this.lblGender = new System.Windows.Forms.Label();
-			this.btnSearch = new System.Windows.Forms.Button();
 			this.txtSearch = new System.Windows.Forms.TextBox();
 			this.lblSearch = new System.Windows.Forms.Label();
 			this.lblSubtitle = new System.Windows.Forms.Label();
@@ -117,11 +121,10 @@
 			this.btnMainMenu.BackColor = System.Drawing.Color.White;
 			this.btnMainMenu.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.btnMainMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
-			this.btnMainMenu.FlatAppearance.BorderSize = 1;
 			this.btnMainMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnMainMenu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnMainMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-			this.btnMainMenu.Location = new System.Drawing.Point(1120, 18);
+			this.btnMainMenu.Location = new System.Drawing.Point(1104, 18);
 			this.btnMainMenu.Name = "btnMainMenu";
 			this.btnMainMenu.Size = new System.Drawing.Size(110, 32);
 			this.btnMainMenu.TabIndex = 2;
@@ -135,7 +138,7 @@
 			this.lblUserInfo.AutoSize = true;
 			this.lblUserInfo.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblUserInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblUserInfo.Location = new System.Drawing.Point(843, 23);
+			this.lblUserInfo.Location = new System.Drawing.Point(808, 23);
 			this.lblUserInfo.Name = "lblUserInfo";
 			this.lblUserInfo.Size = new System.Drawing.Size(271, 23);
 			this.lblUserInfo.TabIndex = 1;
@@ -416,13 +419,30 @@
 			// 
 			// detailsPanel
 			// 
-			this.detailsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.detailsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
+			this.detailsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.detailsPanel.Controls.Add(this.btnPrint);
 			this.detailsPanel.Controls.Add(this.btnViewDetails);
-			this.detailsPanel.Location = new System.Drawing.Point(35, 630);
+			this.detailsPanel.Location = new System.Drawing.Point(825, 610);
 			this.detailsPanel.Name = "detailsPanel";
-			this.detailsPanel.Size = new System.Drawing.Size(1060, 60);
+			this.detailsPanel.Size = new System.Drawing.Size(270, 60);
 			this.detailsPanel.TabIndex = 4;
+			// 
+			// btnPrint
+			// 
+			this.btnPrint.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(114)))), ((int)(((byte)(128)))));
+			this.btnPrint.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnPrint.Enabled = false;
+			this.btnPrint.FlatAppearance.BorderSize = 0;
+			this.btnPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnPrint.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnPrint.ForeColor = System.Drawing.Color.White;
+			this.btnPrint.Location = new System.Drawing.Point(0, 10);
+			this.btnPrint.Name = "btnPrint";
+			this.btnPrint.Size = new System.Drawing.Size(120, 40);
+			this.btnPrint.TabIndex = 1;
+			this.btnPrint.Text = "Print Record";
+			this.btnPrint.UseVisualStyleBackColor = false;
+			this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
 			// 
 			// btnViewDetails
 			// 
@@ -433,9 +453,9 @@
 			this.btnViewDetails.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnViewDetails.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnViewDetails.ForeColor = System.Drawing.Color.White;
-			this.btnViewDetails.Location = new System.Drawing.Point(0, 10);
+			this.btnViewDetails.Location = new System.Drawing.Point(140, 10);
 			this.btnViewDetails.Name = "btnViewDetails";
-			this.btnViewDetails.Size = new System.Drawing.Size(160, 40);
+			this.btnViewDetails.Size = new System.Drawing.Size(130, 40);
 			this.btnViewDetails.TabIndex = 0;
 			this.btnViewDetails.Text = "View Details";
 			this.btnViewDetails.UseVisualStyleBackColor = false;
@@ -452,8 +472,33 @@
 			this.cardPanel.Controls.Add(this.dgvSearchResults);
 			this.cardPanel.Location = new System.Drawing.Point(35, 182);
 			this.cardPanel.Name = "cardPanel";
-			this.cardPanel.Size = new System.Drawing.Size(1060, 440);
+			this.cardPanel.Size = new System.Drawing.Size(1060, 422);
 			this.cardPanel.TabIndex = 3;
+			// 
+			// lblNoResults
+			// 
+			this.lblNoResults.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.lblNoResults.AutoSize = true;
+			this.lblNoResults.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblNoResults.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
+			this.lblNoResults.Location = new System.Drawing.Point(400, 200);
+			this.lblNoResults.Name = "lblNoResults";
+			this.lblNoResults.Size = new System.Drawing.Size(260, 32);
+			this.lblNoResults.TabIndex = 2;
+			this.lblNoResults.Text = "No matching records found.";
+			this.lblNoResults.Visible = false;
+			// 
+			// lblCount
+			// 
+			this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblCount.AutoSize = true;
+			this.lblCount.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+			this.lblCount.Location = new System.Drawing.Point(20, 385);
+			this.lblCount.Name = "lblCount";
+			this.lblCount.Size = new System.Drawing.Size(141, 23);
+			this.lblCount.TabIndex = 1;
+			this.lblCount.Text = "Total Results: 0";
 			// 
 			// dgvSearchResults
 			// 
@@ -461,7 +506,7 @@
 			this.dgvSearchResults.AllowUserToDeleteRows = false;
 			this.dgvSearchResults.AllowUserToResizeRows = false;
 			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(253)))));
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 10F);
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 12F);
 			dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
 			dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
 			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
@@ -476,7 +521,7 @@
 			this.dgvSearchResults.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
 			this.dgvSearchResults.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
 			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F);
 			dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
 			dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
 			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
@@ -491,7 +536,7 @@
 			this.colAdmissionStatus});
 			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-			dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 12F);
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F);
 			dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
 			dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
 			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
@@ -508,7 +553,7 @@
 			this.dgvSearchResults.RowHeadersWidth = 51;
 			this.dgvSearchResults.RowTemplate.Height = 50;
 			this.dgvSearchResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dgvSearchResults.Size = new System.Drawing.Size(1060, 390);
+			this.dgvSearchResults.Size = new System.Drawing.Size(1060, 360);
 			this.dgvSearchResults.TabIndex = 0;
 			this.dgvSearchResults.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSearchResults_CellDoubleClick);
 			this.dgvSearchResults.SelectionChanged += new System.EventHandler(this.dgvSearchResults_SelectionChanged_EnableButton);
@@ -516,7 +561,7 @@
 			// colPatientCode
 			// 
 			this.colPatientCode.DataPropertyName = "PatientCode";
-			this.colPatientCode.FillWeight = 15F;
+			this.colPatientCode.FillWeight = 20F;
 			this.colPatientCode.HeaderText = "Patient ID";
 			this.colPatientCode.MinimumWidth = 6;
 			this.colPatientCode.Name = "colPatientCode";
@@ -525,7 +570,7 @@
 			// colFullName
 			// 
 			this.colFullName.DataPropertyName = "FullName";
-			this.colFullName.FillWeight = 45F;
+			this.colFullName.FillWeight = 40F;
 			this.colFullName.HeaderText = "Full Name";
 			this.colFullName.MinimumWidth = 6;
 			this.colFullName.Name = "colFullName";
@@ -534,7 +579,7 @@
 			// colGender
 			// 
 			this.colGender.DataPropertyName = "Gender";
-			this.colGender.FillWeight = 15F;
+			this.colGender.FillWeight = 20F;
 			this.colGender.HeaderText = "Gender";
 			this.colGender.MinimumWidth = 6;
 			this.colGender.Name = "colGender";
@@ -542,74 +587,31 @@
 			// 
 			// colAdmissionStatus
 			// 
-			this.colAdmissionStatus.FillWeight = 25F;
+			this.colAdmissionStatus.DataPropertyName = "AdmissionStatus";
+			this.colAdmissionStatus.FillWeight = 20F;
 			this.colAdmissionStatus.HeaderText = "Admission Status";
 			this.colAdmissionStatus.MinimumWidth = 6;
 			this.colAdmissionStatus.Name = "colAdmissionStatus";
 			this.colAdmissionStatus.ReadOnly = true;
-			// 
-			// lblNoResults
-			// 
-			this.lblNoResults.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.lblNoResults.AutoSize = true;
-			this.lblNoResults.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblNoResults.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
-			this.lblNoResults.Location = new System.Drawing.Point(420, 200);
-			this.lblNoResults.Name = "lblNoResults";
-			this.lblNoResults.Size = new System.Drawing.Size(227, 28);
-			this.lblNoResults.TabIndex = 2;
-			this.lblNoResults.Text = "No patient records found.";
-			this.lblNoResults.Visible = false;
-			// 
-			// lblCount
-			// 
-			this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.lblCount.AutoSize = true;
-			this.lblCount.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-			this.lblCount.Location = new System.Drawing.Point(20, 405);
-			this.lblCount.Name = "lblCount";
-			this.lblCount.Size = new System.Drawing.Size(134, 23);
-			this.lblCount.TabIndex = 1;
-			this.lblCount.Text = "Total Results: 0";
 			// 
 			// toolbarPanel
 			// 
 			this.toolbarPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.toolbarPanel.BackColor = System.Drawing.Color.White;
+			this.toolbarPanel.Controls.Add(this.btnSearch);
 			this.toolbarPanel.Controls.Add(this.cmbAdmissionStatus);
 			this.toolbarPanel.Controls.Add(this.lblAdmissionStatus);
+			this.toolbarPanel.Controls.Add(this.cmbRegStatus);
+			this.toolbarPanel.Controls.Add(this.lblRegStatus);
 			this.toolbarPanel.Controls.Add(this.cmbGender);
 			this.toolbarPanel.Controls.Add(this.lblGender);
-			this.toolbarPanel.Controls.Add(this.btnSearch);
 			this.toolbarPanel.Controls.Add(this.txtSearch);
 			this.toolbarPanel.Controls.Add(this.lblSearch);
 			this.toolbarPanel.Location = new System.Drawing.Point(35, 110);
 			this.toolbarPanel.Name = "toolbarPanel";
-			this.toolbarPanel.Size = new System.Drawing.Size(1060, 70);
+			this.toolbarPanel.Size = new System.Drawing.Size(1060, 60);
 			this.toolbarPanel.TabIndex = 2;
-			// 
-			// lblSearch
-			// 
-			this.lblSearch.AutoSize = true;
-			this.lblSearch.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblSearch.Location = new System.Drawing.Point(20, 22);
-			this.lblSearch.Name = "lblSearch";
-			this.lblSearch.Size = new System.Drawing.Size(170, 23);
-			this.lblSearch.TabIndex = 0;
-			this.lblSearch.Text = "Search: ID / Name / #:";
-			// 
-			// txtSearch
-			// 
-			this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.txtSearch.Location = new System.Drawing.Point(200, 19);
-			this.txtSearch.Name = "txtSearch";
-			this.txtSearch.Size = new System.Drawing.Size(220, 30);
-			this.txtSearch.TabIndex = 1;
-			this.txtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyDown);
 			// 
 			// btnSearch
 			// 
@@ -619,47 +621,13 @@
 			this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnSearch.ForeColor = System.Drawing.Color.White;
-			this.btnSearch.Location = new System.Drawing.Point(430, 19);
+			this.btnSearch.Location = new System.Drawing.Point(980, 14);
 			this.btnSearch.Name = "btnSearch";
-			this.btnSearch.Size = new System.Drawing.Size(100, 32);
-			this.btnSearch.TabIndex = 2;
-			this.btnSearch.Text = "🔍  Search";
+			this.btnSearch.Size = new System.Drawing.Size(80, 36);
+			this.btnSearch.TabIndex = 9;
+			this.btnSearch.Text = "Search";
 			this.btnSearch.UseVisualStyleBackColor = false;
 			this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-			// 
-			// lblGender
-			// 
-			this.lblGender.AutoSize = true;
-			this.lblGender.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblGender.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblGender.Location = new System.Drawing.Point(560, 22);
-			this.lblGender.Name = "lblGender";
-			this.lblGender.Size = new System.Drawing.Size(70, 23);
-			this.lblGender.TabIndex = 3;
-			this.lblGender.Text = "Gender:";
-			// 
-			// cmbGender
-			// 
-			this.cmbGender.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cmbGender.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.cmbGender.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cmbGender.FormattingEnabled = true;
-			this.cmbGender.Location = new System.Drawing.Point(630, 19);
-			this.cmbGender.Name = "cmbGender";
-			this.cmbGender.Size = new System.Drawing.Size(120, 31);
-			this.cmbGender.TabIndex = 4;
-			this.cmbGender.SelectedIndexChanged += new System.EventHandler(this.cmbGender_SelectedIndexChanged);
-			// 
-			// lblAdmissionStatus
-			// 
-			this.lblAdmissionStatus.AutoSize = true;
-			this.lblAdmissionStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblAdmissionStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblAdmissionStatus.Location = new System.Drawing.Point(770, 22);
-			this.lblAdmissionStatus.Name = "lblAdmissionStatus";
-			this.lblAdmissionStatus.Size = new System.Drawing.Size(150, 23);
-			this.lblAdmissionStatus.TabIndex = 5;
-			this.lblAdmissionStatus.Text = "Admission Status:";
 			// 
 			// cmbAdmissionStatus
 			// 
@@ -667,11 +635,89 @@
 			this.cmbAdmissionStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.cmbAdmissionStatus.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cmbAdmissionStatus.FormattingEnabled = true;
-			this.cmbAdmissionStatus.Location = new System.Drawing.Point(930, 19);
+			this.cmbAdmissionStatus.Location = new System.Drawing.Point(850, 17);
 			this.cmbAdmissionStatus.Name = "cmbAdmissionStatus";
-			this.cmbAdmissionStatus.Size = new System.Drawing.Size(110, 31);
-			this.cmbAdmissionStatus.TabIndex = 6;
+			this.cmbAdmissionStatus.Size = new System.Drawing.Size(120, 31);
+			this.cmbAdmissionStatus.TabIndex = 8;
 			this.cmbAdmissionStatus.SelectedIndexChanged += new System.EventHandler(this.cmbAdmissionStatus_SelectedIndexChanged);
+			// 
+			// lblAdmissionStatus
+			// 
+			this.lblAdmissionStatus.AutoSize = true;
+			this.lblAdmissionStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblAdmissionStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblAdmissionStatus.Location = new System.Drawing.Point(720, 20);
+			this.lblAdmissionStatus.Name = "lblAdmissionStatus";
+			this.lblAdmissionStatus.Size = new System.Drawing.Size(130, 23);
+			this.lblAdmissionStatus.TabIndex = 7;
+			this.lblAdmissionStatus.Text = "Admission Status:";
+			// 
+			// cmbRegStatus
+			// 
+			this.cmbRegStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbRegStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.cmbRegStatus.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cmbRegStatus.FormattingEnabled = true;
+			this.cmbRegStatus.Location = new System.Drawing.Point(570, 17);
+			this.cmbRegStatus.Name = "cmbRegStatus";
+			this.cmbRegStatus.Size = new System.Drawing.Size(140, 31);
+			this.cmbRegStatus.TabIndex = 6;
+			this.cmbRegStatus.SelectedIndexChanged += new System.EventHandler(this.cmbRegStatus_SelectedIndexChanged);
+			// 
+			// lblRegStatus
+			// 
+			this.lblRegStatus.AutoSize = true;
+			this.lblRegStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblRegStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblRegStatus.Location = new System.Drawing.Point(430, 20);
+			this.lblRegStatus.Name = "lblRegStatus";
+			this.lblRegStatus.Size = new System.Drawing.Size(135, 23);
+			this.lblRegStatus.TabIndex = 5;
+			this.lblRegStatus.Text = "Reg. Status:";
+			// 
+			// cmbGender
+			// 
+			this.cmbGender.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbGender.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.cmbGender.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cmbGender.FormattingEnabled = true;
+			this.cmbGender.Location = new System.Drawing.Point(320, 17);
+			this.cmbGender.Name = "cmbGender";
+			this.cmbGender.Size = new System.Drawing.Size(100, 31);
+			this.cmbGender.TabIndex = 4;
+			this.cmbGender.SelectedIndexChanged += new System.EventHandler(this.cmbGender_SelectedIndexChanged);
+			// 
+			// lblGender
+			// 
+			this.lblGender.AutoSize = true;
+			this.lblGender.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblGender.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblGender.Location = new System.Drawing.Point(250, 20);
+			this.lblGender.Name = "lblGender";
+			this.lblGender.Size = new System.Drawing.Size(64, 23);
+			this.lblGender.TabIndex = 3;
+			this.lblGender.Text = "Gender:";
+			// 
+			// txtSearch
+			// 
+			this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txtSearch.Location = new System.Drawing.Point(90, 17);
+			this.txtSearch.Name = "txtSearch";
+			this.txtSearch.Size = new System.Drawing.Size(150, 30);
+			this.txtSearch.TabIndex = 2;
+			this.txtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyDown);
+			// 
+			// lblSearch
+			// 
+			this.lblSearch.AutoSize = true;
+			this.lblSearch.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblSearch.Location = new System.Drawing.Point(20, 20);
+			this.lblSearch.Name = "lblSearch";
+			this.lblSearch.Size = new System.Drawing.Size(60, 23);
+			this.lblSearch.TabIndex = 1;
+			this.lblSearch.Text = "Search:";
 			// 
 			// lblSubtitle
 			// 
@@ -680,9 +726,9 @@
 			this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
 			this.lblSubtitle.Location = new System.Drawing.Point(38, 68);
 			this.lblSubtitle.Name = "lblSubtitle";
-			this.lblSubtitle.Size = new System.Drawing.Size(360, 23);
+			this.lblSubtitle.Size = new System.Drawing.Size(407, 23);
 			this.lblSubtitle.TabIndex = 1;
-			this.lblSubtitle.Text = "Search patients by ID, name, or contact";
+			this.lblSubtitle.Text = "Search patients and view their admission status";
 			// 
 			// lblTitle
 			// 
@@ -691,7 +737,7 @@
 			this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
 			this.lblTitle.Location = new System.Drawing.Point(35, 25);
 			this.lblTitle.Name = "lblTitle";
-			this.lblTitle.Size = new System.Drawing.Size(250, 41);
+			this.lblTitle.Size = new System.Drawing.Size(295, 41);
 			this.lblTitle.TabIndex = 0;
 			this.lblTitle.Text = "Patient Info Search";
 			// 
@@ -745,8 +791,8 @@
 		private System.Windows.Forms.Button btnNavRoomSearch;
 		private System.Windows.Forms.Button btnNavAdmission;
 		private System.Windows.Forms.Button btnNavAdmissionLog;
-		private System.Windows.Forms.Button btnNavDoctorNurse;
 		private System.Windows.Forms.Button btnNavTreatment;
+		private System.Windows.Forms.Button btnNavDoctorNurse;
 		private System.Windows.Forms.Button btnNavBilling;
 		private System.Windows.Forms.Button btnNavDischarge;
 		private System.Windows.Forms.Button btnNavSummary;
@@ -757,20 +803,23 @@
 		private System.Windows.Forms.Panel toolbarPanel;
 		private System.Windows.Forms.Label lblSearch;
 		private System.Windows.Forms.TextBox txtSearch;
-		private System.Windows.Forms.Button btnSearch;
 		private System.Windows.Forms.Label lblGender;
 		private System.Windows.Forms.ComboBox cmbGender;
+		private System.Windows.Forms.Label lblRegStatus;
+		private System.Windows.Forms.ComboBox cmbRegStatus;
 		private System.Windows.Forms.Label lblAdmissionStatus;
 		private System.Windows.Forms.ComboBox cmbAdmissionStatus;
+		private System.Windows.Forms.Button btnSearch;
 		private System.Windows.Forms.Panel cardPanel;
 		private System.Windows.Forms.DataGridView dgvSearchResults;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colPatientCode;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colFullName;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colGender;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colAdmissionStatus;
-		private System.Windows.Forms.Label lblNoResults;
 		private System.Windows.Forms.Label lblCount;
+		private System.Windows.Forms.Label lblNoResults;
 		private System.Windows.Forms.Panel detailsPanel;
 		private System.Windows.Forms.Button btnViewDetails;
+		private System.Windows.Forms.Button btnPrint;
 	}
 }

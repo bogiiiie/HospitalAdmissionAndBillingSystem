@@ -63,6 +63,7 @@ namespace BusinessLogic.Repository
 						UserID INTEGER PRIMARY KEY AUTOINCREMENT,
 						Username TEXT NOT NULL UNIQUE,
 						PasswordHash TEXT NOT NULL,
+						FullName TEXT NOT NULL,
 						Role TEXT NOT NULL,
 						IsActive INTEGER NOT NULL DEFAULT 1,
 						CreatedAt TEXT NOT NULL DEFAULT (datetime('now'))
@@ -147,6 +148,7 @@ namespace BusinessLogic.Repository
 						GuardianPresent INTEGER NOT NULL DEFAULT 0,
 						EmergencyContactName TEXT,
 						EmergencyContactNumber TEXT,
+						IsFullyRegistered INTEGER NOT NULL DEFAULT 1,
 						IsActive INTEGER NOT NULL DEFAULT 1,
 						CreatedAt TEXT NOT NULL DEFAULT (datetime('now'))
 					);";

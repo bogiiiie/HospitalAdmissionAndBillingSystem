@@ -2,7 +2,16 @@
 {
 	partial class AddEditPatientForm
 	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
 		private System.ComponentModel.IContainer components = null;
+
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+
 
 		protected override void Dispose(bool disposing)
 		{
@@ -15,6 +24,10 @@
 
 		#region Windows Form Designer generated code
 
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
 		private void InitializeComponent()
 		{
 			this.panelHeader = new System.Windows.Forms.Panel();
@@ -43,6 +56,7 @@
 			this.lblSectionGuardian = new System.Windows.Forms.Label();
 			this.chkMinor = new System.Windows.Forms.CheckBox();
 			this.chkUnable = new System.Windows.Forms.CheckBox();
+			this.chkNotFullyRegistered = new System.Windows.Forms.CheckBox();
 			this.lblGuardianName = new System.Windows.Forms.Label();
 			this.txtGuardianName = new System.Windows.Forms.TextBox();
 			this.lblRelationship = new System.Windows.Forms.Label();
@@ -117,6 +131,7 @@
 			this.panel1.Controls.Add(this.lblSectionGuardian);
 			this.panel1.Controls.Add(this.chkMinor);
 			this.panel1.Controls.Add(this.chkUnable);
+			this.panel1.Controls.Add(this.chkNotFullyRegistered);
 			this.panel1.Controls.Add(this.lblGuardianName);
 			this.panel1.Controls.Add(this.txtGuardianName);
 			this.panel1.Controls.Add(this.lblRelationship);
@@ -381,6 +396,17 @@
 			this.chkUnable.TabIndex = 21;
 			this.chkUnable.Text = "Patient is unable to provide information";
 			// 
+			// chkNotFullyRegistered
+			// 
+			this.chkNotFullyRegistered.AutoSize = true;
+			this.chkNotFullyRegistered.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.chkNotFullyRegistered.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(217)))), ((int)(((byte)(119)))), ((int)(((byte)(6)))));
+			this.chkNotFullyRegistered.Location = new System.Drawing.Point(500, 350);
+			this.chkNotFullyRegistered.Name = "chkNotFullyRegistered";
+			this.chkNotFullyRegistered.Size = new System.Drawing.Size(150, 19);
+			this.chkNotFullyRegistered.TabIndex = 22;
+			this.chkNotFullyRegistered.Text = "Not Fully Registered";
+			// 
 			// lblGuardianName
 			// 
 			this.lblGuardianName.AutoSize = true;
@@ -389,7 +415,7 @@
 			this.lblGuardianName.Location = new System.Drawing.Point(30, 380);
 			this.lblGuardianName.Name = "lblGuardianName";
 			this.lblGuardianName.Size = new System.Drawing.Size(120, 15);
-			this.lblGuardianName.TabIndex = 22;
+			this.lblGuardianName.TabIndex = 23;
 			this.lblGuardianName.Text = "Guardian Full Name *";
 			// 
 			// txtGuardianName
@@ -399,7 +425,7 @@
 			this.txtGuardianName.Location = new System.Drawing.Point(30, 400);
 			this.txtGuardianName.Name = "txtGuardianName";
 			this.txtGuardianName.Size = new System.Drawing.Size(300, 24);
-			this.txtGuardianName.TabIndex = 23;
+			this.txtGuardianName.TabIndex = 24;
 			// 
 			// lblRelationship
 			// 
@@ -409,7 +435,7 @@
 			this.lblRelationship.Location = new System.Drawing.Point(360, 380);
 			this.lblRelationship.Name = "lblRelationship";
 			this.lblRelationship.Size = new System.Drawing.Size(85, 15);
-			this.lblRelationship.TabIndex = 24;
+			this.lblRelationship.TabIndex = 25;
 			this.lblRelationship.Text = "Relationship *";
 			// 
 			// cmbRelationship
@@ -423,7 +449,7 @@
 			this.cmbRelationship.Location = new System.Drawing.Point(360, 400);
 			this.cmbRelationship.Name = "cmbRelationship";
 			this.cmbRelationship.Size = new System.Drawing.Size(310, 25);
-			this.cmbRelationship.TabIndex = 25;
+			this.cmbRelationship.TabIndex = 26;
 			// 
 			// lblGuardianContact
 			// 
@@ -433,7 +459,7 @@
 			this.lblGuardianContact.Location = new System.Drawing.Point(30, 435);
 			this.lblGuardianContact.Name = "lblGuardianContact";
 			this.lblGuardianContact.Size = new System.Drawing.Size(140, 15);
-			this.lblGuardianContact.TabIndex = 26;
+			this.lblGuardianContact.TabIndex = 27;
 			this.lblGuardianContact.Text = "Guardian Contact Number *";
 			// 
 			// txtGuardianContact
@@ -443,7 +469,7 @@
 			this.txtGuardianContact.Location = new System.Drawing.Point(30, 455);
 			this.txtGuardianContact.Name = "txtGuardianContact";
 			this.txtGuardianContact.Size = new System.Drawing.Size(300, 24);
-			this.txtGuardianContact.TabIndex = 27;
+			this.txtGuardianContact.TabIndex = 28;
 			// 
 			// lblGuardianAddress
 			// 
@@ -453,7 +479,7 @@
 			this.lblGuardianAddress.Location = new System.Drawing.Point(360, 435);
 			this.lblGuardianAddress.Name = "lblGuardianAddress";
 			this.lblGuardianAddress.Size = new System.Drawing.Size(100, 15);
-			this.lblGuardianAddress.TabIndex = 28;
+			this.lblGuardianAddress.TabIndex = 29;
 			this.lblGuardianAddress.Text = "Guardian Address";
 			// 
 			// txtGuardianAddress
@@ -463,7 +489,7 @@
 			this.txtGuardianAddress.Location = new System.Drawing.Point(360, 455);
 			this.txtGuardianAddress.Name = "txtGuardianAddress";
 			this.txtGuardianAddress.Size = new System.Drawing.Size(310, 24);
-			this.txtGuardianAddress.TabIndex = 29;
+			this.txtGuardianAddress.TabIndex = 30;
 			// 
 			// chkGuardianPresent
 			// 
@@ -473,7 +499,7 @@
 			this.chkGuardianPresent.Location = new System.Drawing.Point(30, 485);
 			this.chkGuardianPresent.Name = "chkGuardianPresent";
 			this.chkGuardianPresent.Size = new System.Drawing.Size(220, 19);
-			this.chkGuardianPresent.TabIndex = 30;
+			this.chkGuardianPresent.TabIndex = 31;
 			this.chkGuardianPresent.Text = "Guardian is present with patient";
 			// 
 			// lblSectionSecondary
@@ -484,7 +510,7 @@
 			this.lblSectionSecondary.Location = new System.Drawing.Point(30, 515);
 			this.lblSectionSecondary.Name = "lblSectionSecondary";
 			this.lblSectionSecondary.Size = new System.Drawing.Size(350, 19);
-			this.lblSectionSecondary.TabIndex = 31;
+			this.lblSectionSecondary.TabIndex = 32;
 			this.lblSectionSecondary.Text = "── SECONDARY EMERGENCY CONTACT (Optional) ──";
 			// 
 			// lblEmergencyName
@@ -495,7 +521,7 @@
 			this.lblEmergencyName.Location = new System.Drawing.Point(30, 540);
 			this.lblEmergencyName.Name = "lblEmergencyName";
 			this.lblEmergencyName.Size = new System.Drawing.Size(100, 15);
-			this.lblEmergencyName.TabIndex = 32;
+			this.lblEmergencyName.TabIndex = 33;
 			this.lblEmergencyName.Text = "Emergency Name";
 			// 
 			// txtEmergencyName
@@ -505,7 +531,7 @@
 			this.txtEmergencyName.Location = new System.Drawing.Point(30, 560);
 			this.txtEmergencyName.Name = "txtEmergencyName";
 			this.txtEmergencyName.Size = new System.Drawing.Size(300, 24);
-			this.txtEmergencyName.TabIndex = 33;
+			this.txtEmergencyName.TabIndex = 34;
 			// 
 			// lblEmergencyContact
 			// 
@@ -515,7 +541,7 @@
 			this.lblEmergencyContact.Location = new System.Drawing.Point(360, 540);
 			this.lblEmergencyContact.Name = "lblEmergencyContact";
 			this.lblEmergencyContact.Size = new System.Drawing.Size(110, 15);
-			this.lblEmergencyContact.TabIndex = 34;
+			this.lblEmergencyContact.TabIndex = 35;
 			this.lblEmergencyContact.Text = "Emergency Contact";
 			// 
 			// txtEmergencyContact
@@ -525,7 +551,7 @@
 			this.txtEmergencyContact.Location = new System.Drawing.Point(360, 560);
 			this.txtEmergencyContact.Name = "txtEmergencyContact";
 			this.txtEmergencyContact.Size = new System.Drawing.Size(310, 24);
-			this.txtEmergencyContact.TabIndex = 35;
+			this.txtEmergencyContact.TabIndex = 36;
 			// 
 			// btnSave
 			// 
@@ -538,7 +564,7 @@
 			this.btnSave.Location = new System.Drawing.Point(30, 605);
 			this.btnSave.Name = "btnSave";
 			this.btnSave.Size = new System.Drawing.Size(200, 40);
-			this.btnSave.TabIndex = 36;
+			this.btnSave.TabIndex = 37;
 			this.btnSave.Text = "Save";
 			this.btnSave.UseVisualStyleBackColor = false;
 			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -555,7 +581,7 @@
 			this.btnCancel.Location = new System.Drawing.Point(250, 605);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(200, 40);
-			this.btnCancel.TabIndex = 37;
+			this.btnCancel.TabIndex = 38;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = false;
 			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -614,6 +640,7 @@
 		private System.Windows.Forms.Label lblSectionGuardian;
 		private System.Windows.Forms.CheckBox chkMinor;
 		private System.Windows.Forms.CheckBox chkUnable;
+		private System.Windows.Forms.CheckBox chkNotFullyRegistered;
 		private System.Windows.Forms.Label lblGuardianName;
 		private System.Windows.Forms.TextBox txtGuardianName;
 		private System.Windows.Forms.Label lblRelationship;
