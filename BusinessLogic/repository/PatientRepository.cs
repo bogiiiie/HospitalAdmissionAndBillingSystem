@@ -6,10 +6,19 @@ using Model;
 
 namespace BusinessLogic.Repository
 {
+	/// <summary>
+	/// Repository class for the Patients table.
+	/// All reads/writes to Patients go through here.
+	/// </summary>
 	public class PatientRepository
 	{
+		// The "address" of the database file, read once in the constructor.
 		private readonly string connectionString;
 
+		// ------------------------------------------------------------
+		// CONSTRUCTOR
+		// Reads the "HospitalDB" connection string from App.config.
+		// ------------------------------------------------------------
 		public PatientRepository()
 		{
 			connectionString = ConfigurationManager
@@ -24,13 +33,18 @@ namespace BusinessLogic.Repository
 		{
 			List<Patient> patients = new List<Patient>();
 
+			// Start with the base query, then append the filter clause.
 			string sql = "SELECT * FROM Patients";
 
+			// NOTE: 'filter' is a fixed set of values, not user input,
+			// so string concatenation here is safe. An unknown value
+			// silently means "All".
 			if (filter == "Active")
 				sql += " WHERE IsActive = 1";
 			else if (filter == "Inactive")
 				sql += " WHERE IsActive = 0";
 
+			// Order by display code so P-0001, P-0002, ... appear in order.
 			sql += " ORDER BY PatientCode;";
 
 			using (var conn = new SQLiteConnection(connectionString))
@@ -39,6 +53,7 @@ namespace BusinessLogic.Repository
 				using (var cmd = new SQLiteCommand(sql, conn))
 				using (var reader = cmd.ExecuteReader())
 				{
+					// Map each row into a Patient object.
 					while (reader.Read())
 						patients.Add(MapReaderToPatient(reader));
 				}
@@ -57,6 +72,8 @@ namespace BusinessLogic.Repository
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
+				// LIMIT 1: PatientCode is unique, but this guards against
+				// accidental duplicates and stops after the first hit.
 				string sql = "SELECT * FROM Patients WHERE PatientCode = @Code LIMIT 1;";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
@@ -78,15 +95,18 @@ namespace BusinessLogic.Repository
 		// ==========================================
 		public string GenerateNextPatientCode()
 		{
+			// Default if the table is empty.
 			string code = "P-0001";
 
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
+				// Look at the most recently inserted patient by PatientID.
 				string sql = "SELECT PatientCode FROM Patients ORDER BY PatientID DESC LIMIT 1;";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
 				{
+					// ExecuteScalar returns the first column of the first row.
 					object result = cmd.ExecuteScalar();
 
 					if (result != null && result != DBNull.Value)
@@ -104,6 +124,8 @@ namespace BusinessLogic.Repository
 
 		// ==========================================
 		// CREATE — Add a new patient
+		// NOTE: IsFullyRegistered is now part of the INSERT so the
+		//       registration flow can record partial vs. complete data.
 		// ==========================================
 		public void AddPatient(Patient p)
 		{
@@ -114,15 +136,16 @@ namespace BusinessLogic.Repository
 					(PatientCode, FirstName, MiddleName, LastName, DateOfBirth, Gender,
 					 ContactNumber, Address, CivilStatus, Occupation,
 					 GuardianName, GuardianRelationship, GuardianContact, GuardianAddress, GuardianPresent,
-					 EmergencyContactName, EmergencyContactNumber, IsActive)
+					 EmergencyContactName, EmergencyContactNumber, IsFullyRegistered, IsActive)
 					VALUES
 					(@PatientCode, @FirstName, @MiddleName, @LastName, @DateOfBirth, @Gender,
 					 @ContactNumber, @Address, @CivilStatus, @Occupation,
 					 @GuardianName, @GuardianRelationship, @GuardianContact, @GuardianAddress, @GuardianPresent,
-					 @EmergencyContactName, @EmergencyContactNumber, 1);";
+					 @EmergencyContactName, @EmergencyContactNumber, @IsFullyRegistered, 1);";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
 				{
+					// AddCommonParameters binds every @placeholder.
 					AddCommonParameters(cmd, p);
 					cmd.ExecuteNonQuery();
 				}
@@ -131,6 +154,8 @@ namespace BusinessLogic.Repository
 
 		// ==========================================
 		// UPDATE — Edit an existing patient
+		// NOTE: PatientCode (the key) and IsActive are NOT touched here.
+		//       IsActive is handled by Deactivate/Reactivate methods.
 		// ==========================================
 		public void UpdatePatient(Patient p)
 		{
@@ -153,7 +178,8 @@ namespace BusinessLogic.Repository
 						GuardianAddress = @GuardianAddress,
 						GuardianPresent = @GuardianPresent,
 						EmergencyContactName = @EmergencyContactName,
-						EmergencyContactNumber = @EmergencyContactNumber
+						EmergencyContactNumber = @EmergencyContactNumber,
+						IsFullyRegistered = @IsFullyRegistered
 					WHERE PatientCode = @PatientCode;";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
@@ -203,6 +229,8 @@ namespace BusinessLogic.Repository
 		// ==========================================
 		// DELETE — Hard delete (only if no history)
 		// Returns rows affected.
+		// NOTE: The "no history" check is the caller's responsibility —
+		//       call HasAdmissionHistory() first before calling this.
 		// ==========================================
 		public int DeletePatient(string patientCode)
 		{
@@ -214,6 +242,7 @@ namespace BusinessLogic.Repository
 				using (var cmd = new SQLiteCommand(sql, conn))
 				{
 					cmd.Parameters.AddWithValue("@Code", patientCode);
+					// Returns number of rows deleted (1 if found, 0 if not).
 					return cmd.ExecuteNonQuery();
 				}
 			}
@@ -233,6 +262,7 @@ namespace BusinessLogic.Repository
 				using (var cmd = new SQLiteCommand(sql, conn))
 				{
 					cmd.Parameters.AddWithValue("@Code", patientCode);
+					// COUNT(*) in SQLite comes back as a long.
 					long count = (long)cmd.ExecuteScalar();
 					return count > 0;
 				}
@@ -246,6 +276,9 @@ namespace BusinessLogic.Repository
 		{
 			List<Patient> patients = new List<Patient>();
 
+			// The parenthesized OR-block is important: without the
+			// parentheses, the appended "AND IsActive = ..." would only
+			// apply to the last OR term.
 			string sql = @"SELECT * FROM Patients
 						   WHERE (PatientCode LIKE @K
 							  OR FirstName LIKE @K
@@ -265,6 +298,8 @@ namespace BusinessLogic.Repository
 				conn.Open();
 				using (var cmd = new SQLiteCommand(sql, conn))
 				{
+					// Wrap the keyword in % so LIKE matches anywhere in the text.
+					// Parameterized, so the % can't be abused for injection.
 					cmd.Parameters.AddWithValue("@K", "%" + keyword + "%");
 
 					using (var reader = cmd.ExecuteReader())
@@ -281,6 +316,9 @@ namespace BusinessLogic.Repository
 		// ==========================================
 		// HELPERS
 		// ==========================================
+
+		// Builds a Patient object from the current row of a reader.
+		// Every nullable text column falls back to "" instead of throwing.
 		private Patient MapReaderToPatient(SQLiteDataReader reader)
 		{
 			return new Patient
@@ -306,11 +344,15 @@ namespace BusinessLogic.Repository
 				EmergencyContactName = reader["EmergencyContactName"] == DBNull.Value ? "" : reader["EmergencyContactName"].ToString(),
 				EmergencyContactNumber = reader["EmergencyContactNumber"] == DBNull.Value ? "" : reader["EmergencyContactNumber"].ToString(),
 
+				IsFullyRegistered = Convert.ToInt32(reader["IsFullyRegistered"]) == 1, // NEW
 				IsActive = Convert.ToInt32(reader["IsActive"]) == 1,
 				CreatedAt = DateTime.Parse(reader["CreatedAt"].ToString())
 			};
 		}
 
+		// Binds every shared @placeholder used by both INSERT and UPDATE.
+		// '(object)x ?? DBNull.Value' converts a null string into a real
+		// DB NULL instead of crashing or storing the literal "null".
 		private void AddCommonParameters(SQLiteCommand cmd, Patient p)
 		{
 			cmd.Parameters.AddWithValue("@PatientCode", p.PatientCode);
@@ -328,10 +370,13 @@ namespace BusinessLogic.Repository
 			cmd.Parameters.AddWithValue("@GuardianRelationship", (object)p.GuardianRelationship ?? DBNull.Value);
 			cmd.Parameters.AddWithValue("@GuardianContact", (object)p.GuardianContact ?? DBNull.Value);
 			cmd.Parameters.AddWithValue("@GuardianAddress", (object)p.GuardianAddress ?? DBNull.Value);
+			// Booleans are stored as 1/0 because SQLite has no real bool type.
 			cmd.Parameters.AddWithValue("@GuardianPresent", p.GuardianPresent ? 1 : 0);
 
 			cmd.Parameters.AddWithValue("@EmergencyContactName", (object)p.EmergencyContactName ?? DBNull.Value);
 			cmd.Parameters.AddWithValue("@EmergencyContactNumber", (object)p.EmergencyContactNumber ?? DBNull.Value);
+
+			cmd.Parameters.AddWithValue("@IsFullyRegistered", p.IsFullyRegistered ? 1 : 0); // NEW
 		}
 	}
 }

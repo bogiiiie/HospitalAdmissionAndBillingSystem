@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Printing; // Required for printing
 using System.Windows.Forms;
 using BusinessLogic.Controller;
 using Model;
@@ -50,6 +51,13 @@ namespace UI
 			cmbGender.Items.Add("Female");
 			cmbGender.Items.Add("Other");
 			cmbGender.SelectedIndex = 0;
+
+			// NEW: Populate Registration Status dropdown
+			cmbRegStatus.Items.Clear();
+			cmbRegStatus.Items.Add("All");
+			cmbRegStatus.Items.Add("Fully Registered");
+			cmbRegStatus.Items.Add("Not Fully Registered");
+			cmbRegStatus.SelectedIndex = 0;
 
 			cmbAdmissionStatus.Items.Clear();
 			cmbAdmissionStatus.Items.Add("All");
@@ -147,7 +155,6 @@ namespace UI
 
 			visibleButtons.Add(btnNavAdmissionLog);
 
-			// Doctor / Nurse is Admin-only
 			if (_role == "Admin")
 			{
 				visibleButtons.Add(btnNavDoctorNurse);
@@ -196,11 +203,17 @@ namespace UI
 				results = results.FindAll(p => p.Gender == gender);
 			}
 
+			// NEW: Apply Registration Status filter
+			if (cmbRegStatus.SelectedItem != null && cmbRegStatus.SelectedItem.ToString() != "All")
+			{
+				bool isFully = cmbRegStatus.SelectedItem.ToString() == "Fully Registered";
+				results = results.FindAll(p => p.IsFullyRegistered == isFully);
+			}
+
 			// Apply admission status filter — real lookup now
 			if (cmbAdmissionStatus.SelectedItem != null && cmbAdmissionStatus.SelectedItem.ToString() != "All")
 			{
 				string status = cmbAdmissionStatus.SelectedItem.ToString();
-
 				results = results.FindAll(p => admissionController.GetPatientStatus(p.PatientCode) == status);
 			}
 
@@ -212,12 +225,21 @@ namespace UI
 				// Real lookup — "Admitted" / "Discharged" / "Not Admitted"
 				string admissionStatus = admissionController.GetPatientStatus(p.PatientCode);
 
-				dgvSearchResults.Rows.Add(
+				// Append warning indicator if not fully registered
+				string displayName = p.FullName + (!p.IsFullyRegistered ? " ⚠️" : "");
+
+				int rowIndex = dgvSearchResults.Rows.Add(
 					p.PatientCode,
-					p.FullName,
+					displayName,
 					p.Gender,
 					admissionStatus
 				);
+
+				// Color the text orange for incomplete registrations
+				if (!p.IsFullyRegistered)
+				{
+					dgvSearchResults.Rows[rowIndex].DefaultCellStyle.ForeColor = Color.FromArgb(217, 119, 6);
+				}
 			}
 
 			lblCount.Text = "Total Results: " + results.Count;
@@ -229,6 +251,7 @@ namespace UI
 			// Reset selection
 			_selectedPatientCode = null;
 			btnViewDetails.Enabled = false;
+			btnPrint.Enabled = false;
 		}
 
 		private void btnSearch_Click(object sender, EventArgs e)
@@ -252,6 +275,13 @@ namespace UI
 				RunSearch();
 		}
 
+		// NEW: Event handler for Registration Status dropdown
+		private void cmbRegStatus_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.IsHandleCreated && !this.DesignMode)
+				RunSearch();
+		}
+
 		private void cmbAdmissionStatus_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.IsHandleCreated && !this.DesignMode)
@@ -266,7 +296,6 @@ namespace UI
 			// Not wired in Designer currently, but kept for future
 		}
 
-		// Double-click a row → open details
 		private void dgvSearchResults_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
 			if (e.RowIndex < 0) return;
@@ -290,10 +319,90 @@ namespace UI
 			dialog.ShowDialog(this);
 		}
 
-		// Enable View Details when a row is selected
 		private void dgvSearchResults_SelectionChanged_EnableButton(object sender, EventArgs e)
 		{
-			btnViewDetails.Enabled = (dgvSearchResults.CurrentRow != null);
+			bool hasSelection = (dgvSearchResults.CurrentRow != null);
+			btnViewDetails.Enabled = hasSelection;
+			btnPrint.Enabled = hasSelection;
+		}
+
+		// =============================================================
+		// PRINT
+		// =============================================================
+		private void btnPrint_Click(object sender, EventArgs e)
+		{
+			if (dgvSearchResults.CurrentRow == null) return;
+
+			string patientCode = dgvSearchResults.CurrentRow.Cells["colPatientCode"].Value.ToString();
+			Patient patient = controller.GetPatientByCode(patientCode);
+			if (patient == null) return;
+
+			// Fetch the logged-in user's Full Name and Role
+			string processedBy = _username;
+			try
+			{
+				var userRepo = new BusinessLogic.Repository.UserRepository();
+				var currentUser = userRepo.GetUserByUsername(_username);
+				if (currentUser != null)
+				{
+					// Combine Full Name and Role (e.g., "Lebron James (Admin)")
+					processedBy = currentUser.FullName + " (" + currentUser.Role + ")";
+				}
+			}
+			catch { }
+
+			PrintDocument pd = new PrintDocument();
+			pd.PrintPage += (s, args) =>
+			{
+				Font titleFont = new Font("Arial", 16, FontStyle.Bold);
+				Font headerFont = new Font("Arial", 12, FontStyle.Bold);
+				Font normalFont = new Font("Arial", 10, FontStyle.Regular);
+
+				float y = 50;
+				float x = 50;
+
+				args.Graphics.DrawString("Hospital Admission System", titleFont, Brushes.Black, x, y);
+				y += 30;
+				args.Graphics.DrawString("Patient Information Record", headerFont, Brushes.Black, x, y);
+				y += 30;
+
+				args.Graphics.DrawString("Patient Code: " + patient.PatientCode, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Full Name: " + patient.FullName, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Date of Birth: " + patient.DateOfBirth.ToString("MM/dd/yyyy"), normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Gender: " + patient.Gender, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Contact: " + patient.ContactNumber, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Address: " + patient.Address, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Civil Status: " + patient.CivilStatus, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Occupation: " + patient.Occupation, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Guardian: " + patient.GuardianName + " (" + patient.GuardianRelationship + ")", normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Emergency Contact: " + patient.EmergencyContactName + " - " + patient.EmergencyContactNumber, normalFont, Brushes.Black, x, y);
+				y += 40;
+
+				if (!patient.IsFullyRegistered)
+				{
+					Font warningFont = new Font("Arial", 10, FontStyle.Bold);
+					args.Graphics.DrawString("*** NOTE: THIS PATIENT IS NOT FULLY REGISTERED ***", warningFont, Brushes.DarkOrange, x, y);
+					y += 30;
+				}
+
+				y += 40;
+				args.Graphics.DrawString("Processed By: " + processedBy, headerFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Date Printed: " + DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"), normalFont, Brushes.Black, x, y);
+			};
+
+			PrintPreviewDialog preview = new PrintPreviewDialog();
+			preview.Document = pd;
+			preview.ShowDialog();
 		}
 
 		// =============================================================

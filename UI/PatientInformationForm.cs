@@ -197,12 +197,21 @@ namespace UI
 
 			foreach (Patient p in patients)
 			{
-				dgvPatients.Rows.Add(
+				// NEW: Append warning indicator if not fully registered
+				string displayName = p.FullName + (!p.IsFullyRegistered ? " ⚠️" : "");
+
+				int rowIndex = dgvPatients.Rows.Add(
 					p.PatientCode,
-					p.FullName,
+					displayName,
 					p.DateOfBirth.ToString("MM/dd/yyyy"),
 					p.ContactNumber
 				);
+
+				// NEW: Color the text orange for incomplete registrations
+				if (!p.IsFullyRegistered)
+				{
+					dgvPatients.Rows[rowIndex].DefaultCellStyle.ForeColor = Color.FromArgb(217, 119, 6); // Orange
+				}
 			}
 
 			lblCount.Text = "Total Patients: " + patients.Count;

@@ -205,7 +205,6 @@
 			this.cmbStatus.FormattingEnabled = true;
 			this.cmbStatus.Items.AddRange(new object[] {
 			"Available",
-			"Occupied",
 			"Maintenance"});
 			this.cmbStatus.Location = new System.Drawing.Point(40, 365);
 			this.cmbStatus.Name = "cmbStatus";

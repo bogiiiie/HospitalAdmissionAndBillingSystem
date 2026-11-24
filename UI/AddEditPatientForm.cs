@@ -20,6 +20,9 @@ namespace UI
 
 		private void AddEditPatientForm_Load(object sender, EventArgs e)
 		{
+			// Wire up the new event handler for the checkbox
+			chkNotFullyRegistered.CheckedChanged += chkNotFullyRegistered_CheckedChanged;
+
 			if (_existingPatient == null)
 			{
 				// ADD MODE
@@ -30,6 +33,7 @@ namespace UI
 				txtGuardianName.Text = "Self — Patient arrived alone";
 				cmbRelationship.Text = "Self";
 				chkGuardianPresent.Checked = false;
+				chkNotFullyRegistered.Checked = false;
 			}
 			else
 			{
@@ -58,6 +62,72 @@ namespace UI
 
 				// Auto-tick minor based on age
 				chkMinor.Checked = _existingPatient.Age < 18;
+
+				// Load fully registered status
+				chkNotFullyRegistered.Checked = !_existingPatient.IsFullyRegistered;
+			}
+		}
+
+		// =============================================================
+		// Auto-fill logic when "Not Fully Registered" is checked
+		// =============================================================
+		private void chkNotFullyRegistered_CheckedChanged(object sender, EventArgs e)
+		{
+			if (chkNotFullyRegistered.Checked)
+			{
+				// The patient is unconscious/unable to speak.
+				// Auto-fill required fields with defaults so validation passes.
+
+				// 1. Patient Info
+				if (string.IsNullOrWhiteSpace(txtFirstName.Text)) txtFirstName.Text = "Unknown";
+				if (string.IsNullOrWhiteSpace(txtMiddleName.Text)) txtMiddleName.Text = "Unknown";
+				if (string.IsNullOrWhiteSpace(txtLastName.Text)) txtLastName.Text = "Unknown";
+
+				// NEW: Set default Date of Birth to 1900-01-01 (Placeholder)
+				dtpDOB.Value = new DateTime(1900, 1, 1);
+
+				// Use a 7-digit dummy number to pass minimum length validation
+				if (string.IsNullOrWhiteSpace(txtContact.Text)) txtContact.Text = "000-0000";
+
+				if (string.IsNullOrWhiteSpace(txtAddress.Text)) txtAddress.Text = "Unknown";
+				if (string.IsNullOrWhiteSpace(cmbGender.Text)) cmbGender.SelectedIndex = 2; // "Other"
+				if (string.IsNullOrWhiteSpace(txtOccupation.Text)) txtOccupation.Text = "Unknown";
+
+				// 2. Guardian Info (since they are alone/unconscious)
+				if (string.IsNullOrWhiteSpace(txtGuardianName.Text) || txtGuardianName.Text == "Self — Patient arrived alone")
+					txtGuardianName.Text = "Unknown";
+
+				if (string.IsNullOrWhiteSpace(cmbRelationship.Text))
+					cmbRelationship.SelectedIndex = 8; // "Other" or whatever is closest
+
+				// Use a 7-digit dummy number for guardian contact
+				if (string.IsNullOrWhiteSpace(txtGuardianContact.Text))
+					txtGuardianContact.Text = "000-0000";
+
+				// 3. Automatically tick the "Unable to provide information" box
+				chkUnable.Checked = true;
+			}
+			else
+			{
+				// Unchecking the box clears the default "Unknown" values 
+				// so the user can type the real information.
+				if (txtFirstName.Text == "Unknown") txtFirstName.Text = "";
+				if (txtMiddleName.Text == "Unknown") txtMiddleName.Text = "";
+				if (txtLastName.Text == "Unknown") txtLastName.Text = "";
+
+				// Reset the date to today's date if they uncheck it
+				if (dtpDOB.Value.Year == 1900) dtpDOB.Value = DateTime.Today;
+
+				if (txtContact.Text == "000-0000") txtContact.Text = ""; // Clear dummy number
+				if (txtAddress.Text == "Unknown") txtAddress.Text = "";
+				if (txtOccupation.Text == "Unknown") txtOccupation.Text = "";
+
+				if (txtGuardianName.Text == "Unknown")
+					txtGuardianName.Text = "Self — Patient arrived alone";
+
+				if (txtGuardianContact.Text == "000-0000") txtGuardianContact.Text = ""; // Clear dummy number
+
+				chkUnable.Checked = false;
 			}
 		}
 
@@ -96,6 +166,7 @@ namespace UI
 				GuardianPresent = chkGuardianPresent.Checked,
 				EmergencyContactName = txtEmergencyName.Text.Trim(),
 				EmergencyContactNumber = txtEmergencyContact.Text.Trim(),
+				IsFullyRegistered = !chkNotFullyRegistered.Checked, // NEW
 				IsActive = true
 			};
 

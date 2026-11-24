@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Printing; // NEW: Required for printing
 using System.Windows.Forms;
 using BusinessLogic.Controller;
+using BusinessLogic.Repository; // NEW: Required for UserRepository
 using Model;
 
 namespace UI
@@ -15,11 +17,15 @@ namespace UI
 		private readonly BillController billController = new BillController(); // Added
 		private readonly Admission _admission;
 
-		// Pass the admission to display
-		public AdmissionDetailsDialog(Admission admission)
+		// NEW: Track who is printing the receipt
+		private readonly string _username;
+
+		// Pass the admission to display, and the current user's username
+		public AdmissionDetailsDialog(Admission admission, string username = "")
 		{
 			InitializeComponent();
 			_admission = admission;
+			_username = username;
 		}
 
 		private void AdmissionDetailsDialog_Load(object sender, EventArgs e)
@@ -127,6 +133,89 @@ namespace UI
 		private void btnClose_Click(object sender, EventArgs e)
 		{
 			this.Close();
+		}
+
+		// =============================================================
+		// PRINT
+		// =============================================================
+		private void btnPrint_Click(object sender, EventArgs e)
+		{
+			if (_admission == null) return;
+
+			// Fetch the logged-in user's Full Name and Role
+			string admittedBy = _username; // Fallback to username
+			try
+			{
+				if (!string.IsNullOrEmpty(_username))
+				{
+					var userRepo = new BusinessLogic.Repository.UserRepository();
+					var currentUser = userRepo.GetUserByUsername(_username);
+					if (currentUser != null)
+					{
+						// Combine Full Name and Role (e.g., "Lebron James (Admin)")
+						admittedBy = currentUser.FullName + " (" + currentUser.Role + ")";
+					}
+				}
+				else
+				{
+					admittedBy = "System / Unknown";
+				}
+			}
+			catch { /* Ignore DB errors during print */ }
+
+			PrintDocument pd = new PrintDocument();
+			pd.PrintPage += (s, args) =>
+			{
+				Font titleFont = new Font("Arial", 16, FontStyle.Bold);
+				Font headerFont = new Font("Arial", 12, FontStyle.Bold);
+				Font normalFont = new Font("Arial", 10, FontStyle.Regular);
+
+				float y = 50;
+				float x = 50;
+
+				args.Graphics.DrawString("Hospital Admission System", titleFont, Brushes.Black, x, y);
+				y += 30;
+				args.Graphics.DrawString("Admission Receipt", headerFont, Brushes.Black, x, y);
+				y += 40;
+
+				args.Graphics.DrawString("Admission Code: " + _admission.AdmissionCode, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Patient: " + lblPatientValue.Text, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Admission Date: " + _admission.AdmissionDate.ToString("MM/dd/yyyy hh:mm tt"), normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Status: " + _admission.Status, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Attending Doctor: " + lblDoctorValue.Text, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Assigned Nurse: " + lblNurseValue.Text, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Diagnosis: " + lblDiagnosisValue.Text, normalFont, Brushes.Black, x, y);
+				y += 40;
+
+				args.Graphics.DrawString("--- BILLING SUMMARY ---", headerFont, Brushes.Black, x, y);
+				y += 25;
+				args.Graphics.DrawString("Room Charges: " + lblRoomChargesValue.Text, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Treatment Charges: " + lblTreatmentValue.Text, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Discount: " + lblDiscountValue.Text, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Total Due: " + lblTotalValue.Text, headerFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Payment Status: " + lblPaymentStatusValue.Text, normalFont, Brushes.Black, x, y);
+				y += 40;
+
+				// UPDATED: Now shows "Admitted By: Name (Role)"
+				args.Graphics.DrawString("Admitted By: " + admittedBy, headerFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Date Printed: " + DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"), normalFont, Brushes.Black, x, y);
+			};
+
+			// Show the print preview dialog
+			PrintPreviewDialog preview = new PrintPreviewDialog();
+			preview.Document = pd;
+			preview.ShowDialog();
 		}
 	}
 }

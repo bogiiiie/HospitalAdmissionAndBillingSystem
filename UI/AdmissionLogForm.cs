@@ -288,7 +288,7 @@ namespace UI
 			}
 			else
 			{
-				new AdmissionDetailsDialog(adm).ShowDialog(this);
+				new AdmissionDetailsDialog(adm, _username).ShowDialog(this);
 			}
 		}
 
