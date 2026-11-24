@@ -50,6 +50,10 @@ namespace UI
 			else
 				lblRoleNote.Text = "Staff can add/edit and mark inactive, but cannot permanently delete records.";
 
+			// Setup Buttons based on Role
+			btnDeleteSelected.Visible = (_role == "Admin");
+			btnDeactivateSelected.Visible = (_role != "Admin");
+
 			WireSidebarEvents();
 			ApplyRoleToSidebar();
 			LoadPatients();
@@ -197,12 +201,15 @@ namespace UI
 					p.PatientCode,
 					p.FullName,
 					p.DateOfBirth.ToString("MM/dd/yyyy"),
-					p.ContactNumber,
-					""
+					p.ContactNumber
 				);
 			}
 
 			lblCount.Text = "Total Patients: " + patients.Count;
+
+			// Reset selection
+			dgvPatients.ClearSelection();
+			UpdateActionButtons();
 		}
 
 		// =============================================================
@@ -219,216 +226,145 @@ namespace UI
 		}
 
 		// =============================================================
-		// CELL PAINTING — Edit + (Delete or Deactivate)
+		// SELECTION CHANGED — Enable/Disable buttons based on selected row
 		// =============================================================
-		private void dgvPatients_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+		private void dgvPatients_SelectionChanged(object sender, EventArgs e)
 		{
-			if (e.RowIndex < 0) return;
-			if (dgvPatients.Columns[e.ColumnIndex].Name != "colActions") return;
-
-			string patientCode = dgvPatients.Rows[e.RowIndex].Cells["colPatientCode"].Value.ToString();
-			Patient patient = controller.GetPatientByCode(patientCode);
-			if (patient == null) return;
-
-			bool isAdmin = (_role == "Admin");
-			bool isInactive = !patient.IsActive;
-
-			e.PaintBackground(e.CellBounds, true);
-
-			// Layout: two side-by-side buttons
-			int padding = 6;
-			int gap = 6;
-			int buttonWidth = (e.CellBounds.Width - padding * 2 - gap) / 2;
-			int buttonHeight = e.CellBounds.Height - padding * 2;
-
-			Rectangle editRect = new Rectangle(
-				e.CellBounds.X + padding,
-				e.CellBounds.Y + padding,
-				buttonWidth,
-				buttonHeight);
-
-			Rectangle secondRect = new Rectangle(
-				e.CellBounds.X + padding + buttonWidth + gap,
-				e.CellBounds.Y + padding,
-				buttonWidth,
-				buttonHeight);
-
-			// First button: Edit (green) — or Reactivate (blue) when inactive
-			Color firstColor = isInactive
-				? Color.FromArgb(37, 99, 235)      // blue for Reactivate
-				: Color.FromArgb(16, 185, 129);    // green for Edit
-
-			string firstText = isInactive ? "Reactivate" : "Edit";
-
-			// Second button:
-			//   Active + Admin  → Delete (red)
-			//   Active + Staff  → Deactivate (amber)
-			//   Inactive        → (leave blank — no second action)
-			bool drawSecond = !isInactive;
-
-			Color secondColor = isAdmin
-				? Color.FromArgb(239, 68, 68)      // red for Delete
-				: Color.FromArgb(245, 158, 11);    // amber for Deactivate
-
-			string secondText = isAdmin ? "Delete" : "Deactivate";
-
-			// Draw first button
-			using (var brush = new SolidBrush(firstColor))
-			{
-				e.Graphics.FillRectangle(brush, editRect);
-			}
-			TextRenderer.DrawText(
-				e.Graphics,
-				firstText,
-				new Font("Segoe UI", 9F, FontStyle.Bold),
-				editRect,
-				Color.White,
-				TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-
-			// Draw second button (if applicable)
-			if (drawSecond)
-			{
-				using (var brush = new SolidBrush(secondColor))
-				{
-					e.Graphics.FillRectangle(brush, secondRect);
-				}
-				TextRenderer.DrawText(
-					e.Graphics,
-					secondText,
-					new Font("Segoe UI", 9F, FontStyle.Bold),
-					secondRect,
-					Color.White,
-					TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-			}
-
-			e.Handled = true;
+			UpdateActionButtons();
 		}
 
-		// =============================================================
-		// CELL CLICK
-		// =============================================================
-		private void dgvPatients_CellClick(object sender, DataGridViewCellEventArgs e)
+		private void UpdateActionButtons()
 		{
-			if (e.RowIndex < 0) return;
-			if (dgvPatients.Columns[e.ColumnIndex].Name != "colActions") return;
-
-			string patientCode = dgvPatients.Rows[e.RowIndex].Cells["colPatientCode"].Value.ToString();
-			Patient patient = controller.GetPatientByCode(patientCode);
-			if (patient == null) return;
-
-			Rectangle cellRect = dgvPatients.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
-			Point mousePos = dgvPatients.PointToClient(Cursor.Position);
-
-			int padding = 6;
-			int gap = 6;
-			int buttonWidth = (cellRect.Width - padding * 2 - gap) / 2;
-			int midX = cellRect.X + padding + buttonWidth + (gap / 2);
-
-			bool isAdmin = (_role == "Admin");
-			bool isInactive = !patient.IsActive;
-			bool firstClicked = (mousePos.X < midX);
-
-			if (isInactive)
+			if (dgvPatients.CurrentRow == null)
 			{
-				// Only one action — Reactivate
-				if (firstClicked)
-				{
-					DialogResult confirm = MessageBox.Show(
-						"Reactivate " + patient.FullName + "?",
-						"Confirm Reactivate",
-						MessageBoxButtons.YesNo,
-						MessageBoxIcon.Question);
-
-					if (confirm == DialogResult.Yes)
-					{
-						string result = controller.ReactivatePatient(patientCode);
-						if (result == "OK")
-						{
-							MessageBox.Show("Patient reactivated.", "Success",
-								MessageBoxButtons.OK, MessageBoxIcon.Information);
-							LoadPatients();
-						}
-						else
-						{
-							MessageBox.Show(result, "Error",
-								MessageBoxButtons.OK, MessageBoxIcon.Warning);
-						}
-					}
-				}
+				btnEditSelected.Enabled = false;
+				btnDeactivateSelected.Enabled = false;
+				btnDeleteSelected.Enabled = false;
+				btnReactivateSelected.Visible = false;
 				return;
 			}
 
-			// Active patient — two buttons
-			if (firstClicked)
+			string patientCode = dgvPatients.CurrentRow.Cells["colPatientCode"].Value.ToString();
+			Patient patient = controller.GetPatientByCode(patientCode);
+			if (patient == null) return;
+
+			bool isAdmin = (_role == "Admin");
+			bool isInactive = !patient.IsActive;
+
+			if (isInactive)
 			{
-				// Edit
-				AddEditPatientForm dialog = new AddEditPatientForm(patient);
-				if (dialog.ShowDialog() == DialogResult.OK)
+				btnEditSelected.Visible = false;
+				btnDeactivateSelected.Visible = false;
+				btnDeleteSelected.Visible = false;
+
+				if (isAdmin)
 				{
-					LoadPatients();
+					btnReactivateSelected.Visible = true;
+					btnReactivateSelected.Enabled = true;
 				}
 			}
 			else
 			{
-				// Second button — Delete (Admin) or Deactivate (Staff)
+				btnReactivateSelected.Visible = false;
+				btnEditSelected.Visible = true;
+				btnEditSelected.Enabled = true;
+
 				if (isAdmin)
 				{
-					DialogResult confirm = MessageBox.Show(
-						"Permanently delete " + patient.FullName + "?\n\n" +
-						"This will only succeed if the patient has no admission or billing history.",
-						"Confirm Permanent Delete",
-						MessageBoxButtons.YesNo,
-						MessageBoxIcon.Warning);
-
-					if (confirm == DialogResult.Yes)
-					{
-						string result = controller.DeletePatient(patientCode);
-						if (result == "OK")
-						{
-							MessageBox.Show("Patient permanently deleted.", "Success",
-								MessageBoxButtons.OK, MessageBoxIcon.Information);
-							LoadPatients();
-						}
-						else
-						{
-							// If delete was blocked due to history, offer to deactivate instead
-							DialogResult deact = MessageBox.Show(result + "\n\nMark as inactive instead?",
-								"Delete Blocked",
-								MessageBoxButtons.YesNo,
-								MessageBoxIcon.Warning);
-
-							if (deact == DialogResult.Yes)
-							{
-								string res2 = controller.DeactivatePatient(patientCode);
-								if (res2 == "OK")
-								{
-									MessageBox.Show("Patient marked inactive.", "Success",
-										MessageBoxButtons.OK, MessageBoxIcon.Information);
-									LoadPatients();
-								}
-								else
-								{
-									MessageBox.Show(res2, "Error",
-										MessageBoxButtons.OK, MessageBoxIcon.Warning);
-								}
-							}
-						}
-					}
+					btnDeleteSelected.Visible = true;
+					btnDeleteSelected.Enabled = true;
+					btnDeactivateSelected.Visible = false;
 				}
 				else
 				{
-					// Staff — Deactivate
-					DialogResult confirm = MessageBox.Show(
-						"Deactivate " + patient.FullName + "?\n\n" +
-						"The record will be hidden but admission and billing history is kept.",
-						"Confirm Deactivate",
+					btnDeleteSelected.Visible = false;
+					btnDeactivateSelected.Visible = true;
+					btnDeactivateSelected.Enabled = true;
+				}
+			}
+		}
+
+		// =============================================================
+		// BUTTON CLICKS
+		// =============================================================
+		private void btnEditSelected_Click(object sender, EventArgs e)
+		{
+			if (dgvPatients.CurrentRow == null) return;
+			string patientCode = dgvPatients.CurrentRow.Cells["colPatientCode"].Value.ToString();
+			Patient patient = controller.GetPatientByCode(patientCode);
+			if (patient == null) return;
+
+			AddEditPatientForm dialog = new AddEditPatientForm(patient);
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				LoadPatients();
+			}
+		}
+
+		private void btnDeactivateSelected_Click(object sender, EventArgs e)
+		{
+			if (dgvPatients.CurrentRow == null) return;
+			string patientCode = dgvPatients.CurrentRow.Cells["colPatientCode"].Value.ToString();
+			Patient patient = controller.GetPatientByCode(patientCode);
+
+			DialogResult confirm = MessageBox.Show(
+				"Deactivate " + patient.FullName + "?\n\n" +
+				"The record will be hidden but admission and billing history is kept.",
+				"Confirm Deactivate",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Warning);
+
+			if (confirm == DialogResult.Yes)
+			{
+				string result = controller.DeactivatePatient(patientCode);
+				if (result == "OK")
+				{
+					MessageBox.Show("Patient marked inactive.", "Success",
+						MessageBoxButtons.OK, MessageBoxIcon.Information);
+					LoadPatients();
+				}
+				else
+				{
+					MessageBox.Show(result, "Error",
+						MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
+			}
+		}
+
+		private void btnDeleteSelected_Click(object sender, EventArgs e)
+		{
+			if (dgvPatients.CurrentRow == null) return;
+			string patientCode = dgvPatients.CurrentRow.Cells["colPatientCode"].Value.ToString();
+			Patient patient = controller.GetPatientByCode(patientCode);
+
+			DialogResult confirm = MessageBox.Show(
+				"Permanently delete " + patient.FullName + "?\n\n" +
+				"This will only succeed if the patient has no admission or billing history.",
+				"Confirm Permanent Delete",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Warning);
+
+			if (confirm == DialogResult.Yes)
+			{
+				string result = controller.DeletePatient(patientCode);
+				if (result == "OK")
+				{
+					MessageBox.Show("Patient permanently deleted.", "Success",
+						MessageBoxButtons.OK, MessageBoxIcon.Information);
+					LoadPatients();
+				}
+				else
+				{
+					// If delete was blocked due to history, offer to deactivate instead
+					DialogResult deact = MessageBox.Show(result + "\n\nMark as inactive instead?",
+						"Delete Blocked",
 						MessageBoxButtons.YesNo,
 						MessageBoxIcon.Warning);
 
-					if (confirm == DialogResult.Yes)
+					if (deact == DialogResult.Yes)
 					{
-						string result = controller.DeactivatePatient(patientCode);
-						if (result == "OK")
+						string res2 = controller.DeactivatePatient(patientCode);
+						if (res2 == "OK")
 						{
 							MessageBox.Show("Patient marked inactive.", "Success",
 								MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -436,10 +372,39 @@ namespace UI
 						}
 						else
 						{
-							MessageBox.Show(result, "Error",
+							MessageBox.Show(res2, "Error",
 								MessageBoxButtons.OK, MessageBoxIcon.Warning);
 						}
 					}
+				}
+			}
+		}
+
+		private void btnReactivateSelected_Click(object sender, EventArgs e)
+		{
+			if (dgvPatients.CurrentRow == null) return;
+			string patientCode = dgvPatients.CurrentRow.Cells["colPatientCode"].Value.ToString();
+			Patient patient = controller.GetPatientByCode(patientCode);
+
+			DialogResult confirm = MessageBox.Show(
+				"Reactivate " + patient.FullName + "?",
+				"Confirm Reactivate",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question);
+
+			if (confirm == DialogResult.Yes)
+			{
+				string result = controller.ReactivatePatient(patientCode);
+				if (result == "OK")
+				{
+					MessageBox.Show("Patient reactivated.", "Success",
+						MessageBoxButtons.OK, MessageBoxIcon.Information);
+					LoadPatients();
+				}
+				else
+				{
+					MessageBox.Show(result, "Error",
+						MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 			}
 		}

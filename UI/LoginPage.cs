@@ -12,6 +12,8 @@ namespace UI
 {
 	public partial class LoginPage : Form
 	{
+		private bool _passwordVisible = false;
+
 		public LoginPage()
 		{
 			InitializeComponent();
@@ -48,6 +50,25 @@ namespace UI
 		}
 
 		// ------------------------------------------------------
+		// Toggle password visibility when the eye icon is clicked.
+		// ------------------------------------------------------
+		private void btnTogglePassword_Click(object sender, EventArgs e)
+		{
+			_passwordVisible = !_passwordVisible;
+
+			if (_passwordVisible)
+			{
+				txtPassword.PasswordChar = '\0';
+				btnTogglePassword.Text = "\uED1A"; // Hide icon
+			}
+			else
+			{
+				txtPassword.PasswordChar = '●';
+				btnTogglePassword.Text = "\uE890"; // View icon
+			}
+		}
+
+		// ------------------------------------------------------
 		// Fires whenever the form becomes visible.
 		// Clears the fields so the previous user's data doesn't
 		// linger after logout.
@@ -61,6 +82,11 @@ namespace UI
 				txtUsername.Clear();
 				txtPassword.Clear();
 				txtUsername.Focus();
+
+				// Always start hidden again
+				_passwordVisible = false;
+				txtPassword.PasswordChar = '●';
+				btnTogglePassword.Text = "\uE890"; // View icon
 			}
 		}
 

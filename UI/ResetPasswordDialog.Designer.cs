@@ -2,30 +2,19 @@
 {
 	partial class ResetPasswordDialog
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing) { if (disposing && (components != null)) components.Dispose(); base.Dispose(disposing); }
 
-		#region Windows Form Designer generated code
-
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		private void InitializeComponent()
 		{
 			this.lblTitle = new System.Windows.Forms.Label();
 			this.lblNewPass = new System.Windows.Forms.Label();
 			this.txtNewPass = new System.Windows.Forms.TextBox();
+			this.btnToggleNewPass = new System.Windows.Forms.Button();
 			this.lblConfirmPass = new System.Windows.Forms.Label();
 			this.txtConfirmPass = new System.Windows.Forms.TextBox();
+			this.btnToggleConfirmPass = new System.Windows.Forms.Button();
 			this.btnSave = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.SuspendLayout();
@@ -60,6 +49,23 @@
 			this.txtNewPass.TabIndex = 2;
 			this.txtNewPass.UseSystemPasswordChar = true;
 			// 
+			// btnToggleNewPass
+			// 
+			this.btnToggleNewPass.BackColor = System.Drawing.Color.White;
+			this.btnToggleNewPass.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnToggleNewPass.FlatAppearance.BorderSize = 0;
+			this.btnToggleNewPass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnToggleNewPass.Font = new System.Drawing.Font("Segoe MDL2 Assets", 12F); // Increased to 12F
+			this.btnToggleNewPass.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+			this.btnToggleNewPass.Location = new System.Drawing.Point(294, 92); // Moved left and up
+			this.btnToggleNewPass.Name = "btnToggleNewPass";
+			this.btnToggleNewPass.Size = new System.Drawing.Size(24, 22);
+			this.btnToggleNewPass.TabIndex = 7;
+			this.btnToggleNewPass.TabStop = false;
+			this.btnToggleNewPass.Text = "\uE890";
+			this.btnToggleNewPass.UseVisualStyleBackColor = false;
+			this.btnToggleNewPass.Click += new System.EventHandler(this.btnToggleNewPass_Click);
+			// 
 			// lblConfirmPass
 			// 
 			this.lblConfirmPass.AutoSize = true;
@@ -79,6 +85,23 @@
 			this.txtConfirmPass.Size = new System.Drawing.Size(300, 30);
 			this.txtConfirmPass.TabIndex = 4;
 			this.txtConfirmPass.UseSystemPasswordChar = true;
+			// 
+			// btnToggleConfirmPass
+			// 
+			this.btnToggleConfirmPass.BackColor = System.Drawing.Color.White;
+			this.btnToggleConfirmPass.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnToggleConfirmPass.FlatAppearance.BorderSize = 0;
+			this.btnToggleConfirmPass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnToggleConfirmPass.Font = new System.Drawing.Font("Segoe MDL2 Assets", 12F); // Increased to 12F
+			this.btnToggleConfirmPass.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+			this.btnToggleConfirmPass.Location = new System.Drawing.Point(294, 157); // Moved left and up
+			this.btnToggleConfirmPass.Name = "btnToggleConfirmPass";
+			this.btnToggleConfirmPass.Size = new System.Drawing.Size(24, 22);
+			this.btnToggleConfirmPass.TabIndex = 8;
+			this.btnToggleConfirmPass.TabStop = false;
+			this.btnToggleConfirmPass.Text = "\uE890";
+			this.btnToggleConfirmPass.UseVisualStyleBackColor = false;
+			this.btnToggleConfirmPass.Click += new System.EventHandler(this.btnToggleConfirmPass_Click);
 			// 
 			// btnSave
 			// 
@@ -121,8 +144,10 @@
 			this.ClientSize = new System.Drawing.Size(350, 280);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnSave);
+			this.Controls.Add(this.btnToggleConfirmPass);
 			this.Controls.Add(this.txtConfirmPass);
 			this.Controls.Add(this.lblConfirmPass);
+			this.Controls.Add(this.btnToggleNewPass);
 			this.Controls.Add(this.txtNewPass);
 			this.Controls.Add(this.lblNewPass);
 			this.Controls.Add(this.lblTitle);
@@ -135,12 +160,13 @@
 			this.Text = "Reset Password";
 			this.ResumeLayout(false);
 			this.PerformLayout();
+			this.btnToggleNewPass.BringToFront();
+			this.btnToggleConfirmPass.BringToFront();
 		}
-
-		#endregion
 
 		private System.Windows.Forms.Label lblTitle, lblNewPass, lblConfirmPass;
 		private System.Windows.Forms.TextBox txtNewPass, txtConfirmPass;
+		private System.Windows.Forms.Button btnToggleNewPass, btnToggleConfirmPass;
 		private System.Windows.Forms.Button btnSave, btnCancel;
 	}
 }

@@ -58,10 +58,12 @@
 			this.colType = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.colActions = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.lblCount = new System.Windows.Forms.Label();
 			this.toolbarPanel = new System.Windows.Forms.Panel();
-			this.btnAdd = new System.Windows.Forms.Button();
+			this.btnReactivateSelected = new FlatButton();
+			this.btnDeleteSelected = new FlatButton();
+			this.btnEditSelected = new FlatButton();
+			this.btnAdd = new FlatButton();
 			this.cmbStatusFilter = new System.Windows.Forms.ComboBox();
 			this.lblStatusFilter = new System.Windows.Forms.Label();
 			this.lblSubtitle = new System.Windows.Forms.Label();
@@ -407,9 +409,9 @@
 			// 
 			// cardPanel
 			// 
-			this.cardPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.cardPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.cardPanel.BackColor = System.Drawing.Color.White;
 			this.cardPanel.Controls.Add(this.dgvRooms);
 			this.cardPanel.Controls.Add(this.lblCount);
@@ -430,9 +432,9 @@
 			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
 			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
 			this.dgvRooms.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-			this.dgvRooms.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.dgvRooms.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.dgvRooms.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.dgvRooms.BackgroundColor = System.Drawing.Color.White;
 			this.dgvRooms.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -448,11 +450,10 @@
 			this.dgvRooms.ColumnHeadersHeight = 55;
 			this.dgvRooms.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.dgvRooms.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colRoomNumber,
-            this.colType,
-            this.colRate,
-            this.colStatus,
-            this.colActions});
+			this.colRoomNumber,
+			this.colType,
+			this.colRate,
+			this.colStatus});
 			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
 			dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -474,13 +475,12 @@
 			this.dgvRooms.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dgvRooms.Size = new System.Drawing.Size(1060, 455);
 			this.dgvRooms.TabIndex = 0;
-			this.dgvRooms.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRooms_CellClick);
-			this.dgvRooms.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvRooms_CellPainting);
+			this.dgvRooms.SelectionChanged += new System.EventHandler(this.dgvRooms_SelectionChanged);
 			// 
 			// colRoomNumber
 			// 
 			this.colRoomNumber.DataPropertyName = "RoomNumber";
-			this.colRoomNumber.FillWeight = 17F;
+			this.colRoomNumber.FillWeight = 20F;
 			this.colRoomNumber.HeaderText = "Room #";
 			this.colRoomNumber.MinimumWidth = 6;
 			this.colRoomNumber.Name = "colRoomNumber";
@@ -489,7 +489,7 @@
 			// colType
 			// 
 			this.colType.DataPropertyName = "RoomType";
-			this.colType.FillWeight = 27F;
+			this.colType.FillWeight = 30F;
 			this.colType.HeaderText = "Type";
 			this.colType.MinimumWidth = 6;
 			this.colType.Name = "colType";
@@ -498,7 +498,7 @@
 			// colRate
 			// 
 			this.colRate.DataPropertyName = "Rate";
-			this.colRate.FillWeight = 22F;
+			this.colRate.FillWeight = 25F;
 			this.colRate.HeaderText = "Rate / Day";
 			this.colRate.MinimumWidth = 6;
 			this.colRate.Name = "colRate";
@@ -507,19 +507,11 @@
 			// colStatus
 			// 
 			this.colStatus.DataPropertyName = "Status";
-			this.colStatus.FillWeight = 22F;
+			this.colStatus.FillWeight = 25F;
 			this.colStatus.HeaderText = "Status";
 			this.colStatus.MinimumWidth = 6;
 			this.colStatus.Name = "colStatus";
 			this.colStatus.ReadOnly = true;
-			// 
-			// colActions
-			// 
-			this.colActions.FillWeight = 15F;
-			this.colActions.HeaderText = "Actions";
-			this.colActions.MinimumWidth = 6;
-			this.colActions.Name = "colActions";
-			this.colActions.ReadOnly = true;
 			// 
 			// lblCount
 			// 
@@ -535,9 +527,12 @@
 			// 
 			// toolbarPanel
 			// 
-			this.toolbarPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.toolbarPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.toolbarPanel.BackColor = System.Drawing.Color.White;
+			this.toolbarPanel.Controls.Add(this.btnReactivateSelected);
+			this.toolbarPanel.Controls.Add(this.btnDeleteSelected);
+			this.toolbarPanel.Controls.Add(this.btnEditSelected);
 			this.toolbarPanel.Controls.Add(this.btnAdd);
 			this.toolbarPanel.Controls.Add(this.cmbStatusFilter);
 			this.toolbarPanel.Controls.Add(this.lblStatusFilter);
@@ -545,6 +540,58 @@
 			this.toolbarPanel.Name = "toolbarPanel";
 			this.toolbarPanel.Size = new System.Drawing.Size(1060, 60);
 			this.toolbarPanel.TabIndex = 2;
+			// 
+			// btnReactivateSelected
+			// 
+			this.btnReactivateSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+			this.btnReactivateSelected.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnReactivateSelected.Enabled = false;
+			this.btnReactivateSelected.FlatAppearance.BorderSize = 0;
+			this.btnReactivateSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnReactivateSelected.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnReactivateSelected.ForeColor = System.Drawing.Color.White;
+			this.btnReactivateSelected.Location = new System.Drawing.Point(560, 14);
+			this.btnReactivateSelected.Name = "btnReactivateSelected";
+			this.btnReactivateSelected.Size = new System.Drawing.Size(130, 36);
+			this.btnReactivateSelected.TabIndex = 5;
+			this.btnReactivateSelected.Text = "Reactivate";
+			this.btnReactivateSelected.UseVisualStyleBackColor = false;
+			this.btnReactivateSelected.Visible = false;
+			this.btnReactivateSelected.Click += new System.EventHandler(this.btnReactivateSelected_Click);
+			// 
+			// btnDeleteSelected
+			// 
+			this.btnDeleteSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+			this.btnDeleteSelected.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnDeleteSelected.Enabled = false;
+			this.btnDeleteSelected.FlatAppearance.BorderSize = 0;
+			this.btnDeleteSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnDeleteSelected.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnDeleteSelected.ForeColor = System.Drawing.Color.White;
+			this.btnDeleteSelected.Location = new System.Drawing.Point(470, 14);
+			this.btnDeleteSelected.Name = "btnDeleteSelected";
+			this.btnDeleteSelected.Size = new System.Drawing.Size(80, 36);
+			this.btnDeleteSelected.TabIndex = 4;
+			this.btnDeleteSelected.Text = "Delete";
+			this.btnDeleteSelected.UseVisualStyleBackColor = false;
+			this.btnDeleteSelected.Click += new System.EventHandler(this.btnDeleteSelected_Click);
+			// 
+			// btnEditSelected
+			// 
+			this.btnEditSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(185)))), ((int)(((byte)(129)))));
+			this.btnEditSelected.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnEditSelected.Enabled = false;
+			this.btnEditSelected.FlatAppearance.BorderSize = 0;
+			this.btnEditSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnEditSelected.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnEditSelected.ForeColor = System.Drawing.Color.White;
+			this.btnEditSelected.Location = new System.Drawing.Point(380, 14);
+			this.btnEditSelected.Name = "btnEditSelected";
+			this.btnEditSelected.Size = new System.Drawing.Size(80, 36);
+			this.btnEditSelected.TabIndex = 3;
+			this.btnEditSelected.Text = "Edit";
+			this.btnEditSelected.UseVisualStyleBackColor = false;
+			this.btnEditSelected.Click += new System.EventHandler(this.btnEditSelected_Click);
 			// 
 			// btnAdd
 			// 
@@ -669,15 +716,17 @@
 		private System.Windows.Forms.Panel toolbarPanel;
 		private System.Windows.Forms.Label lblStatusFilter;
 		private System.Windows.Forms.ComboBox cmbStatusFilter;
-		private System.Windows.Forms.Button btnAdd;
+		private FlatButton btnAdd;
 		private System.Windows.Forms.Panel cardPanel;
 		private System.Windows.Forms.DataGridView dgvRooms;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colRoomNumber;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colType;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colRate;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
-		private System.Windows.Forms.DataGridViewTextBoxColumn colActions;
 		private System.Windows.Forms.Label lblCount;
 		private System.Windows.Forms.Button btnMainMenu;
+		private FlatButton btnEditSelected;
+		private FlatButton btnDeleteSelected;
+		private FlatButton btnReactivateSelected;
 	}
 }

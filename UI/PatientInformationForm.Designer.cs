@@ -58,11 +58,14 @@
 			this.colFullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colDOB = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colContact = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.colActions = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.lblCount = new System.Windows.Forms.Label();
 			this.lblRoleNote = new System.Windows.Forms.Label();
 			this.toolbarPanel = new System.Windows.Forms.Panel();
-			this.btnAdd = new System.Windows.Forms.Button();
+			this.btnReactivateSelected = new FlatButton();
+			this.btnDeleteSelected = new FlatButton();
+			this.btnDeactivateSelected = new FlatButton();
+			this.btnEditSelected = new FlatButton();
+			this.btnAdd = new FlatButton();
 			this.cmbFilter = new System.Windows.Forms.ComboBox();
 			this.lblFilter = new System.Windows.Forms.Label();
 			this.txtSearch = new System.Windows.Forms.TextBox();
@@ -455,8 +458,7 @@
 			this.colPatientCode,
 			this.colFullName,
 			this.colDOB,
-			this.colContact,
-			this.colActions});
+			this.colContact});
 			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
 			dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -478,13 +480,12 @@
 			this.dgvPatients.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dgvPatients.Size = new System.Drawing.Size(1060, 430);
 			this.dgvPatients.TabIndex = 0;
-			this.dgvPatients.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPatients_CellClick);
-			this.dgvPatients.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvPatients_CellPainting);
+			this.dgvPatients.SelectionChanged += new System.EventHandler(this.dgvPatients_SelectionChanged);
 			// 
 			// colPatientCode
 			// 
 			this.colPatientCode.DataPropertyName = "PatientCode";
-			this.colPatientCode.FillWeight = 15F;
+			this.colPatientCode.FillWeight = 18F;
 			this.colPatientCode.HeaderText = "Patient ID";
 			this.colPatientCode.MinimumWidth = 6;
 			this.colPatientCode.Name = "colPatientCode";
@@ -493,7 +494,7 @@
 			// colFullName
 			// 
 			this.colFullName.DataPropertyName = "FullName";
-			this.colFullName.FillWeight = 35F;
+			this.colFullName.FillWeight = 37F;
 			this.colFullName.HeaderText = "Full Name";
 			this.colFullName.MinimumWidth = 6;
 			this.colFullName.Name = "colFullName";
@@ -502,7 +503,7 @@
 			// colDOB
 			// 
 			this.colDOB.DataPropertyName = "DateOfBirth";
-			this.colDOB.FillWeight = 18F;
+			this.colDOB.FillWeight = 20F;
 			this.colDOB.HeaderText = "DOB";
 			this.colDOB.MinimumWidth = 6;
 			this.colDOB.Name = "colDOB";
@@ -511,19 +512,11 @@
 			// colContact
 			// 
 			this.colContact.DataPropertyName = "ContactNumber";
-			this.colContact.FillWeight = 17F;
+			this.colContact.FillWeight = 25F;
 			this.colContact.HeaderText = "Contact #";
 			this.colContact.MinimumWidth = 6;
 			this.colContact.Name = "colContact";
 			this.colContact.ReadOnly = true;
-			// 
-			// colActions
-			// 
-			this.colActions.FillWeight = 20F;
-			this.colActions.HeaderText = "Actions";
-			this.colActions.MinimumWidth = 6;
-			this.colActions.Name = "colActions";
-			this.colActions.ReadOnly = true;
 			// 
 			// lblCount
 			// 
@@ -553,6 +546,10 @@
 			this.toolbarPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.toolbarPanel.BackColor = System.Drawing.Color.White;
+			this.toolbarPanel.Controls.Add(this.btnReactivateSelected);
+			this.toolbarPanel.Controls.Add(this.btnDeleteSelected);
+			this.toolbarPanel.Controls.Add(this.btnDeactivateSelected);
+			this.toolbarPanel.Controls.Add(this.btnEditSelected);
 			this.toolbarPanel.Controls.Add(this.btnAdd);
 			this.toolbarPanel.Controls.Add(this.cmbFilter);
 			this.toolbarPanel.Controls.Add(this.lblFilter);
@@ -562,6 +559,75 @@
 			this.toolbarPanel.Name = "toolbarPanel";
 			this.toolbarPanel.Size = new System.Drawing.Size(1060, 60);
 			this.toolbarPanel.TabIndex = 2;
+			// 
+			// btnReactivateSelected
+			// 
+			this.btnReactivateSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+			this.btnReactivateSelected.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnReactivateSelected.Enabled = false;
+			this.btnReactivateSelected.FlatAppearance.BorderSize = 0;
+			this.btnReactivateSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnReactivateSelected.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnReactivateSelected.ForeColor = System.Drawing.Color.White;
+			this.btnReactivateSelected.Location = new System.Drawing.Point(600, 14);
+			this.btnReactivateSelected.Name = "btnReactivateSelected";
+			this.btnReactivateSelected.Size = new System.Drawing.Size(100, 36);
+			this.btnReactivateSelected.TabIndex = 8;
+			this.btnReactivateSelected.Text = "Reactivate";
+			this.btnReactivateSelected.UseVisualStyleBackColor = false;
+			this.btnReactivateSelected.Visible = false;
+			this.btnReactivateSelected.Click += new System.EventHandler(this.btnReactivateSelected_Click);
+			// 
+			// btnDeleteSelected
+			// 
+			this.btnDeleteSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+			this.btnDeleteSelected.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnDeleteSelected.Enabled = false;
+			this.btnDeleteSelected.FlatAppearance.BorderSize = 0;
+			this.btnDeleteSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnDeleteSelected.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnDeleteSelected.ForeColor = System.Drawing.Color.White;
+			this.btnDeleteSelected.Location = new System.Drawing.Point(490, 14);
+			this.btnDeleteSelected.Name = "btnDeleteSelected";
+			this.btnDeleteSelected.Size = new System.Drawing.Size(100, 36);
+			this.btnDeleteSelected.TabIndex = 7;
+			this.btnDeleteSelected.Text = "Delete";
+			this.btnDeleteSelected.UseVisualStyleBackColor = false;
+			this.btnDeleteSelected.Click += new System.EventHandler(this.btnDeleteSelected_Click);
+			// 
+			// btnDeactivateSelected
+			// 
+			this.btnDeactivateSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(158)))), ((int)(((byte)(11)))));
+			this.btnDeactivateSelected.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnDeactivateSelected.Enabled = false;
+			this.btnDeactivateSelected.FlatAppearance.BorderSize = 0;
+			this.btnDeactivateSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnDeactivateSelected.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnDeactivateSelected.ForeColor = System.Drawing.Color.White;
+			this.btnDeactivateSelected.Location = new System.Drawing.Point(490, 14);
+			this.btnDeactivateSelected.Name = "btnDeactivateSelected";
+			this.btnDeactivateSelected.Size = new System.Drawing.Size(100, 36);
+			this.btnDeactivateSelected.TabIndex = 6;
+			this.btnDeactivateSelected.Text = "Deactivate";
+			this.btnDeactivateSelected.UseVisualStyleBackColor = false;
+			this.btnDeactivateSelected.Click += new System.EventHandler(this.btnDeactivateSelected_Click);
+			// 
+			// btnEditSelected
+			// 
+			this.btnEditSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(185)))), ((int)(((byte)(129)))));
+			this.btnEditSelected.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnEditSelected.Enabled = false;
+			this.btnEditSelected.FlatAppearance.BorderSize = 0;
+			this.btnEditSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnEditSelected.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnEditSelected.ForeColor = System.Drawing.Color.White;
+			this.btnEditSelected.Location = new System.Drawing.Point(400, 14);
+			this.btnEditSelected.Name = "btnEditSelected";
+			this.btnEditSelected.Size = new System.Drawing.Size(80, 36);
+			this.btnEditSelected.TabIndex = 5;
+			this.btnEditSelected.Text = "Edit";
+			this.btnEditSelected.UseVisualStyleBackColor = false;
+			this.btnEditSelected.Click += new System.EventHandler(this.btnEditSelected_Click);
 			// 
 			// btnAdd
 			// 
@@ -586,9 +652,9 @@
 			this.cmbFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.cmbFilter.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cmbFilter.FormattingEnabled = true;
-			this.cmbFilter.Location = new System.Drawing.Point(430, 17);
+			this.cmbFilter.Location = new System.Drawing.Point(250, 17);
 			this.cmbFilter.Name = "cmbFilter";
-			this.cmbFilter.Size = new System.Drawing.Size(150, 31);
+			this.cmbFilter.Size = new System.Drawing.Size(120, 31);
 			this.cmbFilter.TabIndex = 3;
 			this.cmbFilter.SelectedIndexChanged += new System.EventHandler(this.cmbFilter_SelectedIndexChanged);
 			// 
@@ -597,9 +663,9 @@
 			this.lblFilter.AutoSize = true;
 			this.lblFilter.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblFilter.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblFilter.Location = new System.Drawing.Point(380, 20);
+			this.lblFilter.Location = new System.Drawing.Point(210, 20);
 			this.lblFilter.Name = "lblFilter";
-			this.lblFilter.Size = new System.Drawing.Size(59, 23);
+			this.lblFilter.Size = new System.Drawing.Size(44, 23);
 			this.lblFilter.TabIndex = 2;
 			this.lblFilter.Text = "Show:";
 			// 
@@ -609,7 +675,7 @@
 			this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.txtSearch.Location = new System.Drawing.Point(88, 17);
 			this.txtSearch.Name = "txtSearch";
-			this.txtSearch.Size = new System.Drawing.Size(270, 30);
+			this.txtSearch.Size = new System.Drawing.Size(110, 30);
 			this.txtSearch.TabIndex = 1;
 			this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
 			// 
@@ -695,8 +761,8 @@
 		private System.Windows.Forms.Button btnNavRoomSearch;
 		private System.Windows.Forms.Button btnNavAdmission;
 		private System.Windows.Forms.Button btnNavAdmissionLog;
-		private System.Windows.Forms.Button btnNavDoctorNurse;
 		private System.Windows.Forms.Button btnNavTreatment;
+		private System.Windows.Forms.Button btnNavDoctorNurse;
 		private System.Windows.Forms.Button btnNavBilling;
 		private System.Windows.Forms.Button btnNavDischarge;
 		private System.Windows.Forms.Button btnNavSummary;
@@ -709,15 +775,18 @@
 		private System.Windows.Forms.TextBox txtSearch;
 		private System.Windows.Forms.Label lblFilter;
 		private System.Windows.Forms.ComboBox cmbFilter;
-		private System.Windows.Forms.Button btnAdd;
+		private FlatButton btnAdd;
 		private System.Windows.Forms.Panel cardPanel;
 		private System.Windows.Forms.DataGridView dgvPatients;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colPatientCode;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colFullName;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colDOB;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colContact;
-		private System.Windows.Forms.DataGridViewTextBoxColumn colActions;
 		private System.Windows.Forms.Label lblCount;
 		private System.Windows.Forms.Label lblRoleNote;
+		private FlatButton btnEditSelected;
+		private FlatButton btnDeactivateSelected;
+		private FlatButton btnDeleteSelected;
+		private FlatButton btnReactivateSelected;
 	}
 }
