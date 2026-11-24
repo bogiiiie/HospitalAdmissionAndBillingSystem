@@ -2,15 +2,8 @@
 {
 	partial class RoomPickerDialog
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null))
@@ -20,12 +13,6 @@
 			base.Dispose(disposing);
 		}
 
-		#region Windows Form Designer generated code
-
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		private void InitializeComponent()
 		{
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -41,6 +28,7 @@
 			this.lblNoResults = new System.Windows.Forms.Label();
 			this.dgvRooms = new System.Windows.Forms.DataGridView();
 			this.colRoomNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colBedName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colRoomType = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -74,7 +62,7 @@
 			this.lblHeader.Name = "lblHeader";
 			this.lblHeader.Size = new System.Drawing.Size(120, 32);
 			this.lblHeader.TabIndex = 0;
-			this.lblHeader.Text = "Find Room";
+			this.lblHeader.Text = "Find Bed";
 			// 
 			// toolbarPanel
 			// 
@@ -170,6 +158,7 @@
 			this.dgvRooms.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.dgvRooms.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
 			this.colRoomNumber,
+			this.colBedName,
 			this.colRoomType,
 			this.colRate,
 			this.colStatus});
@@ -205,9 +194,17 @@
 			this.colRoomNumber.Name = "colRoomNumber";
 			this.colRoomNumber.ReadOnly = true;
 			// 
+			// colBedName
+			// 
+			this.colBedName.FillWeight = 15F;
+			this.colBedName.HeaderText = "Bed";
+			this.colBedName.MinimumWidth = 6;
+			this.colBedName.Name = "colBedName";
+			this.colBedName.ReadOnly = true;
+			// 
 			// colRoomType
 			// 
-			this.colRoomType.FillWeight = 30F;
+			this.colRoomType.FillWeight = 25F;
 			this.colRoomType.HeaderText = "Type";
 			this.colRoomType.MinimumWidth = 6;
 			this.colRoomType.Name = "colRoomType";
@@ -223,7 +220,7 @@
 			// 
 			// colStatus
 			// 
-			this.colStatus.FillWeight = 30F;
+			this.colStatus.FillWeight = 20F;
 			this.colStatus.HeaderText = "Status";
 			this.colStatus.MinimumWidth = 6;
 			this.colStatus.Name = "colStatus";
@@ -239,7 +236,7 @@
 			this.lblNoResults.Name = "lblNoResults";
 			this.lblNoResults.Size = new System.Drawing.Size(220, 25);
 			this.lblNoResults.TabIndex = 2;
-			this.lblNoResults.Text = "No available rooms found.";
+			this.lblNoResults.Text = "No available beds found.";
 			this.lblNoResults.Visible = false;
 			// 
 			// lblCount
@@ -279,7 +276,7 @@
 			this.btnSelect.Name = "btnSelect";
 			this.btnSelect.Size = new System.Drawing.Size(140, 40);
 			this.btnSelect.TabIndex = 0;
-			this.btnSelect.Text = "Select Room";
+			this.btnSelect.Text = "Select Bed";
 			this.btnSelect.UseVisualStyleBackColor = false;
 			this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
 			// 
@@ -318,7 +315,7 @@
 			this.MinimumSize = new System.Drawing.Size(916, 654);
 			this.Name = "RoomPickerDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Find Room";
+			this.Text = "Find Bed";
 			this.Load += new System.EventHandler(this.RoomPickerDialog_Load);
 			this.panelHeader.ResumeLayout(false);
 			this.panelHeader.PerformLayout();
@@ -332,8 +329,6 @@
 
 		}
 
-		#endregion
-
 		private System.Windows.Forms.Panel panelHeader;
 		private System.Windows.Forms.Label lblHeader;
 		private System.Windows.Forms.Panel toolbarPanel;
@@ -343,6 +338,7 @@
 		private System.Windows.Forms.Panel cardPanel;
 		private System.Windows.Forms.DataGridView dgvRooms;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colRoomNumber;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colBedName;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colRoomType;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colRate;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;

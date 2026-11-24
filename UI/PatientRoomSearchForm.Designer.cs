@@ -53,13 +53,14 @@
 			this.sidebarBorder = new System.Windows.Forms.Panel();
 			this.contentPanel = new System.Windows.Forms.Panel();
 			this.cardPanel = new System.Windows.Forms.Panel();
+			this.lblNoResults = new System.Windows.Forms.Label();
+			this.lblCount = new System.Windows.Forms.Label();
 			this.dgvRooms = new System.Windows.Forms.DataGridView();
 			this.colRoomNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colBedName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colRoomType = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colOccupant = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.lblNoResults = new System.Windows.Forms.Label();
-			this.lblCount = new System.Windows.Forms.Label();
 			this.toolbarPanel = new System.Windows.Forms.Panel();
 			this.cmbStatus = new System.Windows.Forms.ComboBox();
 			this.lblStatus = new System.Windows.Forms.Label();
@@ -453,6 +454,7 @@
 			this.dgvRooms.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.dgvRooms.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
 			this.colRoomNumber,
+			this.colBedName,
 			this.colRoomType,
 			this.colStatus,
 			this.colOccupant});
@@ -486,9 +488,17 @@
 			this.colRoomNumber.Name = "colRoomNumber";
 			this.colRoomNumber.ReadOnly = true;
 			// 
+			// colBedName
+			// 
+			this.colBedName.FillWeight = 15F;
+			this.colBedName.HeaderText = "Bed #";
+			this.colBedName.MinimumWidth = 6;
+			this.colBedName.Name = "colBedName";
+			this.colBedName.ReadOnly = true;
+			// 
 			// colRoomType
 			// 
-			this.colRoomType.FillWeight = 25F;
+			this.colRoomType.FillWeight = 20F;
 			this.colRoomType.HeaderText = "Type";
 			this.colRoomType.MinimumWidth = 6;
 			this.colRoomType.Name = "colRoomType";
@@ -504,7 +514,7 @@
 			// 
 			// colOccupant
 			// 
-			this.colOccupant.FillWeight = 40F;
+			this.colOccupant.FillWeight = 30F;
 			this.colOccupant.HeaderText = "Occupant";
 			this.colOccupant.MinimumWidth = 6;
 			this.colOccupant.Name = "colOccupant";
@@ -619,7 +629,7 @@
 			this.lblSubtitle.Name = "lblSubtitle";
 			this.lblSubtitle.Size = new System.Drawing.Size(420, 23);
 			this.lblSubtitle.TabIndex = 1;
-			this.lblSubtitle.Text = "Find room availability or locate a patient's current room";
+			this.lblSubtitle.Text = "Find room availability or locate a patient\'s current room";
 			// 
 			// lblTitle
 			// 
@@ -699,6 +709,7 @@
 		private System.Windows.Forms.Panel cardPanel;
 		private System.Windows.Forms.DataGridView dgvRooms;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colRoomNumber;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colBedName;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colRoomType;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colOccupant;

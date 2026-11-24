@@ -13,8 +13,9 @@ namespace UI
 
 		private readonly Admission _admission;
 
-		// Only set if the user picks a new room
+		// Only set if the user picks a new bed
 		private string _newRoomNumber;
+		private string _newBedName;
 
 		public EditAdmissionForm(Admission admission)
 		{
@@ -39,12 +40,12 @@ namespace UI
 			string patientName = patient != null ? patient.FullName : "(unknown)";
 			txtPatient.Text = _admission.PatientCode + " — " + patientName;
 
-			// Current room display
+			// Current room/bed display
 			Room currentRoom = roomController.GetRoomByNumber(_admission.RoomNumber);
 			string currentRoomDisplay = currentRoom != null
-				? _admission.RoomNumber + " — " + currentRoom.RoomType +
+				? _admission.RoomNumber + " (Bed " + _admission.BedName + ") — " + currentRoom.RoomType +
 				  " — ₱" + _admission.LockedRate.ToString("N2") + "/day (locked)"
-				: _admission.RoomNumber;
+				: _admission.RoomNumber + " (Bed " + _admission.BedName + ")";
 			txtCurrentRoom.Text = currentRoomDisplay;
 
 			// Admission date
@@ -56,6 +57,7 @@ namespace UI
 			// New room is empty by default
 			txtNewRoom.Text = "";
 			_newRoomNumber = null;
+			_newBedName = null;
 		}
 
 		private void btnFindRoom_Click(object sender, EventArgs e)
@@ -64,7 +66,9 @@ namespace UI
 			if (picker.ShowDialog(this) == DialogResult.OK)
 			{
 				_newRoomNumber = picker.SelectedRoomNumber;
-				txtNewRoom.Text = picker.SelectedRoomNumber + " — " +
+				_newBedName = picker.SelectedBedName; // NEW
+
+				txtNewRoom.Text = picker.SelectedRoomNumber + " (Bed " + picker.SelectedBedName + ") — " +
 								  picker.SelectedRoomType + " — ₱" +
 								  picker.SelectedRoomRate.ToString("N2") + "/day";
 			}
@@ -72,14 +76,14 @@ namespace UI
 
 		private void btnSave_Click(object sender, EventArgs e)
 		{
-			// If the user didn't pick a new room, keep the current one
-			string targetRoom = string.IsNullOrWhiteSpace(_newRoomNumber)
-				? _admission.RoomNumber
-				: _newRoomNumber;
+			// If the user didn't pick a new bed, keep the current one
+			string targetRoom = string.IsNullOrWhiteSpace(_newRoomNumber) ? _admission.RoomNumber : _newRoomNumber;
+			string targetBed = string.IsNullOrWhiteSpace(_newBedName) ? _admission.BedName : _newBedName;
 
 			string result = admissionController.UpdateAdmission(
 				_admission.AdmissionCode,
 				targetRoom,
+				targetBed, // NEW
 				txtDiagnosis.Text);
 
 			if (result == "OK")

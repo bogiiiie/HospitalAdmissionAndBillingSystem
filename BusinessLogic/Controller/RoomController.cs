@@ -8,6 +8,7 @@ namespace BusinessLogic.Controller
 	public class RoomController
 	{
 		private readonly RoomRepository repository = new RoomRepository();
+		private readonly BedRepository bedRepo = new BedRepository();
 
 		// ==========================================
 		// READ — Get all rooms (passthrough)
@@ -27,9 +28,8 @@ namespace BusinessLogic.Controller
 
 		// ==========================================
 		// CREATE — Add with validation
-		// Returns "OK" on success, or an error message
 		// ==========================================
-		public string AddRoom(string number, string type, decimal rate, string status)
+		public string AddRoom(string number, string type, decimal rate, int capacity, string status)
 		{
 			if (string.IsNullOrWhiteSpace(number))
 				return "Room number is required.";
@@ -40,10 +40,12 @@ namespace BusinessLogic.Controller
 			if (rate <= 0)
 				return "Rate must be greater than zero.";
 
+			if (capacity < 1)
+				return "Capacity must be at least 1 bed."; // NEW
+
 			if (string.IsNullOrWhiteSpace(status))
 				return "Status is required.";
 
-			// Check for duplicate room number
 			Room existing = repository.GetRoomByNumber(number);
 			if (existing != null)
 				return "Room number already exists.";
@@ -53,6 +55,7 @@ namespace BusinessLogic.Controller
 				RoomNumber = number,
 				RoomType = type,
 				Rate = rate,
+				Capacity = capacity, // NEW
 				Status = status
 			};
 
@@ -62,9 +65,8 @@ namespace BusinessLogic.Controller
 
 		// ==========================================
 		// UPDATE — Edit with validation
-		// Added a check so an occupied room cannot be edited.
 		// ==========================================
-		public string UpdateRoom(string number, string type, decimal rate, string status)
+		public string UpdateRoom(string number, string type, decimal rate, int capacity, string status)
 		{
 			if (string.IsNullOrWhiteSpace(number))
 				return "Room number is required.";
@@ -75,40 +77,40 @@ namespace BusinessLogic.Controller
 			if (rate <= 0)
 				return "Rate must be greater than zero.";
 
+			if (capacity < 1)
+				return "Capacity must be at least 1 bed.";
+
 			if (string.IsNullOrWhiteSpace(status))
 				return "Status is required.";
 
-			// Room must exist
 			Room existing = repository.GetRoomByNumber(number);
 			if (existing == null)
 				return "Room not found.";
 
-			// Occupied rooms are locked — the patient must be discharged first
-			if (existing.Status == "Occupied")
-				return "Cannot edit an occupied room. Discharge the patient first.";
+			// NEW: Block editing if ANY bed is currently occupied
+			int occupiedBeds = bedRepo.GetOccupiedBedCount(number);
+			if (occupiedBeds > 0)
+				return "Cannot edit a room that has occupied beds. Discharge the patients first.";
 
 			Room room = new Room
 			{
 				RoomNumber = number,
 				RoomType = type,
 				Rate = rate,
+				Capacity = capacity, // NEW
 				Status = status
 			};
 
 			int rows = repository.UpdateRoom(room);
 
-			// Safety net — if the DB guard also blocked it (0 rows updated)
 			if (rows == 0)
-				return "Cannot edit an occupied room. Discharge the patient first.";
+				return "Cannot edit this room. It may be occupied.";
 
 			return "OK";
 		}
 
 		// ==========================================
-		// UPDATE STATUS ONLY — passthrough
-		// Used by the Admission and Discharge modules to flip
-		// a room between Available and Occupied without going
-		// through the full occupied-room guard.
+		// UPDATE STATUS ONLY
 		// ==========================================
 		public int UpdateRoomStatus(string roomNumber, string status)
 		{
@@ -116,7 +118,7 @@ namespace BusinessLogic.Controller
 		}
 
 		// ==========================================
-		// DELETE — Remove with validation
+		// DELETE
 		// ==========================================
 		public string DeleteRoom(string number)
 		{
@@ -127,15 +129,14 @@ namespace BusinessLogic.Controller
 			if (existing == null)
 				return "Room not found.";
 
-			if (existing.Status == "Occupied")
-				return "Cannot delete an occupied room.";
+			int occupiedBeds = bedRepo.GetOccupiedBedCount(number);
+			if (occupiedBeds > 0)
+				return "Cannot delete a room that has occupied beds.";
 
 			if (existing.Status == "Deleted")
 				return "Room is already deleted.";
 
 			int rows = repository.DeleteRoom(number);
-
-			// Same idea — if the DB-level guard rejected the change
 			if (rows == 0)
 				return "Cannot delete an occupied room.";
 
@@ -143,18 +144,18 @@ namespace BusinessLogic.Controller
 		}
 
 		// ==========================================
-		// SEARCH — Find rooms by keyword
+		// SEARCH
 		// ==========================================
 		public List<Room> SearchRooms(string keyword)
 		{
 			if (string.IsNullOrWhiteSpace(keyword))
-				return repository.GetAllRooms();   // empty keyword = show all
+				return repository.GetAllRooms();
 
 			return repository.SearchRooms(keyword);
 		}
 
 		// ==========================================
-		// REACTIVATE — Restore a Deleted room to Available
+		// REACTIVATE
 		// ==========================================
 		public string ReactivateRoom(string number)
 		{

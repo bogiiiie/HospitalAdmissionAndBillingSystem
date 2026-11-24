@@ -25,6 +25,7 @@ namespace UI
 				this.Text = "Add Room";
 				lblHeader.Text = "Room Management — Add Room";
 				cmbStatus.SelectedItem = "Available";
+				numCapacity.Value = 1;
 			}
 			else
 			{
@@ -35,6 +36,7 @@ namespace UI
 				txtRoomNumber.ReadOnly = true;
 				cmbRoomType.Text = _existingRoom.RoomType;
 				txtRate.Text = _existingRoom.Rate.ToString();
+				numCapacity.Value = _existingRoom.Capacity; // NEW
 				cmbStatus.Text = _existingRoom.Status;
 			}
 		}
@@ -48,6 +50,7 @@ namespace UI
 				return;
 			}
 
+			int capacity = (int)numCapacity.Value; // NEW
 			string result;
 
 			if (_existingRoom == null)
@@ -56,6 +59,7 @@ namespace UI
 					txtRoomNumber.Text.Trim(),
 					cmbRoomType.Text,
 					rate,
+					capacity, // NEW
 					cmbStatus.Text);
 			}
 			else
@@ -64,6 +68,7 @@ namespace UI
 					txtRoomNumber.Text.Trim(),
 					cmbRoomType.Text,
 					rate,
+					capacity, // NEW
 					cmbStatus.Text);
 			}
 

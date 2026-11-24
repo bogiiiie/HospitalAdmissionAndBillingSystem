@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using BusinessLogic.Controller;
+using BusinessLogic.Repository;
 using Model;
 
 namespace UI
@@ -9,9 +10,11 @@ namespace UI
 	public partial class RoomPickerDialog : Form
 	{
 		private readonly RoomController roomController = new RoomController();
+		private readonly BedRepository bedRepo = new BedRepository();
 
-		// The selected room number (null if cancelled)
+		// The selected values (null if cancelled)
 		public string SelectedRoomNumber { get; private set; }
+		public string SelectedBedName { get; private set; } // NEW
 		public decimal SelectedRoomRate { get; private set; }
 		public string SelectedRoomType { get; private set; }
 
@@ -35,29 +38,34 @@ namespace UI
 		{
 			string keyword = txtSearch.Text.Trim();
 
-			// Fetch all rooms, then filter
-			List<Room> rooms = string.IsNullOrWhiteSpace(keyword)
-				? roomController.GetAllRooms()
-				: roomController.SearchRooms(keyword);
+			// Fetch all available beds from the repository
+			List<Bed> beds = bedRepo.GetAvailableBeds();
 
-			// Only Available rooms — those are the ones you can admit into
-			rooms = rooms.FindAll(r => r.Status == "Available");
+			// Filter by keyword (room number or bed name)
+			if (!string.IsNullOrWhiteSpace(keyword))
+			{
+				beds = beds.FindAll(b => b.RoomNumber.Contains(keyword) || b.BedName.Contains(keyword));
+			}
 
 			// Populate grid
 			dgvRooms.Rows.Clear();
-			foreach (Room r in rooms)
+			foreach (Bed b in beds)
 			{
+				Room r = roomController.GetRoomByNumber(b.RoomNumber);
+				if (r == null) continue;
+
 				dgvRooms.Rows.Add(
-					r.RoomNumber,
+					b.RoomNumber,
+					b.BedName, // NEW
 					r.RoomType,
 					"₱" + r.Rate.ToString("N2") + "/day",
-					r.Status
+					b.Status
 				);
 			}
 
-			lblCount.Text = "Total Results: " + rooms.Count;
-			lblNoResults.Visible = (rooms.Count == 0);
-			dgvRooms.Visible = (rooms.Count > 0);
+			lblCount.Text = "Total Results: " + beds.Count;
+			lblNoResults.Visible = (beds.Count == 0);
+			dgvRooms.Visible = (beds.Count > 0);
 			btnSelect.Enabled = false;
 		}
 
@@ -96,6 +104,7 @@ namespace UI
 			if (dgvRooms.CurrentRow == null) return;
 
 			SelectedRoomNumber = dgvRooms.CurrentRow.Cells["colRoomNumber"].Value.ToString();
+			SelectedBedName = dgvRooms.CurrentRow.Cells["colBedName"].Value.ToString(); // NEW
 			SelectedRoomType = dgvRooms.CurrentRow.Cells["colRoomType"].Value.ToString();
 
 			// Parse the rate back from the display format ("₱1,500.00/day")

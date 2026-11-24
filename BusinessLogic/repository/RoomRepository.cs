@@ -26,7 +26,7 @@ namespace BusinessLogic.Repository
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
-				string sql = "SELECT RoomID, RoomNumber, RoomType, Rate, Status FROM Rooms;";
+				string sql = "SELECT RoomID, RoomNumber, RoomType, Rate, Capacity, Status FROM Rooms;";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
 				using (var reader = cmd.ExecuteReader())
@@ -39,6 +39,7 @@ namespace BusinessLogic.Repository
 							RoomNumber = reader["RoomNumber"].ToString(),
 							RoomType = reader["RoomType"].ToString(),
 							Rate = Convert.ToDecimal(reader["Rate"]),
+							Capacity = Convert.ToInt32(reader["Capacity"]), // NEW
 							Status = reader["Status"].ToString()
 						});
 					}
@@ -58,7 +59,7 @@ namespace BusinessLogic.Repository
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
-				string sql = "SELECT RoomID, RoomNumber, RoomType, Rate, Status " +
+				string sql = "SELECT RoomID, RoomNumber, RoomType, Rate, Capacity, Status " +
 							 "FROM Rooms WHERE RoomNumber = @RoomNumber LIMIT 1;";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
@@ -75,6 +76,7 @@ namespace BusinessLogic.Repository
 								RoomNumber = reader["RoomNumber"].ToString(),
 								RoomType = reader["RoomType"].ToString(),
 								Rate = Convert.ToDecimal(reader["Rate"]),
+								Capacity = Convert.ToInt32(reader["Capacity"]), // NEW
 								Status = reader["Status"].ToString()
 							};
 						}
@@ -86,60 +88,107 @@ namespace BusinessLogic.Repository
 		}
 
 		// ==========================================
-		// CREATE — Add a new room
+		// CREATE — Add a new room and generate beds
 		// ==========================================
 		public void AddRoom(Room room)
 		{
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
-				string sql = "INSERT INTO Rooms (RoomNumber, RoomType, Rate, Status) " +
-							 "VALUES (@RoomNumber, @RoomType, @Rate, @Status);";
-
-				using (var cmd = new SQLiteCommand(sql, conn))
+				using (var trans = conn.BeginTransaction())
 				{
-					cmd.Parameters.AddWithValue("@RoomNumber", room.RoomNumber);
-					cmd.Parameters.AddWithValue("@RoomType", room.RoomType);
-					cmd.Parameters.AddWithValue("@Rate", room.Rate);
-					cmd.Parameters.AddWithValue("@Status", room.Status);
+					try
+					{
+						string sql = "INSERT INTO Rooms (RoomNumber, RoomType, Rate, Capacity, Status) " +
+									 "VALUES (@RoomNumber, @RoomType, @Rate, @Capacity, @Status);";
 
-					cmd.ExecuteNonQuery();
+						using (var cmd = new SQLiteCommand(sql, conn))
+						{
+							cmd.Parameters.AddWithValue("@RoomNumber", room.RoomNumber);
+							cmd.Parameters.AddWithValue("@RoomType", room.RoomType);
+							cmd.Parameters.AddWithValue("@Rate", room.Rate);
+							cmd.Parameters.AddWithValue("@Capacity", room.Capacity); // NEW
+							cmd.Parameters.AddWithValue("@Status", room.Status);
+							cmd.ExecuteNonQuery();
+						}
+
+						// Generate the beds automatically
+						GenerateBeds(conn, room.RoomNumber, room.Capacity);
+
+						trans.Commit();
+					}
+					catch
+					{
+						trans.Rollback();
+						throw;
+					}
 				}
 			}
 		}
 
 		// ==========================================
 		// UPDATE — Edit an existing room
-		// Added a WHERE guard so an occupied room can't be edited
-		// even if something calls this method directly.
-		// Returns the number of rows affected so we can detect a blocked update.
 		// ==========================================
 		public int UpdateRoom(Room room)
 		{
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
-				string sql = "UPDATE Rooms SET RoomType = @RoomType, Rate = @Rate, " +
-							 "Status = @Status " +
-							 "WHERE RoomNumber = @RoomNumber AND Status <> 'Occupied';";
-
-				using (var cmd = new SQLiteCommand(sql, conn))
+				using (var trans = conn.BeginTransaction())
 				{
-					cmd.Parameters.AddWithValue("@RoomNumber", room.RoomNumber);
-					cmd.Parameters.AddWithValue("@RoomType", room.RoomType);
-					cmd.Parameters.AddWithValue("@Rate", room.Rate);
-					cmd.Parameters.AddWithValue("@Status", room.Status);
+					try
+					{
+						// Get the old capacity to calculate if we need to add/remove beds
+						int oldCapacity = 0;
+						using (var cmd = new SQLiteCommand("SELECT Capacity FROM Rooms WHERE RoomNumber = @Room", conn))
+						{
+							cmd.Parameters.AddWithValue("@Room", room.RoomNumber);
+							oldCapacity = Convert.ToInt32(cmd.ExecuteScalar());
+						}
 
-					return cmd.ExecuteNonQuery();
+						string sql = "UPDATE Rooms SET RoomType = @RoomType, Rate = @Rate, " +
+									 "Capacity = @Capacity, Status = @Status " +
+									 "WHERE RoomNumber = @RoomNumber AND Status <> 'Occupied';";
+
+						int rows = 0;
+						using (var cmd = new SQLiteCommand(sql, conn))
+						{
+							cmd.Parameters.AddWithValue("@RoomNumber", room.RoomNumber);
+							cmd.Parameters.AddWithValue("@RoomType", room.RoomType);
+							cmd.Parameters.AddWithValue("@Rate", room.Rate);
+							cmd.Parameters.AddWithValue("@Capacity", room.Capacity); // NEW
+							cmd.Parameters.AddWithValue("@Status", room.Status);
+
+							rows = cmd.ExecuteNonQuery();
+						}
+
+						if (rows > 0)
+						{
+							// Adjust beds if capacity changed
+							if (room.Capacity > oldCapacity)
+							{
+								AddBeds(conn, room.RoomNumber, oldCapacity, room.Capacity);
+							}
+							else if (room.Capacity < oldCapacity)
+							{
+								RemoveBeds(conn, room.RoomNumber, room.Capacity);
+							}
+						}
+
+						trans.Commit();
+						return rows;
+					}
+					catch
+					{
+						trans.Rollback();
+						throw;
+					}
 				}
 			}
 		}
 
 		// ==========================================
-		// UPDATE STATUS ONLY — used by Admission / Discharge
-		// Bypasses the occupied-room guard because it is only
-		// ever called by trusted internal logic (admission → Occupied,
-		// discharge → Available).
+		// UPDATE STATUS ONLY
 		// ==========================================
 		public int UpdateRoomStatus(string roomNumber, string status)
 		{
@@ -159,9 +208,7 @@ namespace BusinessLogic.Repository
 		}
 
 		// ==========================================
-		// DELETE — Soft delete (mark Status as 'Deleted')
-		// Same guard as UpdateRoom so an occupied room
-		// can never be soft-deleted from here.
+		// DELETE — Soft delete
 		// ==========================================
 		public int DeleteRoom(string roomNumber)
 		{
@@ -180,7 +227,7 @@ namespace BusinessLogic.Repository
 		}
 
 		// ==========================================
-		// SEARCH — Find rooms by keyword
+		// SEARCH
 		// ==========================================
 		public List<Room> SearchRooms(string keyword)
 		{
@@ -189,7 +236,7 @@ namespace BusinessLogic.Repository
 			using (var conn = new SQLiteConnection(connectionString))
 			{
 				conn.Open();
-				string sql = "SELECT RoomID, RoomNumber, RoomType, Rate, Status FROM Rooms " +
+				string sql = "SELECT RoomID, RoomNumber, RoomType, Rate, Capacity, Status FROM Rooms " +
 							 "WHERE RoomNumber LIKE @Keyword OR RoomType LIKE @Keyword;";
 
 				using (var cmd = new SQLiteCommand(sql, conn))
@@ -206,6 +253,7 @@ namespace BusinessLogic.Repository
 								RoomNumber = reader["RoomNumber"].ToString(),
 								RoomType = reader["RoomType"].ToString(),
 								Rate = Convert.ToDecimal(reader["Rate"]),
+								Capacity = Convert.ToInt32(reader["Capacity"]), // NEW
 								Status = reader["Status"].ToString()
 							});
 						}
@@ -217,9 +265,7 @@ namespace BusinessLogic.Repository
 		}
 
 		// ==========================================
-		// REACTIVATE — Set status back to Available
-		// Used to restore a room that was previously
-		// soft-deleted by mistake. Returns rows affected.
+		// REACTIVATE
 		// ==========================================
 		public int ReactivateRoom(string roomNumber)
 		{
@@ -234,6 +280,52 @@ namespace BusinessLogic.Repository
 					cmd.Parameters.AddWithValue("@RoomNumber", roomNumber);
 					return cmd.ExecuteNonQuery();
 				}
+			}
+		}
+
+		// ==========================================
+		// HELPERS FOR BED GENERATION
+		// ==========================================
+		private void GenerateBeds(SQLiteConnection conn, string roomNumber, int capacity)
+		{
+			for (int i = 0; i < capacity; i++)
+			{
+				char bedLetter = (char)('A' + i);
+				string sql = "INSERT INTO Beds (RoomNumber, BedName, Status) VALUES (@Room, @Bed, 'Available');";
+				using (var cmd = new SQLiteCommand(sql, conn))
+				{
+					cmd.Parameters.AddWithValue("@Room", roomNumber);
+					cmd.Parameters.AddWithValue("@Bed", bedLetter.ToString());
+					cmd.ExecuteNonQuery();
+				}
+			}
+		}
+
+		private void AddBeds(SQLiteConnection conn, string roomNumber, int currentCap, int newCap)
+		{
+			for (int i = currentCap; i < newCap; i++)
+			{
+				char bedLetter = (char)('A' + i);
+				string sql = "INSERT INTO Beds (RoomNumber, BedName, Status) VALUES (@Room, @Bed, 'Available');";
+				using (var cmd = new SQLiteCommand(sql, conn))
+				{
+					cmd.Parameters.AddWithValue("@Room", roomNumber);
+					cmd.Parameters.AddWithValue("@Bed", bedLetter.ToString());
+					cmd.ExecuteNonQuery();
+				}
+			}
+		}
+
+		private void RemoveBeds(SQLiteConnection conn, string roomNumber, int newCap)
+		{
+			// Delete beds with letters greater than the new capacity
+			char maxLetter = (char)('A' + newCap - 1);
+			string sql = "DELETE FROM Beds WHERE RoomNumber = @Room AND BedName > @MaxBed AND Status = 'Available';";
+			using (var cmd = new SQLiteCommand(sql, conn))
+			{
+				cmd.Parameters.AddWithValue("@Room", roomNumber);
+				cmd.Parameters.AddWithValue("@MaxBed", maxLetter.ToString());
+				cmd.ExecuteNonQuery();
 			}
 		}
 	}

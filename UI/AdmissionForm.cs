@@ -19,6 +19,8 @@ namespace UI
 		private string _selectedRoomNumber;
 		private string _selectedRoomDisplay;
 
+		private string _selectedBedName;
+
 		public AdmissionForm(LoginPage loginPage, string username, string role)
 		{
 			InitializeComponent();
@@ -188,9 +190,13 @@ namespace UI
 			if (picker.ShowDialog(this) == DialogResult.OK)
 			{
 				_selectedRoomNumber = picker.SelectedRoomNumber;
-				_selectedRoomDisplay = picker.SelectedRoomNumber + " — " +
+				_selectedBedName = picker.SelectedBedName; // <-- Capture the bed name
+
+				// Update the display to show the bed (e.g., "201 (Bed A) — Ward — ₱800.00/day")
+				_selectedRoomDisplay = picker.SelectedRoomNumber + " (Bed " + picker.SelectedBedName + ") — " +
 									   picker.SelectedRoomType + " — ₱" +
 									   picker.SelectedRoomRate.ToString("N2") + "/day";
+
 				txtSelectedRoom.Text = _selectedRoomDisplay;
 			}
 		}
@@ -203,6 +209,7 @@ namespace UI
 			string result = controller.AddAdmission(
 				_selectedPatientCode,
 				_selectedRoomNumber,
+				_selectedBedName, // <-- Pass the bed name here
 				txtDiagnosis.Text,
 				_username);
 
@@ -210,7 +217,7 @@ namespace UI
 			{
 				MessageBox.Show(
 					"Patient admitted successfully.\n\n" +
-					"Room " + _selectedRoomNumber + " is now Occupied.",
+					"Room " + _selectedRoomNumber + ", Bed " + _selectedBedName + " is now Occupied.", // <-- Updated message
 					"Success",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
