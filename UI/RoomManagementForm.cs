@@ -39,11 +39,6 @@ namespace UI
 			dgvRooms.AlternatingRowsDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
 			dgvRooms.RowsDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
 
-			// Wire the mouse enter/leave events so we can show a tooltip on
-			// disabled Edit/Delete buttons when a room is occupied.
-			dgvRooms.CellMouseEnter += dgvRooms_CellMouseEnter;
-			dgvRooms.CellMouseLeave += dgvRooms_CellMouseLeave;
-
 			lblUserInfo.Text = "Logged in as: " + _username + "   |   Role: " + _role;
 
 			// Build the filter dropdown — "Deleted" only for Admin
@@ -57,8 +52,10 @@ namespace UI
 
 			cmbStatusFilter.SelectedIndex = 0;
 
-			// Admin sees the Actions column; Staff does not
-			colActions.Visible = (_role == "Admin");
+			// Show/hide action panel based on role
+			btnEditSelected.Visible = (_role == "Admin");
+			btnDeleteSelected.Visible = (_role == "Admin");
+			btnReactivateSelected.Visible = (_role == "Admin");
 
 			WireSidebarEvents();
 			ApplyRoleToSidebar();
@@ -67,8 +64,7 @@ namespace UI
 
 		private void RoomManagementForm_Shown(object sender, EventArgs e)
 		{
-			// Hide the Actions column for Staff (after the form is laid out)
-			colActions.Visible = (_role == "Admin");
+			// Kept for layout consistency
 		}
 
 		// =============================================================
@@ -214,282 +210,147 @@ namespace UI
 
 			foreach (Room room in rooms)
 			{
-				// Actions cell is blank — buttons are drawn in CellPainting
+				// Actions cell is removed
 				dgvRooms.Rows.Add(
 					room.RoomNumber,
 					room.RoomType,
 					"P" + room.Rate.ToString("N0") + "/day",
-					room.Status,
-					""
+					room.Status
 				);
 			}
 
 			lblCount.Text = "Total Rooms: " + rooms.Count;
+
+			// Reset selection and buttons
+			dgvRooms.ClearSelection();
+			UpdateActionButtons();
 		}
 
 		// =============================================================
 		// STATUS FILTER — fires when dropdown changes
-		// Actions column stays visible for Admin on every filter,
-		// including Deleted, because Deleted rows need a Reactivate
-		// button.
 		// =============================================================
 		private void cmbStatusFilter_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			// Admin always sees the Actions column. Staff never does.
-			colActions.Visible = (_role == "Admin");
-
 			LoadRooms();
 		}
 
 		// =============================================================
-		// CELL PAINTING — draws buttons in the Actions cell
-		//   Deleted     → single full-width Reactivate button (blue)
-		//   Occupied    → Edit + Delete grayed out (disabled)
-		//   Otherwise   → Edit (green) + Delete (red)
+		// SELECTION CHANGED — Enable/Disable buttons based on selected row
 		// =============================================================
-		private void dgvRooms_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+		private void dgvRooms_SelectionChanged(object sender, EventArgs e)
 		{
-			// Only paint data rows (skip header)
-			if (e.RowIndex < 0) return;
+			UpdateActionButtons();
+		}
 
-			// Only paint the Actions column
-			if (dgvRooms.Columns[e.ColumnIndex].Name != "colActions") return;
-
-			// Only Admin sees buttons
-			if (_role != "Admin") return;
-
-			// Get the room for this row
-			string roomNumber = dgvRooms.Rows[e.RowIndex].Cells["colRoomNumber"].Value.ToString();
-			Room room = controller.GetRoomByNumber(roomNumber);
-			if (room == null)
+		private void UpdateActionButtons()
+		{
+			if (_role != "Admin" || dgvRooms.CurrentRow == null)
 			{
-				e.Handled = true;
+				btnEditSelected.Enabled = false;
+				btnDeleteSelected.Enabled = false;
+				btnReactivateSelected.Visible = false;
 				return;
 			}
 
-			bool isDeleted = (room.Status == "Deleted");
-			bool isOccupied = (room.Status == "Occupied");
-
-			// Paint the background first
-			e.PaintBackground(e.CellBounds, true);
-
-			// ---- Deleted: single centered Reactivate button ----
-			if (isDeleted)
-			{
-				int paddingD = 6;
-				Rectangle reactivateRect = new Rectangle(
-					e.CellBounds.X + paddingD,
-					e.CellBounds.Y + paddingD,
-					e.CellBounds.Width - paddingD * 2,
-					e.CellBounds.Height - paddingD * 2);
-
-				using (var brush = new SolidBrush(Color.FromArgb(37, 99, 235)))   // blue-600
-				{
-					e.Graphics.FillRectangle(brush, reactivateRect);
-				}
-				TextRenderer.DrawText(
-					e.Graphics,
-					"Reactivate",
-					new Font("Segoe UI", 9F, FontStyle.Bold),
-					reactivateRect,
-					Color.White,
-					TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-
-				e.Handled = true;
-				return;
-			}
-
-			// ---- Otherwise: Edit + Delete side-by-side ----
-			int padding = 6;
-			int gap = 6;
-			int buttonWidth = (e.CellBounds.Width - padding * 2 - gap) / 2;
-			int buttonHeight = e.CellBounds.Height - padding * 2;
-
-			Rectangle editRect = new Rectangle(
-				e.CellBounds.X + padding,
-				e.CellBounds.Y + padding,
-				buttonWidth,
-				buttonHeight);
-
-			Rectangle deleteRect = new Rectangle(
-				e.CellBounds.X + padding + buttonWidth + gap,
-				e.CellBounds.Y + padding,
-				buttonWidth,
-				buttonHeight);
-
-			// Pick colors — gray when occupied, normal when not
-			Color editColor = isOccupied
-				? Color.FromArgb(203, 213, 225)   // slate-300 gray
-				: Color.FromArgb(16, 185, 129);   // emerald-500 green
-
-			Color deleteColor = isOccupied
-				? Color.FromArgb(203, 213, 225)   // same gray
-				: Color.FromArgb(239, 68, 68);    // red-500
-
-			Color textColor = isOccupied
-				? Color.FromArgb(100, 116, 139)   // slate-500 — softer text on gray
-				: Color.White;
-
-			// Draw Edit button
-			using (var brush = new SolidBrush(editColor))
-			{
-				e.Graphics.FillRectangle(brush, editRect);
-			}
-			TextRenderer.DrawText(
-				e.Graphics,
-				"Edit",
-				new Font("Segoe UI", 9F, FontStyle.Bold),
-				editRect,
-				textColor,
-				TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-
-			// Draw Delete button
-			using (var brush = new SolidBrush(deleteColor))
-			{
-				e.Graphics.FillRectangle(brush, deleteRect);
-			}
-			TextRenderer.DrawText(
-				e.Graphics,
-				"Delete",
-				new Font("Segoe UI", 9F, FontStyle.Bold),
-				deleteRect,
-				textColor,
-				TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-
-			e.Handled = true;
-		}
-
-		// =============================================================
-		// CELL MOUSE ENTER / LEAVE — show a tooltip on disabled buttons
-		// Only fires for Occupied rooms in the Actions column.
-		// =============================================================
-		private void dgvRooms_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
-		{
-			if (e.RowIndex < 0) return;
-			if (e.ColumnIndex < 0) return;
-			if (dgvRooms.Columns[e.ColumnIndex].Name != "colActions") return;
-			if (_role != "Admin") return;
-
-			string roomNumber = dgvRooms.Rows[e.RowIndex].Cells["colRoomNumber"].Value.ToString();
-			Room room = controller.GetRoomByNumber(roomNumber);
-
-			if (room != null && room.Status == "Occupied")
-			{
-				dgvRooms.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText =
-					"Cannot modify — room has an active patient.";
-			}
-			else
-			{
-				// Clear any leftover tooltip when not occupied
-				dgvRooms.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText = "";
-			}
-		}
-
-		private void dgvRooms_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
-		{
-			// Clear the tooltip when the mouse leaves the cell
-			if (e.RowIndex < 0) return;
-			if (e.ColumnIndex < 0) return;
-			if (dgvRooms.Columns[e.ColumnIndex].Name != "colActions") return;
-
-			dgvRooms.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText = "";
-		}
-
-		// =============================================================
-		// CELL CLICK — handles Edit / Delete / Reactivate
-		//   Deleted     → confirm + reactivate
-		//   Occupied    → warning, no action
-		//   Otherwise   → Edit or Delete depending on click position
-		// =============================================================
-		private void dgvRooms_CellClick(object sender, DataGridViewCellEventArgs e)
-		{
-			if (_role != "Admin") return;
-			if (e.RowIndex < 0) return;
-			if (dgvRooms.Columns[e.ColumnIndex].Name != "colActions") return;
-
-			string roomNumber = dgvRooms.Rows[e.RowIndex].Cells["colRoomNumber"].Value.ToString();
+			string roomNumber = dgvRooms.CurrentRow.Cells["colRoomNumber"].Value.ToString();
 			Room room = controller.GetRoomByNumber(roomNumber);
 			if (room == null) return;
 
-			// ---- Deleted: single Reactivate button ----
 			if (room.Status == "Deleted")
 			{
-				DialogResult confirm = MessageBox.Show(
-					"Reactivate Room " + roomNumber + "?\n\nIts status will be set back to Available.",
-					"Confirm Reactivate",
-					MessageBoxButtons.YesNo,
-					MessageBoxIcon.Question);
-
-				if (confirm == DialogResult.Yes)
-				{
-					string result = controller.ReactivateRoom(roomNumber);
-					if (result == "OK")
-					{
-						MessageBox.Show("Room reactivated.", "Success",
-							MessageBoxButtons.OK, MessageBoxIcon.Information);
-						LoadRooms();
-					}
-					else
-					{
-						MessageBox.Show(result, "Error",
-							MessageBoxButtons.OK, MessageBoxIcon.Warning);
-					}
-				}
-				return;
+				btnEditSelected.Visible = false;
+				btnDeleteSelected.Visible = false;
+				btnReactivateSelected.Visible = true;
+				btnReactivateSelected.Enabled = true;
 			}
-
-			// ---- Occupied: warn and exit ----
-			if (room.Status == "Occupied")
+			else if (room.Status == "Occupied")
 			{
-				MessageBox.Show(
-					"Cannot modify an occupied room. Discharge the patient first.",
-					"Room Occupied",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning);
-				return;
-			}
-
-			// ---- Available / Maintenance: Edit or Delete ----
-			Rectangle cellRect = dgvRooms.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
-			Point mousePos = dgvRooms.PointToClient(Cursor.Position);
-
-			int padding = 6;
-			int gap = 6;
-			int buttonWidth = (cellRect.Width - padding * 2 - gap) / 2;
-			int midX = cellRect.X + padding + buttonWidth + (gap / 2);
-
-			if (mousePos.X < midX)
-			{
-				// Edit was clicked
-				AddEditRoomForm dialog = new AddEditRoomForm(room);
-				if (dialog.ShowDialog() == DialogResult.OK)
-				{
-					LoadRooms();
-				}
+				btnEditSelected.Visible = true;
+				btnDeleteSelected.Visible = true;
+				btnReactivateSelected.Visible = false;
+				btnEditSelected.Enabled = false;
+				btnDeleteSelected.Enabled = false;
+				// Tooltip could be added here if desired
 			}
 			else
 			{
-				// Delete was clicked
-				DialogResult confirm = MessageBox.Show(
-					"Move Room " + roomNumber + " to Deleted?",
-					"Confirm Delete",
-					MessageBoxButtons.YesNo,
-					MessageBoxIcon.Warning);
+				btnEditSelected.Visible = true;
+				btnDeleteSelected.Visible = true;
+				btnReactivateSelected.Visible = false;
+				btnEditSelected.Enabled = true;
+				btnDeleteSelected.Enabled = true;
+			}
+		}
 
-				if (confirm == DialogResult.Yes)
+		// =============================================================
+		// BUTTON CLICKS
+		// =============================================================
+		private void btnEditSelected_Click(object sender, EventArgs e)
+		{
+			if (dgvRooms.CurrentRow == null) return;
+			string roomNumber = dgvRooms.CurrentRow.Cells["colRoomNumber"].Value.ToString();
+			Room room = controller.GetRoomByNumber(roomNumber);
+			if (room == null) return;
+
+			AddEditRoomForm dialog = new AddEditRoomForm(room);
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				LoadRooms();
+			}
+		}
+
+		private void btnDeleteSelected_Click(object sender, EventArgs e)
+		{
+			if (dgvRooms.CurrentRow == null) return;
+			string roomNumber = dgvRooms.CurrentRow.Cells["colRoomNumber"].Value.ToString();
+
+			DialogResult confirm = MessageBox.Show(
+				"Move Room " + roomNumber + " to Deleted?",
+				"Confirm Delete",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Warning);
+
+			if (confirm == DialogResult.Yes)
+			{
+				string result = controller.DeleteRoom(roomNumber);
+				if (result == "OK")
 				{
-					string result = controller.DeleteRoom(roomNumber);
-					if (result == "OK")
-					{
-						MessageBox.Show("Room moved to Deleted.", "Success",
-							MessageBoxButtons.OK, MessageBoxIcon.Information);
-						LoadRooms();
-					}
-					else
-					{
-						MessageBox.Show(result, "Error",
-							MessageBoxButtons.OK, MessageBoxIcon.Warning);
-					}
+					MessageBox.Show("Room moved to Deleted.", "Success",
+						MessageBoxButtons.OK, MessageBoxIcon.Information);
+					LoadRooms();
+				}
+				else
+				{
+					MessageBox.Show(result, "Error",
+						MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
+			}
+		}
+
+		private void btnReactivateSelected_Click(object sender, EventArgs e)
+		{
+			if (dgvRooms.CurrentRow == null) return;
+			string roomNumber = dgvRooms.CurrentRow.Cells["colRoomNumber"].Value.ToString();
+
+			DialogResult confirm = MessageBox.Show(
+				"Reactivate Room " + roomNumber + "?\n\nIts status will be set back to Available.",
+				"Confirm Reactivate",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question);
+
+			if (confirm == DialogResult.Yes)
+			{
+				string result = controller.ReactivateRoom(roomNumber);
+				if (result == "OK")
+				{
+					MessageBox.Show("Room reactivated.", "Success",
+						MessageBoxButtons.OK, MessageBoxIcon.Information);
+					LoadRooms();
+				}
+				else
+				{
+					MessageBox.Show(result, "Error",
+						MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 			}
 		}
@@ -539,6 +400,42 @@ namespace UI
 			{
 				if (_loginPage != null) _loginPage.Show();
 				this.Close();
+			}
+		}
+	}
+
+	// =============================================================
+	// FlatButton — gray background + white text when disabled
+	// =============================================================
+	public class FlatButton : Button
+	{
+		public Color DisabledBackColor { get; set; } = Color.FromArgb(160, 160, 160); // gray
+		public Color DisabledForeColor { get; set; } = Color.White;
+
+		public FlatButton()
+		{
+			FlatStyle = FlatStyle.Flat;
+			FlatAppearance.BorderSize = 0;
+		}
+
+		protected override void OnPaint(PaintEventArgs pevent)
+		{
+			if (!Enabled)
+			{
+				using (var bg = new SolidBrush(DisabledBackColor))
+					pevent.Graphics.FillRectangle(bg, ClientRectangle);
+
+				TextRenderer.DrawText(
+					pevent.Graphics,
+					Text,
+					Font,
+					ClientRectangle,
+					DisabledForeColor,
+					TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+			}
+			else
+			{
+				base.OnPaint(pevent);
 			}
 		}
 	}

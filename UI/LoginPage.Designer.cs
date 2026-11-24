@@ -2,15 +2,8 @@
 {
 	partial class LoginPage
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null))
@@ -20,12 +13,6 @@
 			base.Dispose(disposing);
 		}
 
-		#region Windows Form Designer generated code
-
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		private void InitializeComponent()
 		{
 			this.panelHeader = new System.Windows.Forms.Panel();
@@ -36,6 +23,7 @@
 			this.button1 = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtPassword = new System.Windows.Forms.TextBox();
+			this.btnTogglePassword = new System.Windows.Forms.Button();
 			this.txtUsername = new System.Windows.Forms.TextBox();
 			this.lblUsername = new System.Windows.Forms.Label();
 			this.lblLoginstaff = new System.Windows.Forms.Label();
@@ -91,6 +79,7 @@
 			this.panel1.Controls.Add(this.button1);
 			this.panel1.Controls.Add(this.label1);
 			this.panel1.Controls.Add(this.txtPassword);
+			this.panel1.Controls.Add(this.btnTogglePassword);
 			this.panel1.Controls.Add(this.txtUsername);
 			this.panel1.Controls.Add(this.lblUsername);
 			this.panel1.Controls.Add(this.lblLoginstaff);
@@ -148,6 +137,22 @@
 			this.txtPassword.Size = new System.Drawing.Size(320, 27);
 			this.txtPassword.TabIndex = 3;
 			// 
+			// btnTogglePassword
+			// 
+			this.btnTogglePassword.BackColor = System.Drawing.Color.White;
+			this.btnTogglePassword.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnTogglePassword.FlatAppearance.BorderSize = 0;
+			this.btnTogglePassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnTogglePassword.Font = new System.Drawing.Font("Segoe MDL2 Assets", 12F);
+			this.btnTogglePassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+			this.btnTogglePassword.Location = new System.Drawing.Point(332, 192);
+			this.btnTogglePassword.Name = "btnTogglePassword";
+			this.btnTogglePassword.Size = new System.Drawing.Size(24, 21);
+			this.btnTogglePassword.TabIndex = 7;
+			this.btnTogglePassword.TabStop = false;
+			this.btnTogglePassword.Text = "\uE890";
+			this.btnTogglePassword.UseVisualStyleBackColor = false;
+			this.btnTogglePassword.Click += new System.EventHandler(this.btnTogglePassword_Click);
 			// txtUsername
 			// 
 			this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -199,10 +204,8 @@
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
-
+			this.btnTogglePassword.BringToFront();
 		}
-
-		#endregion
 
 		private System.Windows.Forms.Panel panelHeader;
 		private System.Windows.Forms.Label lblTitle;
@@ -211,6 +214,7 @@
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox txtPassword;
+		private System.Windows.Forms.Button btnTogglePassword;
 		private System.Windows.Forms.TextBox txtUsername;
 		private System.Windows.Forms.Label lblUsername;
 		private System.Windows.Forms.Label lblLoginstaff;
