@@ -63,6 +63,7 @@ namespace BusinessLogic.Repository
 								TotalDue = Convert.ToDecimal(reader["TotalDue"]),
 								AmountPaid = Convert.ToDecimal(reader["AmountPaid"]),
 								Change = Convert.ToDecimal(reader["Change"]),
+								Balance = Convert.ToDecimal(reader["Balance"]), // NEW: Read the remaining balance
 								Status = reader["Status"].ToString(),
 								ProcessedBy = reader["ProcessedBy"].ToString(),
 								CreatedAt = DateTime.Parse(reader["CreatedAt"].ToString())
@@ -83,23 +84,25 @@ namespace BusinessLogic.Repository
 
 				if (isUpdate)
 				{
+					// NEW: Added Balance = @Balance to the UPDATE statement
 					sql = @"UPDATE Bills SET 
 								RoomCharges = @Room, TreatmentCharges = @Treat,
 								DiscountType = @DType, DiscountValue = @DVal, DiscountReason = @DReason, DiscountComputed = @DComp,
-								TotalDue = @Total, AmountPaid = @Paid, Change = @Change,
+								TotalDue = @Total, AmountPaid = @Paid, Change = @Change, Balance = @Balance,
 								Status = @Status, ProcessedBy = @By
 							WHERE BillCode = @Code;";
 				}
 				else
 				{
+					// NEW: Added Balance to the INSERT statement
 					sql = @"INSERT INTO Bills 
 								(BillCode, AdmissionCode, RoomCharges, TreatmentCharges, 
 								 DiscountType, DiscountValue, DiscountReason, DiscountComputed,
-								 TotalDue, AmountPaid, Change, Status, ProcessedBy)
+								 TotalDue, AmountPaid, Change, Balance, Status, ProcessedBy)
 							VALUES 
 								(@Code, @Admission, @Room, @Treat,
 								 @DType, @DVal, @DReason, @DComp,
-								 @Total, @Paid, @Change, @Status, @By);";
+								 @Total, @Paid, @Change, @Balance, @Status, @By);";
 				}
 
 				using (var cmd = new SQLiteCommand(sql, conn))
@@ -116,6 +119,7 @@ namespace BusinessLogic.Repository
 					cmd.Parameters.AddWithValue("@Total", b.TotalDue);
 					cmd.Parameters.AddWithValue("@Paid", b.AmountPaid);
 					cmd.Parameters.AddWithValue("@Change", b.Change);
+					cmd.Parameters.AddWithValue("@Balance", b.Balance); // NEW: Bind the balance parameter
 					cmd.Parameters.AddWithValue("@Status", b.Status);
 					cmd.Parameters.AddWithValue("@By", b.ProcessedBy);
 

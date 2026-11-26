@@ -2,15 +2,8 @@
 {
 	partial class BillingForm
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null)) components.Dispose();
@@ -19,10 +12,6 @@
 
 		#region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		private void InitializeComponent()
 		{
 			this.headerPanel = new System.Windows.Forms.Panel();
@@ -48,6 +37,7 @@
 			this.contentPanel = new System.Windows.Forms.Panel();
 			this.cardPanel = new System.Windows.Forms.Panel();
 			this.panelPayment = new System.Windows.Forms.Panel();
+			this.btnPrintReceipt = new System.Windows.Forms.Button();
 			this.btnFinalize = new System.Windows.Forms.Button();
 			this.btnSaveDraft = new System.Windows.Forms.Button();
 			this.lblChangeValue = new System.Windows.Forms.Label();
@@ -56,6 +46,8 @@
 			this.lblAmountPaid = new System.Windows.Forms.Label();
 			this.lblPaymentTitle = new System.Windows.Forms.Label();
 			this.panelBreakdown = new System.Windows.Forms.Panel();
+			this.lblBalanceValue = new System.Windows.Forms.Label();
+			this.lblBalanceTitle = new System.Windows.Forms.Label();
 			this.lblDiscountDisplay = new System.Windows.Forms.Label();
 			this.cmbDiscountReason = new System.Windows.Forms.ComboBox();
 			this.lblDiscountReason = new System.Windows.Forms.Label();
@@ -431,6 +423,7 @@
 			// 
 			this.panelPayment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
 			this.panelPayment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelPayment.Controls.Add(this.btnPrintReceipt);
 			this.panelPayment.Controls.Add(this.btnFinalize);
 			this.panelPayment.Controls.Add(this.btnSaveDraft);
 			this.panelPayment.Controls.Add(this.lblChangeValue);
@@ -438,11 +431,28 @@
 			this.panelPayment.Controls.Add(this.txtAmountPaid);
 			this.panelPayment.Controls.Add(this.lblAmountPaid);
 			this.panelPayment.Controls.Add(this.lblPaymentTitle);
-			this.panelPayment.Location = new System.Drawing.Point(20, 260);
+			this.panelPayment.Location = new System.Drawing.Point(20, 280);
 			this.panelPayment.Name = "panelPayment";
 			this.panelPayment.Size = new System.Drawing.Size(1020, 150);
 			this.panelPayment.TabIndex = 2;
 			this.panelPayment.Visible = false;
+			// 
+			// btnPrintReceipt
+			// 
+			this.btnPrintReceipt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(114)))), ((int)(((byte)(128)))));
+			this.btnPrintReceipt.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnPrintReceipt.Enabled = false;
+			this.btnPrintReceipt.FlatAppearance.BorderSize = 0;
+			this.btnPrintReceipt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnPrintReceipt.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+			this.btnPrintReceipt.ForeColor = System.Drawing.Color.White;
+			this.btnPrintReceipt.Location = new System.Drawing.Point(390, 90);
+			this.btnPrintReceipt.Name = "btnPrintReceipt";
+			this.btnPrintReceipt.Size = new System.Drawing.Size(180, 40);
+			this.btnPrintReceipt.TabIndex = 7;
+			this.btnPrintReceipt.Text = "Print Receipt";
+			this.btnPrintReceipt.UseVisualStyleBackColor = false;
+			this.btnPrintReceipt.Click += new System.EventHandler(this.btnPrintReceipt_Click);
 			// 
 			// btnFinalize
 			// 
@@ -456,7 +466,7 @@
 			this.btnFinalize.Name = "btnFinalize";
 			this.btnFinalize.Size = new System.Drawing.Size(180, 40);
 			this.btnFinalize.TabIndex = 6;
-			this.btnFinalize.Text = "Finalize Bill";
+			this.btnFinalize.Text = "Record Payment";
 			this.btnFinalize.UseVisualStyleBackColor = false;
 			this.btnFinalize.Click += new System.EventHandler(this.btnFinalize_Click);
 			// 
@@ -531,6 +541,8 @@
 			// 
 			this.panelBreakdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
 			this.panelBreakdown.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelBreakdown.Controls.Add(this.lblBalanceValue);
+			this.panelBreakdown.Controls.Add(this.lblBalanceTitle);
 			this.panelBreakdown.Controls.Add(this.lblDiscountDisplay);
 			this.panelBreakdown.Controls.Add(this.cmbDiscountReason);
 			this.panelBreakdown.Controls.Add(this.lblDiscountReason);
@@ -546,9 +558,30 @@
 			this.panelBreakdown.Controls.Add(this.lblBreakdownTitle);
 			this.panelBreakdown.Location = new System.Drawing.Point(20, 20);
 			this.panelBreakdown.Name = "panelBreakdown";
-			this.panelBreakdown.Size = new System.Drawing.Size(1020, 220);
+			this.panelBreakdown.Size = new System.Drawing.Size(1020, 240);
 			this.panelBreakdown.TabIndex = 1;
 			this.panelBreakdown.Visible = false;
+			// 
+			// lblBalanceValue
+			// 
+			this.lblBalanceValue.AutoSize = true;
+			this.lblBalanceValue.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+			this.lblBalanceValue.ForeColor = System.Drawing.Color.Red;
+			this.lblBalanceValue.Location = new System.Drawing.Point(650, 160);
+			this.lblBalanceValue.Name = "lblBalanceValue";
+			this.lblBalanceValue.Size = new System.Drawing.Size(66, 28);
+			this.lblBalanceValue.TabIndex = 14;
+			this.lblBalanceValue.Text = "₱0.00";
+			// 
+			// lblBalanceTitle
+			// 
+			this.lblBalanceTitle.AutoSize = true;
+			this.lblBalanceTitle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+			this.lblBalanceTitle.Location = new System.Drawing.Point(550, 162);
+			this.lblBalanceTitle.Name = "lblBalanceTitle";
+			this.lblBalanceTitle.Size = new System.Drawing.Size(95, 25);
+			this.lblBalanceTitle.TabIndex = 13;
+			this.lblBalanceTitle.Text = "Balance:";
 			// 
 			// lblDiscountDisplay
 			// 
@@ -568,12 +601,12 @@
 			this.cmbDiscountReason.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.cmbDiscountReason.FormattingEnabled = true;
 			this.cmbDiscountReason.Items.AddRange(new object[] {
-            "PhilHealth",
-            "Senior Citizen",
-            "PWD",
-            "HMO",
-            "Employee",
-            "Other"});
+			"PhilHealth",
+			"Senior Citizen",
+			"PWD",
+			"HMO",
+			"Employee",
+			"Other"});
 			this.cmbDiscountReason.Location = new System.Drawing.Point(450, 112);
 			this.cmbDiscountReason.Name = "cmbDiscountReason";
 			this.cmbDiscountReason.Size = new System.Drawing.Size(180, 31);
@@ -606,8 +639,8 @@
 			this.cmbDiscountType.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.cmbDiscountType.FormattingEnabled = true;
 			this.cmbDiscountType.Items.AddRange(new object[] {
-            "Percentage",
-            "Amount"});
+			"Percentage",
+			"Amount"});
 			this.cmbDiscountType.Location = new System.Drawing.Point(150, 112);
 			this.cmbDiscountType.Name = "cmbDiscountType";
 			this.cmbDiscountType.Size = new System.Drawing.Size(120, 31);
@@ -867,5 +900,8 @@
 		private System.Windows.Forms.Label lblChangeValue;
 		private System.Windows.Forms.Button btnSaveDraft;
 		private System.Windows.Forms.Button btnFinalize;
+		private System.Windows.Forms.Label lblBalanceTitle;
+		private System.Windows.Forms.Label lblBalanceValue;
+		private System.Windows.Forms.Button btnPrintReceipt;
 	}
 }

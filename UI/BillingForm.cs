@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Printing; // Required for printing
 using System.Windows.Forms;
 using BusinessLogic.Controller;
 using Model;
@@ -104,6 +105,10 @@ namespace UI
 				lblTotalDue.Text = "₱" + _existingBill.TotalDue.ToString("N2");
 				_currentTotalDue = _existingBill.TotalDue;
 
+				// Show existing balance
+				lblBalanceValue.Text = "₱" + _existingBill.Balance.ToString("N2");
+				btnPrintReceipt.Enabled = true;
+
 				if (_existingBill.Status == "Paid")
 				{
 					_isReadOnly = true;
@@ -130,16 +135,29 @@ namespace UI
 						lblDiscountDisplay.Text = $"Discount Applied: ₱{_existingBill.DiscountComputed:N2} ({_existingBill.DiscountReason})";
 					}
 
-					MessageBox.Show("This bill has already been finalized and paid.", "Read-Only", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("This bill has already been fully paid.", "Read-Only", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 				else
 				{
-					// Draft Bill
+					// Draft or Partially Paid Bill
+					btnFindAdmission.Enabled = true;
+					txtSelectedAdmission.ReadOnly = true;
+					btnSaveDraft.Enabled = true;
+					btnFinalize.Enabled = true;
+					txtAmountPaid.ReadOnly = false;
+
+					// FIX: Clear the textbox so they type a NEW payment amount
+					txtAmountPaid.Text = "";
+					lblChangeValue.Text = "₱0.00";
+
 					if (_role == "Admin")
 					{
 						txtDiscountValue.Text = _existingBill.DiscountValue.ToString("N2");
 						cmbDiscountType.Text = _existingBill.DiscountType;
 						cmbDiscountReason.Text = _existingBill.DiscountReason;
+						txtDiscountValue.ReadOnly = false;
+						cmbDiscountType.Enabled = true;
+						cmbDiscountReason.Enabled = true;
 					}
 					else
 					{
@@ -158,6 +176,8 @@ namespace UI
 				txtAmountPaid.ReadOnly = false;
 				txtAmountPaid.Text = "";
 				lblChangeValue.Text = "₱0.00";
+				lblBalanceValue.Text = "₱0.00";
+				btnPrintReceipt.Enabled = false;
 
 				if (_role == "Admin")
 				{
@@ -197,7 +217,7 @@ namespace UI
 			lblTotalDue.Text = "₱" + total.ToString("N2");
 			_currentTotalDue = total;
 
-			CalculateChange();
+			CalculateBalance();
 		}
 
 		private void RecalculateTotal(decimal discount)
@@ -213,17 +233,31 @@ namespace UI
 
 		private void txtAmountPaid_TextChanged(object sender, EventArgs e)
 		{
-			CalculateChange();
+			CalculateBalance();
 		}
 
-		private void CalculateChange()
+		// FIX: Calculates the Balance based on the EXISTING balance minus the NEW payment
+		private void CalculateBalance()
 		{
-			decimal paid = 0m;
-			decimal.TryParse(txtAmountPaid.Text, out paid);
+			decimal newPayment = 0m;
+			decimal.TryParse(txtAmountPaid.Text, out newPayment);
 
-			decimal change = paid - _currentTotalDue;
-			if (change < 0) change = 0;
-			lblChangeValue.Text = "₱" + change.ToString("N2");
+			// Base the remaining calculation on the existing balance (if a bill already exists)
+			decimal currentBalance = _existingBill != null ? _existingBill.Balance : _currentTotalDue;
+
+			decimal remaining = currentBalance - newPayment;
+
+			if (remaining > 0)
+			{
+				lblBalanceValue.Text = "₱" + remaining.ToString("N2");
+				lblChangeValue.Text = "₱0.00";
+			}
+			else
+			{
+				lblBalanceValue.Text = "₱0.00";
+				decimal change = Math.Abs(remaining);
+				lblChangeValue.Text = "₱" + change.ToString("N2");
+			}
 		}
 
 		private void btnSaveDraft_Click(object sender, EventArgs e)
@@ -242,10 +276,12 @@ namespace UI
 				DiscountReason = cmbDiscountReason.Text,
 				DiscountComputed = (decimal.Parse(lblRoomCharges.Text.Replace("₱", "").Replace(",", "").Trim()) + decimal.Parse(lblTreatmentCharges.Text.Replace("₱", "").Replace(",", "").Trim())) - _currentTotalDue,
 				TotalDue = _currentTotalDue,
+				AmountPaid = 0,
+				Balance = _currentTotalDue, // Draft means no payment yet
 				ProcessedBy = _username
 			};
 
-			string result = billController.ProcessBill(b, false, 0);
+			string result = billController.ProcessBill(b, 0);
 			if (result == "OK")
 			{
 				MessageBox.Show("Bill saved as Draft. Cashier can finalize this later.", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -266,7 +302,7 @@ namespace UI
 				return;
 			}
 
-			if (MessageBox.Show($"Confirm processing payment of ₱{paid:N2} for a total due of ₱{_currentTotalDue:N2}? This cannot be undone.", "Confirm Payment", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+			if (MessageBox.Show($"Confirm processing payment of ₱{paid:N2} for a total due of ₱{_currentTotalDue:N2}?", "Confirm Payment", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
 				return;
 
 			decimal discVal = 0m;
@@ -281,7 +317,7 @@ namespace UI
 				DiscountType = _role == "Admin" ? cmbDiscountType.Text : (_existingBill != null ? _existingBill.DiscountType : "Amount"),
 				DiscountValue = _role == "Admin" ? discVal : (_existingBill != null ? _existingBill.DiscountValue : 0),
 				DiscountReason = _role == "Admin" ? cmbDiscountReason.Text : (_existingBill != null ? _existingBill.DiscountReason : ""),
-				DiscountComputed = _existingBill != null ? _existingBill.DiscountComputed : 0, // If no existing bill, discount is 0
+				DiscountComputed = _existingBill != null ? _existingBill.DiscountComputed : 0,
 				TotalDue = _currentTotalDue,
 				ProcessedBy = _username
 			};
@@ -291,16 +327,102 @@ namespace UI
 				b.DiscountComputed = b.RoomCharges + b.TreatmentCharges - b.TotalDue;
 			}
 
-			string result = billController.ProcessBill(b, true, paid);
+			// Controller handles the Partial vs Full logic
+			string result = billController.ProcessBill(b, paid);
 			if (result == "OK")
 			{
-				MessageBox.Show("Payment finalized. The patient is now cleared for discharge.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				LoadBillingData(); // Reloads as Read-Only
+				MessageBox.Show("Payment recorded successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				LoadBillingData(); // Reloads data
 			}
 			else
 			{
 				MessageBox.Show(result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
+		}
+
+		// =============================================================
+		// PRINT RECEIPT
+		// =============================================================
+		private void btnPrintReceipt_Click(object sender, EventArgs e)
+		{
+			if (_existingBill == null) return;
+
+			// Fetch the logged-in user's Full Name and Role
+			string processedBy = _username;
+			try
+			{
+				var userRepo = new BusinessLogic.Repository.UserRepository();
+				var currentUser = userRepo.GetUserByUsername(_username);
+				if (currentUser != null)
+				{
+					processedBy = currentUser.FullName + " (" + currentUser.Role + ")";
+				}
+			}
+			catch { }
+
+			// Determine Receipt Title based on status
+			string title = "STATEMENT OF ACCOUNT";
+			if (_existingBill.Status == "Paid") title = "OFFICIAL RECEIPT (FULLY PAID)";
+			else if (_existingBill.Status == "Partially Paid") title = "OFFICIAL RECEIPT (PARTIAL)";
+
+			PrintDocument pd = new PrintDocument();
+			pd.PrintPage += (s, args) =>
+			{
+				Font titleFont = new Font("Arial", 16, FontStyle.Bold);
+				Font headerFont = new Font("Arial", 12, FontStyle.Bold);
+				Font normalFont = new Font("Arial", 10, FontStyle.Regular);
+
+				float y = 50;
+				float x = 50;
+
+				args.Graphics.DrawString("Hospital Admission System", titleFont, Brushes.Black, x, y);
+				y += 30;
+				args.Graphics.DrawString(title, headerFont, Brushes.Black, x, y);
+				y += 40;
+
+				args.Graphics.DrawString("Bill Code: " + _existingBill.BillCode, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Admission Code: " + _existingBill.AdmissionCode, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Status: " + _existingBill.Status, normalFont, Brushes.Black, x, y);
+				y += 40;
+
+				args.Graphics.DrawString("--- BILL BREAKDOWN ---", headerFont, Brushes.Black, x, y);
+				y += 25;
+				args.Graphics.DrawString("Room Charges: " + lblRoomCharges.Text, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Treatment Charges: " + lblTreatmentCharges.Text, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Total Due: " + lblTotalDue.Text, normalFont, Brushes.Black, x, y);
+				y += 20;
+
+				if (_existingBill.DiscountComputed > 0)
+				{
+					args.Graphics.DrawString("Discount: - ₱" + _existingBill.DiscountComputed.ToString("N2") + " (" + _existingBill.DiscountReason + ")", normalFont, Brushes.Black, x, y);
+					y += 20;
+				}
+
+				args.Graphics.DrawString("Amount Paid: " + "₱" + _existingBill.AmountPaid.ToString("N2"), normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Balance: " + "₱" + _existingBill.Balance.ToString("N2"), headerFont, Brushes.Black, x, y);
+				y += 40;
+
+				if (_existingBill.Balance > 0 && _existingBill.Status == "Partially Paid")
+				{
+					Font warningFont = new Font("Arial", 10, FontStyle.Bold);
+					args.Graphics.DrawString("*** NOTE: PATIENT HAS AN OUTSTANDING BALANCE ***", warningFont, Brushes.DarkOrange, x, y);
+					y += 30;
+				}
+
+				y += 40;
+				args.Graphics.DrawString("Processed By: " + processedBy, headerFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Date Printed: " + DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"), normalFont, Brushes.Black, x, y);
+			};
+
+			PrintPreviewDialog preview = new PrintPreviewDialog();
+			preview.Document = pd;
+			preview.ShowDialog();
 		}
 
 		// =============================================================

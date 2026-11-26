@@ -171,6 +171,7 @@ namespace BusinessLogic.Repository
 				// Stores one row per hospital stay.
 				// LockedRate captures the room's rate at admission time
 				// so later rate changes don't affect this stay's bill.
+				// NEW: Added fields for Promissory Note / Admin Override.
 				// --------------------------------------------------------
 				string createAdmissionsTable = @"
 					CREATE TABLE IF NOT EXISTS Admissions (
@@ -188,6 +189,9 @@ namespace BusinessLogic.Repository
 						AssignedNurse   TEXT,
 						DischargeDate   TEXT,
 						DischargeNotes  TEXT,
+						DischargeReason TEXT,
+						PaymentFrequency TEXT,
+						FollowUpDate    TEXT,
 						CreatedAt       TEXT NOT NULL DEFAULT (datetime('now'))
 					);";
 
@@ -266,6 +270,7 @@ namespace BusinessLogic.Repository
 				// --------------------------------------------------------
 				// BILLS
 				// Created by the Billing module (US-011).
+				// NEW: Added Balance column to support partial payments.
 				// --------------------------------------------------------
 				string createBillsTable = @"
 					CREATE TABLE IF NOT EXISTS Bills (
@@ -281,6 +286,7 @@ namespace BusinessLogic.Repository
 						TotalDue            REAL NOT NULL,
 						AmountPaid          REAL NOT NULL DEFAULT 0,
 						Change              REAL NOT NULL DEFAULT 0,
+						Balance             REAL NOT NULL DEFAULT 0,
 						Status              TEXT NOT NULL DEFAULT 'Draft',
 						ProcessedBy         TEXT NOT NULL,
 						CreatedAt           TEXT NOT NULL DEFAULT (datetime('now'))

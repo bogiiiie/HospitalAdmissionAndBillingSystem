@@ -35,7 +35,7 @@ namespace UI
 			string keyword = txtSearch.Text.Trim().ToLower();
 
 			// Get active admissions
-			List<Admission> active = admissionController.GetActiveAdmissions();
+			List<Admission> active = admissionController.GetBillableAdmissions();
 
 			dgvAdmissions.Rows.Clear();
 

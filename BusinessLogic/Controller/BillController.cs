@@ -57,26 +57,51 @@ namespace BusinessLogic.Controller
 			return "OK";
 		}
 
-		public string ProcessBill(Bill b, bool isFinalize, decimal amountPaid)
+		// ==========================================
+		// PROCESS BILL — Handles Partial Payments
+		// ==========================================
+		// ==========================================
+		// PROCESS BILL — Handles Partial Payments
+		// ==========================================
+		public string ProcessBill(Bill b, decimal newPayment)
 		{
 			if (b.TotalDue < 0)
 				return "Invalid total due.";
 
-			if (isFinalize)
-			{
-				if (amountPaid < b.TotalDue)
-					return "Full payment is required to finalize the bill.";
+			if (newPayment < 0)
+				return "Payment cannot be negative.";
 
-				b.AmountPaid = amountPaid;
-				b.Change = amountPaid - b.TotalDue;
+			decimal existingPaid = 0m;
+
+			// Fetch existing bill to accumulate payments if this is an update
+			if (!string.IsNullOrEmpty(b.BillCode))
+			{
+				var existingBill = repository.GetBillByAdmission(b.AdmissionCode);
+				if (existingBill != null)
+				{
+					existingPaid = existingBill.AmountPaid;
+				}
+			}
+
+			// Add the new payment to the existing payment
+			decimal totalPaid = existingPaid + newPayment;
+
+			b.AmountPaid = totalPaid;
+			b.Balance = b.TotalDue - totalPaid;
+
+			// Determine Status based on Balance
+			if (b.Balance <= 0)
+			{
+				// Fully Paid (or Overpaid)
 				b.Status = "Paid";
+				b.Change = Math.Abs(b.Balance); // Change is the overpaid amount
+				b.Balance = 0;                  // Force balance to zero
 			}
 			else
 			{
-				// Save Draft
-				b.AmountPaid = 0;
+				// Partially Paid
+				b.Status = "Partially Paid";
 				b.Change = 0;
-				b.Status = "Draft";
 			}
 
 			// If creating new

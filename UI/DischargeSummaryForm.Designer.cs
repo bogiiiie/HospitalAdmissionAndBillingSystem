@@ -447,7 +447,7 @@
 			this.btnPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnPrint.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
 			this.btnPrint.ForeColor = System.Drawing.Color.White;
-			this.btnPrint.Location = new System.Drawing.Point(30, 790);
+			this.btnPrint.Location = new System.Drawing.Point(30, 850);
 			this.btnPrint.Name = "btnPrint";
 			this.btnPrint.Size = new System.Drawing.Size(150, 40);
 			this.btnPrint.TabIndex = 24;

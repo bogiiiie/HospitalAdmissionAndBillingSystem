@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Printing; // Required for printing
 using System.Windows.Forms;
 using BusinessLogic.Controller;
 using Model;
@@ -16,6 +17,7 @@ namespace UI
 		private readonly string _role;
 
 		private string _selectedAdmissionCode;
+		private Bill _currentBill = null;
 
 		public DischargeForm(LoginPage loginPage, string username, string role)
 		{
@@ -48,6 +50,10 @@ namespace UI
 			{
 				_selectedAdmissionCode = null;
 				txtSelectedAdmission.Text = "";
+				_currentBill = null;
+				chkAdminOverride.Visible = false;
+				chkAdminOverride.Checked = false;
+				panelOverride.Visible = false;
 			}
 		}
 
@@ -67,24 +73,103 @@ namespace UI
 			SetAdmissionState(true);
 			dtpDischargeDate.Value = DateTime.Now;
 
+			// Reset override UI on new search
+			chkAdminOverride.Visible = false;
+			chkAdminOverride.Checked = false;
+			panelOverride.Visible = false;
+
 			// Check Billing Status
-			Bill bill = billController.GetBill(_selectedAdmissionCode);
-			if (bill != null && bill.Status == "Paid")
+			_currentBill = billController.GetBill(_selectedAdmissionCode);
+
+			if (_currentBill != null && _currentBill.Balance <= 0)
 			{
+				// Fully Paid
 				lblBillingStatus.Text = "Billing Status: PAID";
 				lblBillingStatus.ForeColor = Color.Green;
 				btnConfirmDischarge.Enabled = true;
 			}
+			else if (_currentBill != null && _currentBill.Balance > 0)
+			{
+				// Partially Paid
+				lblBillingStatus.Text = $"Billing Status: PARTIALLY PAID (Balance: ₱{_currentBill.Balance:N2})";
+				lblBillingStatus.ForeColor = Color.Orange;
+
+				if (_role == "Admin")
+				{
+					// Admin can override
+					btnConfirmDischarge.Enabled = false; // Disabled until they check the override box
+					chkAdminOverride.Visible = true;
+				}
+				else
+				{
+					// Staff is blocked
+					lblBillingStatus.Text = $"Billing Status: OUTSTANDING BALANCE (₱{_currentBill.Balance:N2}). Ask Admin to override.";
+					lblBillingStatus.ForeColor = Color.Red;
+					btnConfirmDischarge.Enabled = false;
+				}
+			}
 			else
 			{
-				lblBillingStatus.Text = "Billing Status: UNPAID";
+				// No bill generated
+				lblBillingStatus.Text = "Billing Status: NO BILL GENERATED";
 				lblBillingStatus.ForeColor = Color.Red;
 				btnConfirmDischarge.Enabled = false;
 			}
 		}
 
+		// =============================================================
+		// ADMIN OVERRIDE LOGIC
+		// =============================================================
+		private void chkAdminOverride_CheckedChanged(object sender, EventArgs e)
+		{
+			if (chkAdminOverride.Checked)
+			{
+				// Show the Promissory Note panel
+				panelOverride.Visible = true;
+				btnConfirmDischarge.Enabled = true;
+
+				// Default to None so they can pick
+				cmbFrequency.SelectedIndex = 0;
+			}
+			else
+			{
+				// Hide and disable
+				panelOverride.Visible = false;
+				btnConfirmDischarge.Enabled = false;
+			}
+		}
+
+		// Auto-calculate Follow-up Date based on Frequency
+		private void cmbFrequency_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			string freq = cmbFrequency.SelectedItem.ToString();
+
+			if (freq == "Weekly")
+			{
+				dtpFollowUpDate.Value = DateTime.Now.AddDays(7);
+			}
+			else if (freq == "Monthly")
+			{
+				dtpFollowUpDate.Value = DateTime.Now.AddMonths(1);
+			}
+			else
+			{
+				dtpFollowUpDate.Value = DateTime.Now; // Default to today
+			}
+		}
+
 		private void btnConfirmDischarge_Click(object sender, EventArgs e)
 		{
+			// Validation for Admin Override
+			if (_currentBill != null && _currentBill.Balance > 0 && chkAdminOverride.Checked)
+			{
+				if (cmbFrequency.SelectedIndex == 0) // "None" is selected
+				{
+					MessageBox.Show("Please select a payment frequency (Weekly/Monthly) for the Promissory Note.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					return;
+				}
+			}
+
 			DialogResult choice = MessageBox.Show(
 				"Are you sure you want to discharge this patient?\n\n" +
 				"This will mark the admission as discharged and free up the room.",
@@ -94,15 +179,30 @@ namespace UI
 
 			if (choice == DialogResult.Yes)
 			{
+				// Auto-generate Promissory Note script
+				string generatedReason = null;
+				string frequency = null;
+				DateTime? followUpDate = null;
+
+				if (chkAdminOverride.Checked && _currentBill != null)
+				{
+					frequency = cmbFrequency.Text;
+					followUpDate = dtpFollowUpDate.Value;
+					generatedReason = $"Promissory Note: Patient has an outstanding balance of ₱{_currentBill.Balance:N2} to be paid on a {frequency} basis, with the next follow-up scheduled on {followUpDate.Value:MM/dd/yyyy}.";
+				}
+
 				string result = admissionController.DischargePatient(
 					_selectedAdmissionCode,
 					dtpDischargeDate.Value,
-					txtNotes.Text.Trim()
+					txtNotes.Text.Trim(),
+					chkAdminOverride.Checked,
+					generatedReason,
+					frequency,
+					followUpDate
 				);
 
 				if (result == "OK")
 				{
-					// Show success message
 					MessageBox.Show(
 						"Patient discharged successfully.\n\nThe room is now available.",
 						"Success",
@@ -112,8 +212,6 @@ namespace UI
 					// Auto-open the Summary Form
 					DischargeSummaryForm summary = new DischargeSummaryForm(_loginPage, _username, _role, _selectedAdmissionCode);
 					summary.Show();
-
-					// Close the Discharge form (which removes the old placeholder message)
 					this.Close();
 				}
 				else
@@ -121,6 +219,81 @@ namespace UI
 					MessageBox.Show(result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 			}
+		}
+
+		// =============================================================
+		// PRINT PROMISSORY NOTE
+		// =============================================================
+		private void btnPrintPromissory_Click(object sender, EventArgs e)
+		{
+			if (_currentBill == null) return;
+
+			string patientName = "Unknown";
+			try
+			{
+				var adm = admissionController.GetAdmissionByCode(_selectedAdmissionCode);
+				if (adm != null)
+				{
+					var pRepo = new BusinessLogic.Repository.PatientRepository();
+					var p = pRepo.GetPatientByCode(adm.PatientCode);
+					if (p != null) patientName = p.FullName;
+				}
+			}
+			catch { }
+
+			PrintDocument pd = new PrintDocument();
+			pd.PrintPage += (s, args) =>
+			{
+				Font titleFont = new Font("Arial", 16, FontStyle.Bold);
+				Font headerFont = new Font("Arial", 12, FontStyle.Bold);
+				Font normalFont = new Font("Arial", 10, FontStyle.Regular);
+
+				float y = 50;
+				float x = 50;
+
+				args.Graphics.DrawString("Hospital Admission System", titleFont, Brushes.Black, x, y);
+				y += 30;
+				args.Graphics.DrawString("Promissory Note / Balance Receipt", headerFont, Brushes.Black, x, y);
+				y += 40;
+
+				args.Graphics.DrawString("Date Generated: " + DateTime.Now.ToString("MM/dd/yyyy"), normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Patient Name: " + patientName, normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Admission Code: " + _selectedAdmissionCode, normalFont, Brushes.Black, x, y);
+				y += 40;
+
+				args.Graphics.DrawString("--- FINANCIAL DETAILS ---", headerFont, Brushes.Black, x, y);
+				y += 25;
+				args.Graphics.DrawString("Total Bill: " + "₱" + _currentBill.TotalDue.ToString("N2"), normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Amount Paid (Downpayment): " + "₱" + _currentBill.AmountPaid.ToString("N2"), normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("REMAINING BALANCE: " + "₱" + _currentBill.Balance.ToString("N2"), headerFont, Brushes.Black, x, y);
+				y += 40;
+
+				args.Graphics.DrawString("--- PAYMENT TERMS ---", headerFont, Brushes.Black, x, y);
+				y += 25;
+				args.Graphics.DrawString("This is to certify that the patient/guardian agrees to pay the remaining", normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("balance on a " + cmbFrequency.Text.ToUpper() + " basis.", normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Next Follow-up Date: " + dtpFollowUpDate.Value.ToString("MM/dd/yyyy"), normalFont, Brushes.Black, x, y);
+				y += 40;
+
+				args.Graphics.DrawString("By signing below, the patient/guardian acknowledges the outstanding balance", normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("and agrees to the payment schedule.", normalFont, Brushes.Black, x, y);
+				y += 60;
+
+				args.Graphics.DrawString("_____________________________          _____________________________", normalFont, Brushes.Black, x, y);
+				y += 20;
+				args.Graphics.DrawString("Patient / Guardian Signature           Admin Signature", normalFont, Brushes.Black, x, y);
+			};
+
+			PrintPreviewDialog preview = new PrintPreviewDialog();
+			preview.Document = pd;
+			preview.ShowDialog();
 		}
 
 		// =============================================================

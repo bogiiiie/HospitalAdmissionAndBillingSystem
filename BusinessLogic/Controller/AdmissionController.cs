@@ -259,8 +259,10 @@ namespace BusinessLogic.Controller
 
 		// ==========================================
 		// DISCHARGE — Validate and process discharge
+		// NEW: Handles Partial Payment rules and Admin Override.
 		// ==========================================
-		public string DischargePatient(string admissionCode, DateTime dischargeDate, string notes)
+		public string DischargePatient(string admissionCode, DateTime dischargeDate, string notes,
+									   bool isAdminOverride, string reason, string frequency, DateTime? followUpDate)
 		{
 			if (string.IsNullOrWhiteSpace(admissionCode))
 				return "Please select an admission.";
@@ -274,11 +276,29 @@ namespace BusinessLogic.Controller
 			// Check Billing Status
 			BillController billController = new BillController();
 			Bill bill = billController.GetBill(admissionCode);
-			if (bill == null || bill.Status != "Paid")
-				return "Patient must have no outstanding balance before discharge.";
 
-			// Process Discharge
-			repository.DischargePatient(admissionCode, adm.RoomNumber, adm.BedName, dischargeDate, notes); // NEW
+			if (bill == null)
+				return "No bill generated yet. Please generate a bill first.";
+
+			// If there is a balance, enforce the rules
+			if (bill.Balance > 0)
+			{
+				// Staff are strictly blocked from discharging with a balance
+				if (!isAdminOverride)
+				{
+					return "Patient must have no outstanding balance before discharge. Ask an Admin to override.";
+				}
+
+				// If Admin Override is true but no reason was provided
+				if (string.IsNullOrWhiteSpace(reason))
+				{
+					return "A reason (Promissory Note) is required for Admin Override.";
+				}
+			}
+
+			// Process Discharge (passing the override fields to the repository)
+			repository.DischargePatient(admissionCode, adm.RoomNumber, adm.BedName, dischargeDate, notes,
+										reason, frequency, followUpDate);
 			return "OK";
 		}
 
@@ -288,6 +308,12 @@ namespace BusinessLogic.Controller
 		public List<Admission> GetDischargedAdmissions()
 		{
 			return repository.GetDischargedAdmissions();
+		}
+
+		// NEW: Used by Billing to find Active patients OR Discharged patients with a Balance > 0
+		public List<Admission> GetBillableAdmissions()
+		{
+			return repository.GetBillableAdmissions();
 		}
 	}
 }

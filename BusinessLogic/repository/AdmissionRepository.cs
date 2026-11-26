@@ -285,6 +285,12 @@ namespace BusinessLogic.Repository
 				DischargeNotes = reader["DischargeNotes"] == DBNull.Value
 					? null
 					: reader["DischargeNotes"].ToString(),
+				// NEW: Map the override fields
+				DischargeReason = reader["DischargeReason"] == DBNull.Value ? null : reader["DischargeReason"].ToString(),
+				PaymentFrequency = reader["PaymentFrequency"] == DBNull.Value ? null : reader["PaymentFrequency"].ToString(),
+				FollowUpDate = reader["FollowUpDate"] == DBNull.Value
+					? (DateTime?)null
+					: DateTime.Parse(reader["FollowUpDate"].ToString()),
 				CreatedAt = DateTime.Parse(reader["CreatedAt"].ToString())
 			};
 		}
@@ -388,8 +394,9 @@ namespace BusinessLogic.Repository
 		// ==========================================
 		// UPDATE — Discharge the patient
 		// Updates admission, closes room history, frees the bed.
+		// NEW: Saves the override reason, frequency, and follow-up date.
 		// ==========================================
-		public void DischargePatient(string admissionCode, string roomNumber, string bedName, DateTime dischargeDate, string notes)
+		public void DischargePatient(string admissionCode, string roomNumber, string bedName, DateTime dischargeDate, string notes, string reason, string frequency, DateTime? followUpDate)
 		{
 			using (var conn = new SQLiteConnection(connectionString))
 			{
@@ -402,13 +409,19 @@ namespace BusinessLogic.Repository
 						string sqlAdm = @"UPDATE Admissions SET 
 											Status = 'Discharged', 
 											DischargeDate = @Date, 
-											DischargeNotes = @Notes 
+											DischargeNotes = @Notes,
+											DischargeReason = @Reason,
+											PaymentFrequency = @Freq,
+											FollowUpDate = @FollowUp
 										  WHERE AdmissionCode = @Code;";
 						using (var cmd = new SQLiteCommand(sqlAdm, conn))
 						{
 							cmd.Parameters.AddWithValue("@Code", admissionCode);
 							cmd.Parameters.AddWithValue("@Date", dischargeDate.ToString("yyyy-MM-dd HH:mm:ss"));
 							cmd.Parameters.AddWithValue("@Notes", (object)notes ?? DBNull.Value);
+							cmd.Parameters.AddWithValue("@Reason", (object)reason ?? DBNull.Value);
+							cmd.Parameters.AddWithValue("@Freq", (object)frequency ?? DBNull.Value);
+							cmd.Parameters.AddWithValue("@FollowUp", followUpDate.HasValue ? (object)followUpDate.Value.ToString("yyyy-MM-dd") : DBNull.Value);
 							cmd.ExecuteNonQuery();
 						}
 
@@ -472,6 +485,27 @@ namespace BusinessLogic.Repository
 			{
 				conn.Open();
 				string sql = "SELECT * FROM Admissions WHERE Status = 'Discharged' ORDER BY AdmissionID DESC;";
+				using (var cmd = new SQLiteCommand(sql, conn))
+				using (var reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+						list.Add(MapReaderToAdmission(reader));
+				}
+			}
+			return list;
+		}
+
+		public List<Admission> GetBillableAdmissions()
+		{
+			List<Admission> list = new List<Admission>();
+			using (var conn = new SQLiteConnection(connectionString))
+			{
+				conn.Open();
+				// Get Active patients OR Discharged patients who still owe money
+				string sql = @"SELECT * FROM Admissions a 
+							   WHERE a.Status = 'Admitted' 
+							   OR (a.Status = 'Discharged' AND EXISTS (SELECT 1 FROM Bills b WHERE b.AdmissionCode = a.AdmissionCode AND b.Balance > 0))
+							   ORDER BY a.AdmissionID DESC;";
 				using (var cmd = new SQLiteCommand(sql, conn))
 				using (var reader = cmd.ExecuteReader())
 				{

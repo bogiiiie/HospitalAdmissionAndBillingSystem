@@ -8,7 +8,7 @@ namespace Model
 		public string AdmissionCode { get; set; }         // display ID like "ADM-0001"
 		public string PatientCode { get; set; }           // FK → Patients.PatientCode
 		public string RoomNumber { get; set; }            // FK → Rooms.RoomNumber
-		public string BedName { get; set; }               // NEW
+		public string BedName { get; set; }
 		public DateTime AdmissionDate { get; set; }
 		public string Diagnosis { get; set; }
 		public decimal LockedRate { get; set; }           // room rate snapshot at admission time
@@ -19,5 +19,18 @@ namespace Model
 		public DateTime CreatedAt { get; set; }
 		public string AttendingDoctor { get; set; }
 		public string AssignedNurse { get; set; }
+
+		// =========================================================
+		// NEW FIELDS: For Partial Payments and Admin Override
+		// =========================================================
+
+		// Stores the reason for overriding (e.g., "Promissory Note")
+		public string DischargeReason { get; set; }
+
+		// Stores the frequency of payment (e.g., "Weekly", "Monthly")
+		public string PaymentFrequency { get; set; }
+
+		// Stores the next expected payment date
+		public DateTime? FollowUpDate { get; set; }
 	}
 }

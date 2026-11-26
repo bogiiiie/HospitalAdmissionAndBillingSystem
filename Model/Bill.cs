@@ -20,7 +20,11 @@ namespace Model
 		public decimal AmountPaid { get; set; }
 		public decimal Change { get; set; }
 
-		public string Status { get; set; }           // "Draft" or "Paid"
+		// NEW: Tracks the remaining amount to be paid.
+		// If TotalDue = 5000 and AmountPaid = 2000, Balance = 3000.
+		public decimal Balance { get; set; }
+
+		public string Status { get; set; }           // "Draft", "Partially Paid", or "Paid"
 		public string ProcessedBy { get; set; }
 		public DateTime CreatedAt { get; set; }
 	}

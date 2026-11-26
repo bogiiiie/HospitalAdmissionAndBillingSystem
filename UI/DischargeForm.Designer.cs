@@ -2,15 +2,8 @@
 {
 	partial class DischargeForm
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null)) components.Dispose();
@@ -19,10 +12,6 @@
 
 		#region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		private void InitializeComponent()
 		{
 			this.headerPanel = new System.Windows.Forms.Panel();
@@ -47,6 +36,13 @@
 			this.sidebarBorder = new System.Windows.Forms.Panel();
 			this.contentPanel = new System.Windows.Forms.Panel();
 			this.cardPanel = new System.Windows.Forms.Panel();
+			this.panelOverride = new System.Windows.Forms.Panel();
+			this.btnPrintPromissory = new System.Windows.Forms.Button();
+			this.cmbFrequency = new System.Windows.Forms.ComboBox();
+			this.lblFrequency = new System.Windows.Forms.Label();
+			this.dtpFollowUpDate = new System.Windows.Forms.DateTimePicker();
+			this.lblFollowUpDate = new System.Windows.Forms.Label();
+			this.chkAdminOverride = new System.Windows.Forms.CheckBox();
 			this.btnConfirmDischarge = new System.Windows.Forms.Button();
 			this.lblBillingStatus = new System.Windows.Forms.Label();
 			this.txtNotes = new System.Windows.Forms.TextBox();
@@ -64,6 +60,7 @@
 			this.sidebarPanel.SuspendLayout();
 			this.contentPanel.SuspendLayout();
 			this.cardPanel.SuspendLayout();
+			this.panelOverride.SuspendLayout();
 			this.toolbarPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -399,27 +396,189 @@
 			this.contentPanel.Size = new System.Drawing.Size(1125, 702);
 			this.contentPanel.TabIndex = 2;
 			// 
-			// lblTitle
+			// cardPanel
 			// 
-			this.lblTitle.AutoSize = true;
-			this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-			this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
-			this.lblTitle.Location = new System.Drawing.Point(35, 25);
-			this.lblTitle.Name = "lblTitle";
-			this.lblTitle.Size = new System.Drawing.Size(155, 41);
-			this.lblTitle.TabIndex = 0;
-			this.lblTitle.Text = "Discharge";
+			this.cardPanel.BackColor = System.Drawing.Color.White;
+			this.cardPanel.Controls.Add(this.panelOverride);
+			this.cardPanel.Controls.Add(this.chkAdminOverride);
+			this.cardPanel.Controls.Add(this.btnConfirmDischarge);
+			this.cardPanel.Controls.Add(this.lblBillingStatus);
+			this.cardPanel.Controls.Add(this.txtNotes);
+			this.cardPanel.Controls.Add(this.lblNotes);
+			this.cardPanel.Controls.Add(this.dtpDischargeDate);
+			this.cardPanel.Controls.Add(this.lblDate);
+			this.cardPanel.Controls.Add(this.lblNoResults);
+			this.cardPanel.Location = new System.Drawing.Point(35, 190);
+			this.cardPanel.Name = "cardPanel";
+			this.cardPanel.Size = new System.Drawing.Size(1060, 580);
+			this.cardPanel.TabIndex = 3;
 			// 
-			// lblSubtitle
+			// panelOverride
 			// 
-			this.lblSubtitle.AutoSize = true;
-			this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
-			this.lblSubtitle.Location = new System.Drawing.Point(38, 68);
-			this.lblSubtitle.Name = "lblSubtitle";
-			this.lblSubtitle.Size = new System.Drawing.Size(420, 23);
-			this.lblSubtitle.TabIndex = 1;
-			this.lblSubtitle.Text = "Complete the patient's stay and free up the room";
+			this.panelOverride.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(254)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
+			this.panelOverride.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelOverride.Controls.Add(this.btnPrintPromissory);
+			this.panelOverride.Controls.Add(this.cmbFrequency);
+			this.panelOverride.Controls.Add(this.lblFrequency);
+			this.panelOverride.Controls.Add(this.dtpFollowUpDate);
+			this.panelOverride.Controls.Add(this.lblFollowUpDate);
+			this.panelOverride.Location = new System.Drawing.Point(50, 320);
+			this.panelOverride.Name = "panelOverride";
+			this.panelOverride.Size = new System.Drawing.Size(700, 120);
+			this.panelOverride.TabIndex = 9;
+			this.panelOverride.Visible = false;
+			// 
+			// btnPrintPromissory
+			// 
+			this.btnPrintPromissory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+			this.btnPrintPromissory.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnPrintPromissory.FlatAppearance.BorderSize = 0;
+			this.btnPrintPromissory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnPrintPromissory.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+			this.btnPrintPromissory.ForeColor = System.Drawing.Color.White;
+			this.btnPrintPromissory.Location = new System.Drawing.Point(480, 50);
+			this.btnPrintPromissory.Name = "btnPrintPromissory";
+			this.btnPrintPromissory.Size = new System.Drawing.Size(180, 40);
+			this.btnPrintPromissory.TabIndex = 4;
+			this.btnPrintPromissory.Text = "Print Promissory Note";
+			this.btnPrintPromissory.UseVisualStyleBackColor = false;
+			this.btnPrintPromissory.Click += new System.EventHandler(this.btnPrintPromissory_Click);
+			// 
+			// cmbFrequency
+			// 
+			this.cmbFrequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbFrequency.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.cmbFrequency.FormattingEnabled = true;
+			this.cmbFrequency.Items.AddRange(new object[] {
+			"None",
+			"Weekly",
+			"Monthly"});
+			this.cmbFrequency.Location = new System.Drawing.Point(250, 55);
+			this.cmbFrequency.Name = "cmbFrequency";
+			this.cmbFrequency.Size = new System.Drawing.Size(150, 31);
+			this.cmbFrequency.TabIndex = 3;
+			this.cmbFrequency.SelectedIndexChanged += new System.EventHandler(this.cmbFrequency_SelectedIndexChanged);
+			// 
+			// lblFrequency
+			// 
+			this.lblFrequency.AutoSize = true;
+			this.lblFrequency.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+			this.lblFrequency.Location = new System.Drawing.Point(250, 30);
+			this.lblFrequency.Name = "lblFrequency";
+			this.lblFrequency.Size = new System.Drawing.Size(160, 20);
+			this.lblFrequency.TabIndex = 2;
+			this.lblFrequency.Text = "Payment Frequency:";
+			// 
+			// dtpFollowUpDate
+			// 
+			this.dtpFollowUpDate.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.dtpFollowUpDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+			this.dtpFollowUpDate.Location = new System.Drawing.Point(20, 55);
+			this.dtpFollowUpDate.Name = "dtpFollowUpDate";
+			this.dtpFollowUpDate.Size = new System.Drawing.Size(200, 30);
+			this.dtpFollowUpDate.TabIndex = 1;
+			// 
+			// lblFollowUpDate
+			// 
+			this.lblFollowUpDate.AutoSize = true;
+			this.lblFollowUpDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+			this.lblFollowUpDate.Location = new System.Drawing.Point(20, 30);
+			this.lblFollowUpDate.Name = "lblFollowUpDate";
+			this.lblFollowUpDate.Size = new System.Drawing.Size(170, 20);
+			this.lblFollowUpDate.TabIndex = 0;
+			this.lblFollowUpDate.Text = "Next Follow-up Date:";
+			// 
+			// chkAdminOverride
+			// 
+			this.chkAdminOverride.AutoSize = true;
+			this.chkAdminOverride.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+			this.chkAdminOverride.ForeColor = System.Drawing.Color.Red;
+			this.chkAdminOverride.Location = new System.Drawing.Point(50, 290);
+			this.chkAdminOverride.Name = "chkAdminOverride";
+			this.chkAdminOverride.Size = new System.Drawing.Size(450, 27);
+			this.chkAdminOverride.TabIndex = 8;
+			this.chkAdminOverride.Text = "Override Discharge with Outstanding Balance (Promissory Note)";
+			this.chkAdminOverride.UseVisualStyleBackColor = true;
+			this.chkAdminOverride.Visible = false;
+			this.chkAdminOverride.CheckedChanged += new System.EventHandler(this.chkAdminOverride_CheckedChanged);
+			// 
+			// btnConfirmDischarge
+			// 
+			this.btnConfirmDischarge.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+			this.btnConfirmDischarge.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.btnConfirmDischarge.FlatAppearance.BorderSize = 0;
+			this.btnConfirmDischarge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnConfirmDischarge.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+			this.btnConfirmDischarge.ForeColor = System.Drawing.Color.White;
+			this.btnConfirmDischarge.Location = new System.Drawing.Point(50, 480);
+			this.btnConfirmDischarge.Name = "btnConfirmDischarge";
+			this.btnConfirmDischarge.Size = new System.Drawing.Size(250, 45);
+			this.btnConfirmDischarge.TabIndex = 6;
+			this.btnConfirmDischarge.Text = "Confirm Discharge";
+			this.btnConfirmDischarge.UseVisualStyleBackColor = false;
+			this.btnConfirmDischarge.Click += new System.EventHandler(this.btnConfirmDischarge_Click);
+			// 
+			// lblBillingStatus
+			// 
+			this.lblBillingStatus.AutoSize = true;
+			this.lblBillingStatus.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+			this.lblBillingStatus.Location = new System.Drawing.Point(50, 260);
+			this.lblBillingStatus.Name = "lblBillingStatus";
+			this.lblBillingStatus.Size = new System.Drawing.Size(220, 28);
+			this.lblBillingStatus.TabIndex = 5;
+			this.lblBillingStatus.Text = "Billing Status: —";
+			// 
+			// txtNotes
+			// 
+			this.txtNotes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtNotes.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.txtNotes.Location = new System.Drawing.Point(50, 145);
+			this.txtNotes.Multiline = true;
+			this.txtNotes.Name = "txtNotes";
+			this.txtNotes.Size = new System.Drawing.Size(600, 100);
+			this.txtNotes.TabIndex = 4;
+			// 
+			// lblNotes
+			// 
+			this.lblNotes.AutoSize = true;
+			this.lblNotes.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+			this.lblNotes.Location = new System.Drawing.Point(50, 120);
+			this.lblNotes.Name = "lblNotes";
+			this.lblNotes.Size = new System.Drawing.Size(320, 20);
+			this.lblNotes.TabIndex = 3;
+			this.lblNotes.Text = "Discharge Notes / Remarks (Optional)";
+			// 
+			// dtpDischargeDate
+			// 
+			this.dtpDischargeDate.CustomFormat = "MM/dd/yyyy hh:mm tt";
+			this.dtpDischargeDate.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.dtpDischargeDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			this.dtpDischargeDate.Location = new System.Drawing.Point(50, 75);
+			this.dtpDischargeDate.Name = "dtpDischargeDate";
+			this.dtpDischargeDate.Size = new System.Drawing.Size(250, 30);
+			this.dtpDischargeDate.TabIndex = 2;
+			// 
+			// lblDate
+			// 
+			this.lblDate.AutoSize = true;
+			this.lblDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+			this.lblDate.Location = new System.Drawing.Point(50, 50);
+			this.lblDate.Name = "lblDate";
+			this.lblDate.Size = new System.Drawing.Size(190, 20);
+			this.lblDate.TabIndex = 1;
+			this.lblDate.Text = "Discharge Date/Time";
+			// 
+			// lblNoResults
+			// 
+			this.lblNoResults.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.lblNoResults.AutoSize = true;
+			this.lblNoResults.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic);
+			this.lblNoResults.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
+			this.lblNoResults.Location = new System.Drawing.Point(350, 200);
+			this.lblNoResults.Name = "lblNoResults";
+			this.lblNoResults.Size = new System.Drawing.Size(380, 28);
+			this.lblNoResults.TabIndex = 0;
+			this.lblNoResults.Text = "Select an active admission to proceed.";
 			// 
 			// toolbarPanel
 			// 
@@ -431,27 +590,6 @@
 			this.toolbarPanel.Name = "toolbarPanel";
 			this.toolbarPanel.Size = new System.Drawing.Size(1060, 70);
 			this.toolbarPanel.TabIndex = 2;
-			// 
-			// lblAdmission
-			// 
-			this.lblAdmission.AutoSize = true;
-			this.lblAdmission.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-			this.lblAdmission.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-			this.lblAdmission.Location = new System.Drawing.Point(20, 22);
-			this.lblAdmission.Name = "lblAdmission";
-			this.lblAdmission.Size = new System.Drawing.Size(200, 23);
-			this.lblAdmission.TabIndex = 0;
-			this.lblAdmission.Text = "Patient / Active Admission *";
-			// 
-			// txtSelectedAdmission
-			// 
-			this.txtSelectedAdmission.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtSelectedAdmission.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.txtSelectedAdmission.Location = new System.Drawing.Point(230, 19);
-			this.txtSelectedAdmission.Name = "txtSelectedAdmission";
-			this.txtSelectedAdmission.ReadOnly = true;
-			this.txtSelectedAdmission.Size = new System.Drawing.Size(600, 30);
-			this.txtSelectedAdmission.TabIndex = 1;
 			// 
 			// btnFindAdmission
 			// 
@@ -470,99 +608,48 @@
 			this.btnFindAdmission.UseVisualStyleBackColor = false;
 			this.btnFindAdmission.Click += new System.EventHandler(this.btnFindAdmission_Click);
 			// 
-			// cardPanel
+			// txtSelectedAdmission
 			// 
-			this.cardPanel.BackColor = System.Drawing.Color.White;
-			this.cardPanel.Controls.Add(this.btnConfirmDischarge);
-			this.cardPanel.Controls.Add(this.lblBillingStatus);
-			this.cardPanel.Controls.Add(this.txtNotes);
-			this.cardPanel.Controls.Add(this.lblNotes);
-			this.cardPanel.Controls.Add(this.dtpDischargeDate);
-			this.cardPanel.Controls.Add(this.lblDate);
-			this.cardPanel.Controls.Add(this.lblNoResults);
-			this.cardPanel.Location = new System.Drawing.Point(35, 190);
-			this.cardPanel.Name = "cardPanel";
-			this.cardPanel.Size = new System.Drawing.Size(1060, 480);
-			this.cardPanel.TabIndex = 3;
+			this.txtSelectedAdmission.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtSelectedAdmission.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.txtSelectedAdmission.Location = new System.Drawing.Point(230, 19);
+			this.txtSelectedAdmission.Name = "txtSelectedAdmission";
+			this.txtSelectedAdmission.ReadOnly = true;
+			this.txtSelectedAdmission.Size = new System.Drawing.Size(600, 30);
+			this.txtSelectedAdmission.TabIndex = 1;
 			// 
-			// lblNoResults
+			// lblAdmission
 			// 
-			this.lblNoResults.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.lblNoResults.AutoSize = true;
-			this.lblNoResults.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic);
-			this.lblNoResults.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
-			this.lblNoResults.Location = new System.Drawing.Point(350, 200);
-			this.lblNoResults.Name = "lblNoResults";
-			this.lblNoResults.Size = new System.Drawing.Size(380, 28);
-			this.lblNoResults.TabIndex = 0;
-			this.lblNoResults.Text = "Select an active admission to proceed.";
-			this.lblNoResults.Visible = true;
+			this.lblAdmission.AutoSize = true;
+			this.lblAdmission.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+			this.lblAdmission.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+			this.lblAdmission.Location = new System.Drawing.Point(20, 22);
+			this.lblAdmission.Name = "lblAdmission";
+			this.lblAdmission.Size = new System.Drawing.Size(200, 23);
+			this.lblAdmission.TabIndex = 0;
+			this.lblAdmission.Text = "Patient / Active Admission *";
 			// 
-			// lblDate
+			// lblSubtitle
 			// 
-			this.lblDate.AutoSize = true;
-			this.lblDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-			this.lblDate.Location = new System.Drawing.Point(50, 50);
-			this.lblDate.Name = "lblDate";
-			this.lblDate.Size = new System.Drawing.Size(190, 20);
-			this.lblDate.TabIndex = 1;
-			this.lblDate.Text = "Discharge Date/Time";
+			this.lblSubtitle.AutoSize = true;
+			this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+			this.lblSubtitle.Location = new System.Drawing.Point(38, 68);
+			this.lblSubtitle.Name = "lblSubtitle";
+			this.lblSubtitle.Size = new System.Drawing.Size(420, 23);
+			this.lblSubtitle.TabIndex = 1;
+			this.lblSubtitle.Text = "Complete the patient's stay and free up the room";
 			// 
-			// dtpDischargeDate
+			// lblTitle
 			// 
-			this.dtpDischargeDate.CustomFormat = "MM/dd/yyyy hh:mm tt";
-			this.dtpDischargeDate.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.dtpDischargeDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtpDischargeDate.Location = new System.Drawing.Point(50, 75);
-			this.dtpDischargeDate.Name = "dtpDischargeDate";
-			this.dtpDischargeDate.Size = new System.Drawing.Size(250, 30);
-			this.dtpDischargeDate.TabIndex = 2;
-			// 
-			// lblNotes
-			// 
-			this.lblNotes.AutoSize = true;
-			this.lblNotes.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-			this.lblNotes.Location = new System.Drawing.Point(50, 120);
-			this.lblNotes.Name = "lblNotes";
-			this.lblNotes.Size = new System.Drawing.Size(320, 20);
-			this.lblNotes.TabIndex = 3;
-			this.lblNotes.Text = "Discharge Notes / Remarks (Optional)";
-			// 
-			// txtNotes
-			// 
-			this.txtNotes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtNotes.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.txtNotes.Location = new System.Drawing.Point(50, 145);
-			this.txtNotes.Multiline = true;
-			this.txtNotes.Name = "txtNotes";
-			this.txtNotes.Size = new System.Drawing.Size(600, 100);
-			this.txtNotes.TabIndex = 4;
-			// 
-			// lblBillingStatus
-			// 
-			this.lblBillingStatus.AutoSize = true;
-			this.lblBillingStatus.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-			this.lblBillingStatus.Location = new System.Drawing.Point(50, 270);
-			this.lblBillingStatus.Name = "lblBillingStatus";
-			this.lblBillingStatus.Size = new System.Drawing.Size(220, 28);
-			this.lblBillingStatus.TabIndex = 5;
-			this.lblBillingStatus.Text = "Billing Status: —";
-			// 
-			// btnConfirmDischarge
-			// 
-			this.btnConfirmDischarge.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
-			this.btnConfirmDischarge.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.btnConfirmDischarge.FlatAppearance.BorderSize = 0;
-			this.btnConfirmDischarge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnConfirmDischarge.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-			this.btnConfirmDischarge.ForeColor = System.Drawing.Color.White;
-			this.btnConfirmDischarge.Location = new System.Drawing.Point(50, 320);
-			this.btnConfirmDischarge.Name = "btnConfirmDischarge";
-			this.btnConfirmDischarge.Size = new System.Drawing.Size(250, 45);
-			this.btnConfirmDischarge.TabIndex = 6;
-			this.btnConfirmDischarge.Text = "Confirm Discharge";
-			this.btnConfirmDischarge.UseVisualStyleBackColor = false;
-			this.btnConfirmDischarge.Click += new System.EventHandler(this.btnConfirmDischarge_Click);
+			this.lblTitle.AutoSize = true;
+			this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+			this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+			this.lblTitle.Location = new System.Drawing.Point(35, 25);
+			this.lblTitle.Name = "lblTitle";
+			this.lblTitle.Size = new System.Drawing.Size(155, 41);
+			this.lblTitle.TabIndex = 0;
+			this.lblTitle.Text = "Discharge";
 			// 
 			// DischargeForm
 			// 
@@ -590,6 +677,8 @@
 			this.contentPanel.PerformLayout();
 			this.cardPanel.ResumeLayout(false);
 			this.cardPanel.PerformLayout();
+			this.panelOverride.ResumeLayout(false);
+			this.panelOverride.PerformLayout();
 			this.toolbarPanel.ResumeLayout(false);
 			this.toolbarPanel.PerformLayout();
 			this.ResumeLayout(false);
@@ -632,5 +721,12 @@
 		private System.Windows.Forms.TextBox txtNotes;
 		private System.Windows.Forms.Label lblBillingStatus;
 		private System.Windows.Forms.Button btnConfirmDischarge;
+		private System.Windows.Forms.CheckBox chkAdminOverride;
+		private System.Windows.Forms.Panel panelOverride;
+		private System.Windows.Forms.Label lblFollowUpDate;
+		private System.Windows.Forms.DateTimePicker dtpFollowUpDate;
+		private System.Windows.Forms.Label lblFrequency;
+		private System.Windows.Forms.ComboBox cmbFrequency;
+		private System.Windows.Forms.Button btnPrintPromissory;
 	}
 }
