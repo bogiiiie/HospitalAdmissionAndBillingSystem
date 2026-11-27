@@ -212,6 +212,9 @@
     <EmbeddedResource Include="BillingForm.resx">
       <DependentUpon>BillingForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DischargeForm.resx">
+      <DependentUpon>DischargeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DischargeSummaryForm.resx">
       <DependentUpon>DischargeSummaryForm.cs</DependentUpon>
     </EmbeddedResource>

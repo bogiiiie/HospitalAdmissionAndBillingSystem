@@ -260,9 +260,12 @@ namespace BusinessLogic.Controller
 		// ==========================================
 		// DISCHARGE — Validate and process discharge
 		// NEW: Handles Partial Payment rules and Admin Override.
+		// UPDATED: accepts installmentType / installmentValue and
+		//          forwards them to the repository.
 		// ==========================================
 		public string DischargePatient(string admissionCode, DateTime dischargeDate, string notes,
-									   bool isAdminOverride, string reason, string frequency, DateTime? followUpDate)
+									   bool isAdminOverride, string reason, string frequency, DateTime? followUpDate,
+									   string installmentType, decimal installmentValue)
 		{
 			if (string.IsNullOrWhiteSpace(admissionCode))
 				return "Please select an admission.";
@@ -298,7 +301,7 @@ namespace BusinessLogic.Controller
 
 			// Process Discharge (passing the override fields to the repository)
 			repository.DischargePatient(admissionCode, adm.RoomNumber, adm.BedName, dischargeDate, notes,
-										reason, frequency, followUpDate);
+										reason, frequency, followUpDate, installmentType, installmentValue);
 			return "OK";
 		}
 

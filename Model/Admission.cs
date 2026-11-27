@@ -32,5 +32,7 @@ namespace Model
 
 		// Stores the next expected payment date
 		public DateTime? FollowUpDate { get; set; }
+		public string InstallmentType { get; set; }  // "Fixed" or "Percentage"
+		public decimal InstallmentValue { get; set; } // e.g., 1000 or 20
 	}
 }

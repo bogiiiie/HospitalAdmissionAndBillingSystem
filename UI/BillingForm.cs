@@ -5,6 +5,7 @@ using System.Drawing.Printing; // Required for printing
 using System.Windows.Forms;
 using BusinessLogic.Controller;
 using Model;
+using BusinessLogic.Repository;
 
 namespace UI
 {
@@ -100,13 +101,13 @@ namespace UI
 			if (_existingBill != null)
 			{
 				// Existing Bill Found
-				lblRoomCharges.Text = "₱" + _existingBill.RoomCharges.ToString("N2");
-				lblTreatmentCharges.Text = "₱" + _existingBill.TreatmentCharges.ToString("N2");
-				lblTotalDue.Text = "₱" + _existingBill.TotalDue.ToString("N2");
+				lblRoomCharges.Text = _existingBill.RoomCharges.ToString("N2") + " ₱";
+				lblTreatmentCharges.Text = _existingBill.TreatmentCharges.ToString("N2") + " ₱";
+				lblTotalDue.Text = _existingBill.TotalDue.ToString("N2") + " ₱";
 				_currentTotalDue = _existingBill.TotalDue;
 
 				// Show existing balance
-				lblBalanceValue.Text = "₱" + _existingBill.Balance.ToString("N2");
+				lblBalanceValue.Text = _existingBill.Balance.ToString("N2") + " ₱";
 				btnPrintReceipt.Enabled = true;
 
 				if (_existingBill.Status == "Paid")
@@ -119,7 +120,7 @@ namespace UI
 					txtAmountPaid.ReadOnly = true;
 
 					txtAmountPaid.Text = _existingBill.AmountPaid.ToString("N2");
-					lblChangeValue.Text = "₱" + _existingBill.Change.ToString("N2");
+					lblChangeValue.Text = _existingBill.Change.ToString("N2") + " ₱";
 
 					if (_role == "Admin")
 					{
@@ -132,7 +133,7 @@ namespace UI
 					}
 					else
 					{
-						lblDiscountDisplay.Text = $"Discount Applied: ₱{_existingBill.DiscountComputed:N2} ({_existingBill.DiscountReason})";
+						lblDiscountDisplay.Text = $"Discount Applied: {_existingBill.DiscountComputed:N2} ₱ ({_existingBill.DiscountReason})";
 					}
 
 					MessageBox.Show("This bill has already been fully paid.", "Read-Only", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -148,7 +149,7 @@ namespace UI
 
 					// FIX: Clear the textbox so they type a NEW payment amount
 					txtAmountPaid.Text = "";
-					lblChangeValue.Text = "₱0.00";
+					lblChangeValue.Text = "0.00 ₱";
 
 					if (_role == "Admin")
 					{
@@ -161,7 +162,7 @@ namespace UI
 					}
 					else
 					{
-						lblDiscountDisplay.Text = $"Discount Applied: ₱{_existingBill.DiscountComputed:N2} ({_existingBill.DiscountReason})";
+						lblDiscountDisplay.Text = $"Discount Applied: {_existingBill.DiscountComputed:N2} ₱ ({_existingBill.DiscountReason})";
 					}
 				}
 			}
@@ -175,8 +176,8 @@ namespace UI
 				btnFinalize.Enabled = true;
 				txtAmountPaid.ReadOnly = false;
 				txtAmountPaid.Text = "";
-				lblChangeValue.Text = "₱0.00";
-				lblBalanceValue.Text = "₱0.00";
+				lblChangeValue.Text = "0.00 ₱";
+				lblBalanceValue.Text = "0.00 ₱";
 				btnPrintReceipt.Enabled = false;
 
 				if (_role == "Admin")
@@ -190,7 +191,7 @@ namespace UI
 				}
 				else
 				{
-					lblDiscountDisplay.Text = "Discount Applied: ₱0.00";
+					lblDiscountDisplay.Text = "Discount Applied: 0.00 ₱";
 					RecalculateTotal(0);
 				}
 			}
@@ -212,9 +213,9 @@ namespace UI
 				return;
 			}
 
-			lblRoomCharges.Text = "₱" + room.ToString("N2");
-			lblTreatmentCharges.Text = "₱" + treat.ToString("N2");
-			lblTotalDue.Text = "₱" + total.ToString("N2");
+			lblRoomCharges.Text = room.ToString("N2") + " ₱";
+			lblTreatmentCharges.Text = treat.ToString("N2") + " ₱";
+			lblTotalDue.Text = total.ToString("N2") + " ₱";
 			_currentTotalDue = total;
 
 			CalculateBalance();
@@ -225,9 +226,9 @@ namespace UI
 			string result = billController.CalculateTotals(_selectedAdmissionCode, "Amount", discount,
 				out decimal room, out decimal treat, out decimal discComp, out decimal total);
 
-			lblRoomCharges.Text = "₱" + room.ToString("N2");
-			lblTreatmentCharges.Text = "₱" + treat.ToString("N2");
-			lblTotalDue.Text = "₱" + total.ToString("N2");
+			lblRoomCharges.Text = room.ToString("N2") + " ₱";
+			lblTreatmentCharges.Text = treat.ToString("N2") + " ₱";
+			lblTotalDue.Text = total.ToString("N2") + " ₱";
 			_currentTotalDue = total;
 		}
 
@@ -249,14 +250,14 @@ namespace UI
 
 			if (remaining > 0)
 			{
-				lblBalanceValue.Text = "₱" + remaining.ToString("N2");
-				lblChangeValue.Text = "₱0.00";
+				lblBalanceValue.Text = remaining.ToString("N2") + " ₱";
+				lblChangeValue.Text = "0.00 ₱";
 			}
 			else
 			{
-				lblBalanceValue.Text = "₱0.00";
+				lblBalanceValue.Text = "0.00 ₱";
 				decimal change = Math.Abs(remaining);
-				lblChangeValue.Text = "₱" + change.ToString("N2");
+				lblChangeValue.Text = change.ToString("N2") + " ₱";
 			}
 		}
 
@@ -302,7 +303,7 @@ namespace UI
 				return;
 			}
 
-			if (MessageBox.Show($"Confirm processing payment of ₱{paid:N2} for a total due of ₱{_currentTotalDue:N2}?", "Confirm Payment", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+			if (MessageBox.Show($"Confirm processing payment of {paid:N2} ₱ for a total due of {_currentTotalDue:N2} ₱?", "Confirm Payment", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
 				return;
 
 			decimal discVal = 0m;
@@ -347,23 +348,23 @@ namespace UI
 		{
 			if (_existingBill == null) return;
 
-			// Fetch the logged-in user's Full Name and Role
 			string processedBy = _username;
 			try
 			{
 				var userRepo = new BusinessLogic.Repository.UserRepository();
 				var currentUser = userRepo.GetUserByUsername(_username);
-				if (currentUser != null)
-				{
-					processedBy = currentUser.FullName + " (" + currentUser.Role + ")";
-				}
+				if (currentUser != null) processedBy = currentUser.FullName + " (" + currentUser.Role + ")";
 			}
 			catch { }
 
-			// Determine Receipt Title based on status
-			string title = "STATEMENT OF ACCOUNT";
-			if (_existingBill.Status == "Paid") title = "OFFICIAL RECEIPT (FULLY PAID)";
-			else if (_existingBill.Status == "Partially Paid") title = "OFFICIAL RECEIPT (PARTIAL)";
+			string title = _existingBill.Status == "Paid" ? "OFFICIAL RECEIPT (FULLY PAID)" :
+						   _existingBill.Status == "Partially Paid" ? "OFFICIAL RECEIPT (PARTIAL)" : "STATEMENT OF ACCOUNT";
+
+			// Fetch history data
+			var tController = new TreatmentController();
+			var treatments = tController.GetTreatments(_selectedAdmissionCode);
+			var pRepo = new PaymentRepository();
+			var payments = pRepo.GetPaymentsByAdmission(_selectedAdmissionCode);
 
 			PrintDocument pd = new PrintDocument();
 			pd.PrintPage += (s, args) =>
@@ -371,52 +372,67 @@ namespace UI
 				Font titleFont = new Font("Arial", 16, FontStyle.Bold);
 				Font headerFont = new Font("Arial", 12, FontStyle.Bold);
 				Font normalFont = new Font("Arial", 10, FontStyle.Regular);
+				Font smallFont = new Font("Arial", 9, FontStyle.Regular);
 
-				float y = 50;
+				float y = 40;
 				float x = 50;
 
-				args.Graphics.DrawString("Hospital Admission System", titleFont, Brushes.Black, x, y);
-				y += 30;
-				args.Graphics.DrawString(title, headerFont, Brushes.Black, x, y);
-				y += 40;
+				args.Graphics.DrawString("Hospital Admission System", titleFont, Brushes.Black, x, y); y += 30;
+				args.Graphics.DrawString(title, headerFont, Brushes.Black, x, y); y += 30;
 
-				args.Graphics.DrawString("Bill Code: " + _existingBill.BillCode, normalFont, Brushes.Black, x, y);
-				y += 20;
-				args.Graphics.DrawString("Admission Code: " + _existingBill.AdmissionCode, normalFont, Brushes.Black, x, y);
-				y += 20;
-				args.Graphics.DrawString("Status: " + _existingBill.Status, normalFont, Brushes.Black, x, y);
-				y += 40;
+				args.Graphics.DrawString("Bill Code: " + _existingBill.BillCode, normalFont, Brushes.Black, x, y); y += 20;
+				args.Graphics.DrawString("Admission Code: " + _existingBill.AdmissionCode, normalFont, Brushes.Black, x, y); y += 30;
 
-				args.Graphics.DrawString("--- BILL BREAKDOWN ---", headerFont, Brushes.Black, x, y);
-				y += 25;
-				args.Graphics.DrawString("Room Charges: " + lblRoomCharges.Text, normalFont, Brushes.Black, x, y);
-				y += 20;
-				args.Graphics.DrawString("Treatment Charges: " + lblTreatmentCharges.Text, normalFont, Brushes.Black, x, y);
-				y += 20;
-				args.Graphics.DrawString("Total Due: " + lblTotalDue.Text, normalFont, Brushes.Black, x, y);
-				y += 20;
+				// 1. ITEMIZED TREATMENTS
+				args.Graphics.DrawString("--- ITEMIZED CHARGES ---", headerFont, Brushes.Black, x, y); y += 20;
+				args.Graphics.DrawString("Service", Font, Brushes.Black, x, y);
+				args.Graphics.DrawString("Qty", Font, Brushes.Black, x + 250, y);
+				args.Graphics.DrawString("Price", Font, Brushes.Black, x + 320, y);
+				args.Graphics.DrawString("Total", Font, Brushes.Black, x + 420, y); y += 15;
+				args.Graphics.DrawLine(Pens.Gray, x, y, x + 500, y); y += 10;
 
-				if (_existingBill.DiscountComputed > 0)
+				args.Graphics.DrawString("Room Charges (Locked Rate)", normalFont, Brushes.Black, x, y);
+				args.Graphics.DrawString(_existingBill.RoomCharges.ToString("N2") + " ₱", normalFont, Brushes.Black, x + 420, y); y += 20;
+
+				foreach (var t in treatments)
 				{
-					args.Graphics.DrawString("Discount: - ₱" + _existingBill.DiscountComputed.ToString("N2") + " (" + _existingBill.DiscountReason + ")", normalFont, Brushes.Black, x, y);
+					args.Graphics.DrawString(t.ServiceName, normalFont, Brushes.Black, x, y);
+					args.Graphics.DrawString(t.Quantity.ToString(), normalFont, Brushes.Black, x + 250, y);
+					args.Graphics.DrawString(t.UnitCost.ToString("N2") + " ₱", normalFont, Brushes.Black, x + 320, y);
+					args.Graphics.DrawString(t.TotalCost.ToString("N2") + " ₱", normalFont, Brushes.Black, x + 420, y);
 					y += 20;
 				}
+				y += 10; args.Graphics.DrawLine(Pens.Gray, x, y, x + 500, y); y += 20;
 
-				args.Graphics.DrawString("Amount Paid: " + "₱" + _existingBill.AmountPaid.ToString("N2"), normalFont, Brushes.Black, x, y);
-				y += 20;
-				args.Graphics.DrawString("Balance: " + "₱" + _existingBill.Balance.ToString("N2"), headerFont, Brushes.Black, x, y);
-				y += 40;
+				// 2. PAYMENT HISTORY
+				args.Graphics.DrawString("--- PAYMENT HISTORY ---", headerFont, Brushes.Black, x, y); y += 20;
+				args.Graphics.DrawString("Date", Font, Brushes.Black, x, y);
+				args.Graphics.DrawString("Amount", Font, Brushes.Black, x + 200, y); y += 15;
+				args.Graphics.DrawLine(Pens.Gray, x, y, x + 500, y); y += 10;
 
-				if (_existingBill.Balance > 0 && _existingBill.Status == "Partially Paid")
+				foreach (var p in payments)
 				{
-					Font warningFont = new Font("Arial", 10, FontStyle.Bold);
-					args.Graphics.DrawString("*** NOTE: PATIENT HAS AN OUTSTANDING BALANCE ***", warningFont, Brushes.DarkOrange, x, y);
-					y += 30;
+					args.Graphics.DrawString(p.PaymentDate.ToString("MM/dd/yyyy hh:mm tt"), smallFont, Brushes.Black, x, y);
+					args.Graphics.DrawString(p.AmountPaid.ToString("N2") + " ₱", smallFont, Brushes.Black, x + 200, y);
+					y += 20;
 				}
+				if (payments.Count == 0)
+				{
+					args.Graphics.DrawString("No payments recorded yet.", smallFont, Brushes.Black, x, y); y += 20;
+				}
+				y += 10; args.Graphics.DrawLine(Pens.Gray, x, y, x + 500, y); y += 20;
 
-				y += 40;
-				args.Graphics.DrawString("Processed By: " + processedBy, headerFont, Brushes.Black, x, y);
-				y += 20;
+				// 3. TOTALS
+				args.Graphics.DrawString("Total Due: " + lblTotalDue.Text, normalFont, Brushes.Black, x, y); y += 20;
+				if (_existingBill.DiscountComputed > 0)
+				{
+					args.Graphics.DrawString("Discount: - " + _existingBill.DiscountComputed.ToString("N2") + " ₱ (" + _existingBill.DiscountReason + ")", normalFont, Brushes.Black, x, y);
+					y += 20;
+				}
+				args.Graphics.DrawString("Amount Paid: " + _existingBill.AmountPaid.ToString("N2") + " ₱", normalFont, Brushes.Black, x, y); y += 20;
+				args.Graphics.DrawString("Balance: " + _existingBill.Balance.ToString("N2") + " ₱", headerFont, Brushes.Black, x, y); y += 30;
+
+				args.Graphics.DrawString("Processed By: " + processedBy, normalFont, Brushes.Black, x, y); y += 20;
 				args.Graphics.DrawString("Date Printed: " + DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"), normalFont, Brushes.Black, x, y);
 			};
 

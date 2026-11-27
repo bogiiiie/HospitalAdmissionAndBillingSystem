@@ -129,22 +129,22 @@ namespace UI
 			dgvTreatments.Rows.Clear();
 			foreach (Treatment t in _treatments)
 			{
-				dgvTreatments.Rows.Add(t.ServiceName, t.TreatmentDate.ToString("MM/dd/yyyy"), t.Quantity, "₱" + t.UnitCost.ToString("N2"), "₱" + t.TotalCost.ToString("N2"));
+				dgvTreatments.Rows.Add(t.ServiceName, t.TreatmentDate.ToString("MM/dd/yyyy"), t.Quantity, t.UnitCost.ToString("N2") + " ₱", t.TotalCost.ToString("N2") + " ₱");
 			}
 
 			// FIX: Dynamic Billing Display based on Balance
 			if (_bill != null)
 			{
-				lblRoomCharges.Text = "Room Charges: ₱" + _bill.RoomCharges.ToString("N2");
-				lblTreatmentCharges.Text = "Treatment Charges: ₱" + _bill.TreatmentCharges.ToString("N2");
-				lblDiscount.Text = "Discount: -₱" + _bill.DiscountComputed.ToString("N2") + " (" + _bill.DiscountReason + ")";
+				lblRoomCharges.Text = "Room Charges: " + _bill.RoomCharges.ToString("N2") + " ₱";
+				lblTreatmentCharges.Text = "Treatment Charges: " + _bill.TreatmentCharges.ToString("N2") + " ₱";
+				lblDiscount.Text = "Discount: -" + _bill.DiscountComputed.ToString("N2") + " ₱ (" + _bill.DiscountReason + ")";
 
 				if (_bill.Balance > 0)
 				{
 					// Partially Paid
-					lblTotalPaid.Text = $"TOTAL BILL: ₱{_bill.TotalDue:N2}\n" +
-										$"Amount Paid: ₱{_bill.AmountPaid:N2}\n" +
-										$"OUTSTANDING BALANCE: ₱{_bill.Balance:N2}\n" +
+					lblTotalPaid.Text = $"TOTAL BILL: {_bill.TotalDue:N2} ₱\n" +
+										$"Amount Paid: {_bill.AmountPaid:N2} ₱\n" +
+										$"OUTSTANDING BALANCE: {_bill.Balance:N2} ₱\n" +
 										$"({_admission.DischargeReason})";
 					lblTotalPaid.ForeColor = Color.Red;
 					lblTotalPaid.AutoSize = true; // Make sure it expands
@@ -152,7 +152,7 @@ namespace UI
 				else
 				{
 					// Fully Paid
-					lblTotalPaid.Text = "TOTAL PAID: ₱" + _bill.TotalDue.ToString("N2");
+					lblTotalPaid.Text = "TOTAL PAID: " + _bill.TotalDue.ToString("N2") + " ₱";
 					lblTotalPaid.ForeColor = Color.Green;
 				}
 			}
@@ -240,8 +240,8 @@ namespace UI
 				g.DrawString(t.TreatmentDate.ToString("MM/dd/yyyy"), fontNormal, brush, leftMargin, y);
 				g.DrawString(t.ServiceName, fontNormal, brush, leftMargin + 100, y);
 				g.DrawString(t.Quantity.ToString(), fontNormal, brush, leftMargin + 350, y);
-				g.DrawString("₱" + t.UnitCost.ToString("N2"), fontNormal, brush, leftMargin + 420, y);
-				g.DrawString("₱" + t.TotalCost.ToString("N2"), fontNormal, brush, leftMargin + 550, y);
+				g.DrawString(t.UnitCost.ToString("N2") + " ₱", fontNormal, brush, leftMargin + 420, y);
+				g.DrawString(t.TotalCost.ToString("N2") + " ₱", fontNormal, brush, leftMargin + 550, y);
 				y += 20;
 			}
 
@@ -253,29 +253,29 @@ namespace UI
 			if (_bill != null)
 			{
 				g.DrawString("Room Charges:", fontNormal, brush, leftMargin, y);
-				g.DrawString("₱" + _bill.RoomCharges.ToString("N2"), fontNormal, brush, leftMargin + 200, y); y += 20;
+				g.DrawString(_bill.RoomCharges.ToString("N2") + " ₱", fontNormal, brush, leftMargin + 200, y); y += 20;
 				g.DrawString("Treatment Charges:", fontNormal, brush, leftMargin, y);
-				g.DrawString("₱" + _bill.TreatmentCharges.ToString("N2"), fontNormal, brush, leftMargin + 200, y); y += 20;
+				g.DrawString(_bill.TreatmentCharges.ToString("N2") + " ₱", fontNormal, brush, leftMargin + 200, y); y += 20;
 				g.DrawString("Discount:", fontNormal, brush, leftMargin, y);
-				g.DrawString("-₱" + _bill.DiscountComputed.ToString("N2"), fontNormal, brush, leftMargin + 200, y); y += 20;
+				g.DrawString("-" + _bill.DiscountComputed.ToString("N2") + " ₱", fontNormal, brush, leftMargin + 200, y); y += 20;
 
 				if (_bill.Balance > 0)
 				{
 					g.DrawString("TOTAL BILL:", fontBold, brush, leftMargin, y);
-					g.DrawString("₱" + _bill.TotalDue.ToString("N2"), fontBold, brush, leftMargin + 200, y); y += 20;
+					g.DrawString(_bill.TotalDue.ToString("N2") + " ₱", fontBold, brush, leftMargin + 200, y); y += 20;
 
 					g.DrawString("Amount Paid:", fontNormal, brush, leftMargin, y);
-					g.DrawString("₱" + _bill.AmountPaid.ToString("N2"), fontNormal, brush, leftMargin + 200, y); y += 20;
+					g.DrawString(_bill.AmountPaid.ToString("N2") + " ₱", fontNormal, brush, leftMargin + 200, y); y += 20;
 
 					g.DrawString("OUTSTANDING BALANCE:", fontBold, brush, leftMargin, y);
-					g.DrawString("₱" + _bill.Balance.ToString("N2"), fontBold, brush, leftMargin + 200, y); y += 20;
+					g.DrawString(_bill.Balance.ToString("N2") + " ₱", fontBold, brush, leftMargin + 200, y); y += 20;
 
 					g.DrawString("Promissory Note: " + _admission.DischargeReason, fontNormal, brush, leftMargin, y);
 				}
 				else
 				{
 					g.DrawString("TOTAL PAID:", fontBold, brush, leftMargin, y);
-					g.DrawString("₱" + _bill.TotalDue.ToString("N2"), fontBold, brush, leftMargin + 200, y);
+					g.DrawString(_bill.TotalDue.ToString("N2") + " ₱", fontBold, brush, leftMargin + 200, y);
 				}
 			}
 		}

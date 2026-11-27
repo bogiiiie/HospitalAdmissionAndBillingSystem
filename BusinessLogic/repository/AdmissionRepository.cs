@@ -291,6 +291,9 @@ namespace BusinessLogic.Repository
 				FollowUpDate = reader["FollowUpDate"] == DBNull.Value
 					? (DateTime?)null
 					: DateTime.Parse(reader["FollowUpDate"].ToString()),
+				// NEW: Map installment fields
+				InstallmentType = reader["InstallmentType"] == DBNull.Value ? null : reader["InstallmentType"].ToString(),
+				InstallmentValue = reader["InstallmentValue"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["InstallmentValue"]),
 				CreatedAt = DateTime.Parse(reader["CreatedAt"].ToString())
 			};
 		}
@@ -394,9 +397,10 @@ namespace BusinessLogic.Repository
 		// ==========================================
 		// UPDATE — Discharge the patient
 		// Updates admission, closes room history, frees the bed.
-		// NEW: Saves the override reason, frequency, and follow-up date.
+		// NEW: Saves the override reason, frequency, follow-up date,
+		//      and installment type/value.
 		// ==========================================
-		public void DischargePatient(string admissionCode, string roomNumber, string bedName, DateTime dischargeDate, string notes, string reason, string frequency, DateTime? followUpDate)
+		public void DischargePatient(string admissionCode, string roomNumber, string bedName, DateTime dischargeDate, string notes, string reason, string frequency, DateTime? followUpDate, string installmentType, decimal installmentValue)
 		{
 			using (var conn = new SQLiteConnection(connectionString))
 			{
@@ -412,7 +416,9 @@ namespace BusinessLogic.Repository
 											DischargeNotes = @Notes,
 											DischargeReason = @Reason,
 											PaymentFrequency = @Freq,
-											FollowUpDate = @FollowUp
+											FollowUpDate = @FollowUp,
+											InstallmentType = @InstType,
+											InstallmentValue = @InstVal
 										  WHERE AdmissionCode = @Code;";
 						using (var cmd = new SQLiteCommand(sqlAdm, conn))
 						{
@@ -422,6 +428,8 @@ namespace BusinessLogic.Repository
 							cmd.Parameters.AddWithValue("@Reason", (object)reason ?? DBNull.Value);
 							cmd.Parameters.AddWithValue("@Freq", (object)frequency ?? DBNull.Value);
 							cmd.Parameters.AddWithValue("@FollowUp", followUpDate.HasValue ? (object)followUpDate.Value.ToString("yyyy-MM-dd") : DBNull.Value);
+							cmd.Parameters.AddWithValue("@InstType", (object)installmentType ?? DBNull.Value);
+							cmd.Parameters.AddWithValue("@InstVal", installmentValue);
 							cmd.ExecuteNonQuery();
 						}
 

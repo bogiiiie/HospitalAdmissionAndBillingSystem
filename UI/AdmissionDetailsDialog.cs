@@ -81,7 +81,7 @@ namespace UI
 				dgvHistory.Rows.Add(
 					h.RoomNumber,
 					h.RoomType,
-					"₱" + h.Rate.ToString("N2"),
+					h.Rate.ToString("N2") + " ₱",
 					h.StartDate.ToString("MM/dd/yyyy hh:mm tt"),
 					to
 				);
@@ -93,16 +93,16 @@ namespace UI
 			if (bill != null)
 			{
 				// A bill exists (either Draft or Paid)
-				lblRoomChargesValue.Text = "₱" + bill.RoomCharges.ToString("N2");
-				lblTreatmentValue.Text = "₱" + bill.TreatmentCharges.ToString("N2");
+				lblRoomChargesValue.Text = bill.RoomCharges.ToString("N2") + " ₱";
+				lblTreatmentValue.Text = bill.TreatmentCharges.ToString("N2") + " ₱";
 
 				if (bill.DiscountComputed > 0)
 				{
-					lblDiscountValue.Text = "- ₱" + bill.DiscountComputed.ToString("N2") + " (" + bill.DiscountReason + ")";
+					lblDiscountValue.Text = "-" + bill.DiscountComputed.ToString("N2") + " ₱" + " (" + bill.DiscountReason + ")";
 				}
 				else
 				{
-					lblDiscountValue.Text = "₱0.00";
+					lblDiscountValue.Text = "0.00 ₱";
 				}
 
 				lblTotalValue.Text = "₱" + bill.TotalDue.ToString("N2");
@@ -121,10 +121,10 @@ namespace UI
 				decimal treatmentCharges = treatmentController.CalculateSubtotal(_admission.AdmissionCode);
 				decimal total = roomCharges + treatmentCharges;
 
-				lblRoomChargesValue.Text = "₱" + roomCharges.ToString("N2");
-				lblTreatmentValue.Text = "₱" + treatmentCharges.ToString("N2");
+				lblRoomChargesValue.Text = roomCharges.ToString("N2") + " ₱";
+				lblTreatmentValue.Text = treatmentCharges.ToString("N2") + " ₱";
 				lblDiscountValue.Text = "—";
-				lblTotalValue.Text = "₱" + total.ToString("N2");
+				lblTotalValue.Text = total.ToString("N2") + " ₱";
 				lblPaymentStatusValue.Text = "Not Billed";
 				lblPaymentStatusValue.ForeColor = Color.Gray;
 			}

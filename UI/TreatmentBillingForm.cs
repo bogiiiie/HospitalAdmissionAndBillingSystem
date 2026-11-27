@@ -63,7 +63,7 @@ namespace UI
 				dgvTreatments.Rows.Clear();
 				lblNoResults.Visible = true;
 				dgvTreatments.Visible = false;
-				lblSubtotal.Text = "Subtotal: ₱0.00";
+				lblSubtotal.Text = "Subtotal: 0.00 ₱";
 			}
 			else
 			{
@@ -98,13 +98,13 @@ namespace UI
 					t.ServiceName,
 					t.TreatmentDate.ToString("MM/dd/yyyy"),
 					t.Quantity,
-					"₱" + t.UnitCost.ToString("N2"),
-					"₱" + t.TotalCost.ToString("N2")
+					t.UnitCost.ToString("N2") + " ₱",
+					t.TotalCost.ToString("N2") + " ₱"
 				);
 				subtotal += t.TotalCost;
 			}
 
-			lblSubtotal.Text = "Subtotal: ₱" + subtotal.ToString("N2");
+			lblSubtotal.Text = "Subtotal: " + subtotal.ToString("N2") +" ₱";
 			SetAdmissionState(true);
 		}
 

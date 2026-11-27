@@ -6,6 +6,7 @@ namespace BusinessLogic.Controller
 {
 	public class BillController
 	{
+		private readonly PaymentRepository paymentRepo = new PaymentRepository();
 		private readonly BillRepository repository = new BillRepository();
 		private readonly AdmissionController admissionController = new AdmissionController();
 		private readonly TreatmentController treatmentController = new TreatmentController();
@@ -60,9 +61,6 @@ namespace BusinessLogic.Controller
 		// ==========================================
 		// PROCESS BILL — Handles Partial Payments
 		// ==========================================
-		// ==========================================
-		// PROCESS BILL — Handles Partial Payments
-		// ==========================================
 		public string ProcessBill(Bill b, decimal newPayment)
 		{
 			if (b.TotalDue < 0)
@@ -113,6 +111,18 @@ namespace BusinessLogic.Controller
 			else
 			{
 				repository.SaveBill(b, true);
+			}
+
+			// Log the payment history if there is a new payment (This goes here!)
+			if (newPayment > 0)
+			{
+				paymentRepo.AddPayment(new Model.Payment
+				{
+					AdmissionCode = b.AdmissionCode,
+					AmountPaid = newPayment,
+					PaymentDate = DateTime.Now,
+					ProcessedBy = b.ProcessedBy
+				});
 			}
 
 			return "OK";

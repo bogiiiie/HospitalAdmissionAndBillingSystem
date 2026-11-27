@@ -42,6 +42,10 @@
 			this.lblFrequency = new System.Windows.Forms.Label();
 			this.dtpFollowUpDate = new System.Windows.Forms.DateTimePicker();
 			this.lblFollowUpDate = new System.Windows.Forms.Label();
+			this.cmbInstallmentType = new System.Windows.Forms.ComboBox();
+			this.lblInstallmentType = new System.Windows.Forms.Label();
+			this.txtInstallmentValue = new System.Windows.Forms.TextBox();
+			this.lblInstallmentValue = new System.Windows.Forms.Label();
 			this.chkAdminOverride = new System.Windows.Forms.CheckBox();
 			this.btnConfirmDischarge = new System.Windows.Forms.Button();
 			this.lblBillingStatus = new System.Windows.Forms.Label();
@@ -100,7 +104,6 @@
 			this.btnMainMenu.BackColor = System.Drawing.Color.White;
 			this.btnMainMenu.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.btnMainMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(213)))), ((int)(((byte)(225)))));
-			this.btnMainMenu.FlatAppearance.BorderSize = 1;
 			this.btnMainMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnMainMenu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 			this.btnMainMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
@@ -422,9 +425,13 @@
 			this.panelOverride.Controls.Add(this.lblFrequency);
 			this.panelOverride.Controls.Add(this.dtpFollowUpDate);
 			this.panelOverride.Controls.Add(this.lblFollowUpDate);
+			this.panelOverride.Controls.Add(this.cmbInstallmentType);
+			this.panelOverride.Controls.Add(this.lblInstallmentType);
+			this.panelOverride.Controls.Add(this.txtInstallmentValue);
+			this.panelOverride.Controls.Add(this.lblInstallmentValue);
 			this.panelOverride.Location = new System.Drawing.Point(50, 320);
 			this.panelOverride.Name = "panelOverride";
-			this.panelOverride.Size = new System.Drawing.Size(700, 120);
+			this.panelOverride.Size = new System.Drawing.Size(900, 120);
 			this.panelOverride.TabIndex = 9;
 			this.panelOverride.Visible = false;
 			// 
@@ -436,7 +443,7 @@
 			this.btnPrintPromissory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnPrintPromissory.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
 			this.btnPrintPromissory.ForeColor = System.Drawing.Color.White;
-			this.btnPrintPromissory.Location = new System.Drawing.Point(480, 50);
+			this.btnPrintPromissory.Location = new System.Drawing.Point(680, 50);
 			this.btnPrintPromissory.Name = "btnPrintPromissory";
 			this.btnPrintPromissory.Size = new System.Drawing.Size(180, 40);
 			this.btnPrintPromissory.TabIndex = 4;
@@ -459,13 +466,36 @@
 			this.cmbFrequency.TabIndex = 3;
 			this.cmbFrequency.SelectedIndexChanged += new System.EventHandler(this.cmbFrequency_SelectedIndexChanged);
 			// 
+			// cmbInstallmentType
+			// 
+			this.cmbInstallmentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbInstallmentType.Items.AddRange(new object[] { "Fixed", "Percentage" });
+			this.cmbInstallmentType.Location = new System.Drawing.Point(420, 55);
+			this.cmbInstallmentType.Size = new System.Drawing.Size(120, 31);
+			this.cmbInstallmentType.SelectedIndex = 0;
+			// 
+			// lblInstallmentType
+			// 
+			this.lblInstallmentType.Text = "Type:";
+			this.lblInstallmentType.Location = new System.Drawing.Point(420, 30);
+			// 
+			// txtInstallmentValue
+			// 
+			this.txtInstallmentValue.Location = new System.Drawing.Point(560, 55);
+			this.txtInstallmentValue.Size = new System.Drawing.Size(100, 30);
+			// 
+			// lblInstallmentValue
+			// 
+			this.lblInstallmentValue.Text = "Amount / %:";
+			this.lblInstallmentValue.Location = new System.Drawing.Point(560, 30);
+			// 
 			// lblFrequency
 			// 
 			this.lblFrequency.AutoSize = true;
 			this.lblFrequency.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 			this.lblFrequency.Location = new System.Drawing.Point(250, 30);
 			this.lblFrequency.Name = "lblFrequency";
-			this.lblFrequency.Size = new System.Drawing.Size(160, 20);
+			this.lblFrequency.Size = new System.Drawing.Size(151, 20);
 			this.lblFrequency.TabIndex = 2;
 			this.lblFrequency.Text = "Payment Frequency:";
 			// 
@@ -484,7 +514,7 @@
 			this.lblFollowUpDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 			this.lblFollowUpDate.Location = new System.Drawing.Point(20, 30);
 			this.lblFollowUpDate.Name = "lblFollowUpDate";
-			this.lblFollowUpDate.Size = new System.Drawing.Size(170, 20);
+			this.lblFollowUpDate.Size = new System.Drawing.Size(158, 20);
 			this.lblFollowUpDate.TabIndex = 0;
 			this.lblFollowUpDate.Text = "Next Follow-up Date:";
 			// 
@@ -495,7 +525,7 @@
 			this.chkAdminOverride.ForeColor = System.Drawing.Color.Red;
 			this.chkAdminOverride.Location = new System.Drawing.Point(50, 290);
 			this.chkAdminOverride.Name = "chkAdminOverride";
-			this.chkAdminOverride.Size = new System.Drawing.Size(450, 27);
+			this.chkAdminOverride.Size = new System.Drawing.Size(548, 27);
 			this.chkAdminOverride.TabIndex = 8;
 			this.chkAdminOverride.Text = "Override Discharge with Outstanding Balance (Promissory Note)";
 			this.chkAdminOverride.UseVisualStyleBackColor = true;
@@ -524,7 +554,7 @@
 			this.lblBillingStatus.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
 			this.lblBillingStatus.Location = new System.Drawing.Point(50, 260);
 			this.lblBillingStatus.Name = "lblBillingStatus";
-			this.lblBillingStatus.Size = new System.Drawing.Size(220, 28);
+			this.lblBillingStatus.Size = new System.Drawing.Size(169, 28);
 			this.lblBillingStatus.TabIndex = 5;
 			this.lblBillingStatus.Text = "Billing Status: —";
 			// 
@@ -544,7 +574,7 @@
 			this.lblNotes.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 			this.lblNotes.Location = new System.Drawing.Point(50, 120);
 			this.lblNotes.Name = "lblNotes";
-			this.lblNotes.Size = new System.Drawing.Size(320, 20);
+			this.lblNotes.Size = new System.Drawing.Size(276, 20);
 			this.lblNotes.TabIndex = 3;
 			this.lblNotes.Text = "Discharge Notes / Remarks (Optional)";
 			// 
@@ -564,7 +594,7 @@
 			this.lblDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 			this.lblDate.Location = new System.Drawing.Point(50, 50);
 			this.lblDate.Name = "lblDate";
-			this.lblDate.Size = new System.Drawing.Size(190, 20);
+			this.lblDate.Size = new System.Drawing.Size(157, 20);
 			this.lblDate.TabIndex = 1;
 			this.lblDate.Text = "Discharge Date/Time";
 			// 
@@ -576,7 +606,7 @@
 			this.lblNoResults.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(163)))), ((int)(((byte)(184)))));
 			this.lblNoResults.Location = new System.Drawing.Point(350, 200);
 			this.lblNoResults.Name = "lblNoResults";
-			this.lblNoResults.Size = new System.Drawing.Size(380, 28);
+			this.lblNoResults.Size = new System.Drawing.Size(341, 28);
 			this.lblNoResults.TabIndex = 0;
 			this.lblNoResults.Text = "Select an active admission to proceed.";
 			// 
@@ -596,7 +626,6 @@
 			this.btnFindAdmission.BackColor = System.Drawing.Color.White;
 			this.btnFindAdmission.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.btnFindAdmission.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
-			this.btnFindAdmission.FlatAppearance.BorderSize = 1;
 			this.btnFindAdmission.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnFindAdmission.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
 			this.btnFindAdmission.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
@@ -625,7 +654,7 @@
 			this.lblAdmission.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
 			this.lblAdmission.Location = new System.Drawing.Point(20, 22);
 			this.lblAdmission.Name = "lblAdmission";
-			this.lblAdmission.Size = new System.Drawing.Size(200, 23);
+			this.lblAdmission.Size = new System.Drawing.Size(236, 23);
 			this.lblAdmission.TabIndex = 0;
 			this.lblAdmission.Text = "Patient / Active Admission *";
 			// 
@@ -636,9 +665,9 @@
 			this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
 			this.lblSubtitle.Location = new System.Drawing.Point(38, 68);
 			this.lblSubtitle.Name = "lblSubtitle";
-			this.lblSubtitle.Size = new System.Drawing.Size(420, 23);
+			this.lblSubtitle.Size = new System.Drawing.Size(388, 23);
 			this.lblSubtitle.TabIndex = 1;
-			this.lblSubtitle.Text = "Complete the patient's stay and free up the room";
+			this.lblSubtitle.Text = "Complete the patient\'s stay and free up the room";
 			// 
 			// lblTitle
 			// 
@@ -647,7 +676,7 @@
 			this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
 			this.lblTitle.Location = new System.Drawing.Point(35, 25);
 			this.lblTitle.Name = "lblTitle";
-			this.lblTitle.Size = new System.Drawing.Size(155, 41);
+			this.lblTitle.Size = new System.Drawing.Size(157, 41);
 			this.lblTitle.TabIndex = 0;
 			this.lblTitle.Text = "Discharge";
 			// 
@@ -682,6 +711,7 @@
 			this.toolbarPanel.ResumeLayout(false);
 			this.toolbarPanel.PerformLayout();
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -728,5 +758,9 @@
 		private System.Windows.Forms.Label lblFrequency;
 		private System.Windows.Forms.ComboBox cmbFrequency;
 		private System.Windows.Forms.Button btnPrintPromissory;
+		private System.Windows.Forms.ComboBox cmbInstallmentType;
+		private System.Windows.Forms.Label lblInstallmentType;
+		private System.Windows.Forms.TextBox txtInstallmentValue;
+		private System.Windows.Forms.Label lblInstallmentValue;
 	}
 }

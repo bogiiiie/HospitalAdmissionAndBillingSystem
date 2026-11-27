@@ -192,7 +192,9 @@ namespace BusinessLogic.Repository
 						DischargeReason TEXT,
 						PaymentFrequency TEXT,
 						FollowUpDate    TEXT,
-						CreatedAt       TEXT NOT NULL DEFAULT (datetime('now'))
+						CreatedAt       TEXT NOT NULL DEFAULT (datetime('now')),
+						InstallmentType TEXT,
+						InstallmentValue REAL DEFAULT 0
 					);";
 
 				using (var cmd = new SQLiteCommand(createAdmissionsTable, conn))
@@ -220,6 +222,24 @@ namespace BusinessLogic.Repository
 					);";
 
 				using (var cmd = new SQLiteCommand(createHistoryTable, conn))
+				{
+					cmd.ExecuteNonQuery();
+				}
+
+				// --------------------------------------------------------
+				// PAYMENTS (NEW)
+				// --------------------------------------------------------
+				string createPaymentsTable = @"
+				CREATE TABLE IF NOT EXISTS Payments (
+					PaymentID       INTEGER PRIMARY KEY AUTOINCREMENT,
+					AdmissionCode   TEXT NOT NULL,
+					AmountPaid      REAL NOT NULL,
+					PaymentDate     TEXT NOT NULL,
+					ProcessedBy     TEXT NOT NULL,
+					CreatedAt       TEXT NOT NULL DEFAULT (datetime('now'))
+				);";
+
+				using (var cmd = new SQLiteCommand(createPaymentsTable, conn))
 				{
 					cmd.ExecuteNonQuery();
 				}

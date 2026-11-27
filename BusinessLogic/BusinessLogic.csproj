@@ -61,6 +61,7 @@
     <Compile Include="Repository\BillRepository.cs" />
     <Compile Include="Repository\DatabaseInitializer.cs" />
     <Compile Include="Repository\PatientRepository.cs" />
+    <Compile Include="Repository\PaymentRepository.cs" />
     <Compile Include="Repository\RoomRepository.cs" />
     <Compile Include="Repository\StaffAssignmentRepository.cs" />
     <Compile Include="Repository\TreatmentRepository.cs" />

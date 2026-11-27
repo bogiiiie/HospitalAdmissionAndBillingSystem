@@ -91,7 +91,7 @@ namespace UI
 			else if (_currentBill != null && _currentBill.Balance > 0)
 			{
 				// Partially Paid
-				lblBillingStatus.Text = $"Billing Status: PARTIALLY PAID (Balance: ₱{_currentBill.Balance:N2})";
+				lblBillingStatus.Text = $"Billing Status: PARTIALLY PAID (Balance: {_currentBill.Balance:N2} ₱)";
 				lblBillingStatus.ForeColor = Color.Orange;
 
 				if (_role == "Admin")
@@ -103,7 +103,7 @@ namespace UI
 				else
 				{
 					// Staff is blocked
-					lblBillingStatus.Text = $"Billing Status: OUTSTANDING BALANCE (₱{_currentBill.Balance:N2}). Ask Admin to override.";
+					lblBillingStatus.Text = $"Billing Status: OUTSTANDING BALANCE ({_currentBill.Balance:N2} ₱). Ask Admin to override.";
 					lblBillingStatus.ForeColor = Color.Red;
 					btnConfirmDischarge.Enabled = false;
 				}
@@ -188,8 +188,13 @@ namespace UI
 				{
 					frequency = cmbFrequency.Text;
 					followUpDate = dtpFollowUpDate.Value;
-					generatedReason = $"Promissory Note: Patient has an outstanding balance of ₱{_currentBill.Balance:N2} to be paid on a {frequency} basis, with the next follow-up scheduled on {followUpDate.Value:MM/dd/yyyy}.";
+					generatedReason = $"Promissory Note: Patient has an outstanding balance of {_currentBill.Balance:N2} ₱ to be paid on a {frequency} basis, with the next follow-up scheduled on {followUpDate.Value:MM/dd/yyyy}.";
 				}
+
+				// Make sure these variables are calculated just above this call
+				string instType = cmbInstallmentType.Text;
+				decimal instVal = 0;
+				decimal.TryParse(txtInstallmentValue.Text, out instVal);
 
 				string result = admissionController.DischargePatient(
 					_selectedAdmissionCode,
@@ -198,7 +203,9 @@ namespace UI
 					chkAdminOverride.Checked,
 					generatedReason,
 					frequency,
-					followUpDate
+					followUpDate,
+					instType,    // NEW PARAMETER
+					instVal      // NEW PARAMETER
 				);
 
 				if (result == "OK")
@@ -241,6 +248,20 @@ namespace UI
 			}
 			catch { }
 
+			// Calculate the installment amount based on user input
+			decimal instValue = 0;
+			decimal.TryParse(txtInstallmentValue.Text, out instValue);
+			decimal installmentAmount = 0;
+
+			if (cmbInstallmentType.Text == "Percentage")
+			{
+				installmentAmount = _currentBill.Balance * (instValue / 100m);
+			}
+			else if (cmbInstallmentType.Text == "Fixed")
+			{
+				installmentAmount = instValue;
+			}
+
 			PrintDocument pd = new PrintDocument();
 			pd.PrintPage += (s, args) =>
 			{
@@ -265,11 +286,11 @@ namespace UI
 
 				args.Graphics.DrawString("--- FINANCIAL DETAILS ---", headerFont, Brushes.Black, x, y);
 				y += 25;
-				args.Graphics.DrawString("Total Bill: " + "₱" + _currentBill.TotalDue.ToString("N2"), normalFont, Brushes.Black, x, y);
+				args.Graphics.DrawString("Total Bill: " + _currentBill.TotalDue.ToString("N2") + " ₱", normalFont, Brushes.Black, x, y);
 				y += 20;
-				args.Graphics.DrawString("Amount Paid (Downpayment): " + "₱" + _currentBill.AmountPaid.ToString("N2"), normalFont, Brushes.Black, x, y);
+				args.Graphics.DrawString("Amount Paid (Downpayment): " + _currentBill.AmountPaid.ToString("N2") + " ₱", normalFont, Brushes.Black, x, y);
 				y += 20;
-				args.Graphics.DrawString("REMAINING BALANCE: " + "₱" + _currentBill.Balance.ToString("N2"), headerFont, Brushes.Black, x, y);
+				args.Graphics.DrawString("REMAINING BALANCE: " + _currentBill.Balance.ToString("N2") + " ₱", headerFont, Brushes.Black, x, y);
 				y += 40;
 
 				args.Graphics.DrawString("--- PAYMENT TERMS ---", headerFont, Brushes.Black, x, y);
@@ -278,6 +299,11 @@ namespace UI
 				y += 20;
 				args.Graphics.DrawString("balance on a " + cmbFrequency.Text.ToUpper() + " basis.", normalFont, Brushes.Black, x, y);
 				y += 20;
+
+				// NEW: Print the calculated installment amount
+				args.Graphics.DrawString($"Installment Amount: {installmentAmount:N2} ₱ per {cmbFrequency.Text}", headerFont, Brushes.Black, x, y);
+				y += 20;
+
 				args.Graphics.DrawString("Next Follow-up Date: " + dtpFollowUpDate.Value.ToString("MM/dd/yyyy"), normalFont, Brushes.Black, x, y);
 				y += 40;
 
@@ -288,7 +314,9 @@ namespace UI
 
 				args.Graphics.DrawString("_____________________________          _____________________________", normalFont, Brushes.Black, x, y);
 				y += 20;
-				args.Graphics.DrawString("Patient / Guardian Signature           Admin Signature", normalFont, Brushes.Black, x, y);
+				// Draw the labels separately to perfectly align the Admin Signature under the second line
+				args.Graphics.DrawString("Patient / Guardian Signature", normalFont, Brushes.Black, x, y);
+				args.Graphics.DrawString("Admin Signature", normalFont, Brushes.Black, x + 280, y);
 			};
 
 			PrintPreviewDialog preview = new PrintPreviewDialog();

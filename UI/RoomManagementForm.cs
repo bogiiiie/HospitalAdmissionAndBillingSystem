@@ -218,7 +218,7 @@ namespace UI
 				dgvRooms.Rows.Add(
 					room.RoomNumber,
 					room.RoomType,
-					"P" + room.Rate.ToString("N0") + "/day",
+					room.Rate.ToString("N0") + " ₱" + " / day",
 					availableBeds + " / " + room.Capacity, // NEW
 					room.Status
 				);
