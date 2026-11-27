@@ -138,7 +138,8 @@
 			"Ward",
 			"Private",
 			"Semi-Private",
-			"ICU"});
+			"ICU",
+			"ER"});
 			this.cmbRoomType.Location = new System.Drawing.Point(40, 140);
 			this.cmbRoomType.Name = "cmbRoomType";
 			this.cmbRoomType.Size = new System.Drawing.Size(420, 25);

@@ -2,6 +2,12 @@
 -- Added Capacity column.
 
 INSERT INTO Rooms (RoomNumber, RoomType, Rate, Capacity, Status) VALUES
+-- Floor 1 — ER rooms (100-103) -> 6 Beds each
+('100', 'ER',           1500.00, 6, 'Available'),
+('101', 'ER',           1500.00, 6, 'Available'),
+('102', 'ER',           1500.00, 6, 'Available'),
+('103', 'ER',           1500.00, 6, 'Maintenance'),
+
 -- Floor 2 — Ward rooms (200-219) -> 4 Beds
 ('200', 'Ward',         800.00,  4, 'Available'),
 ('201', 'Ward',         800.00,  4, 'Available'),
