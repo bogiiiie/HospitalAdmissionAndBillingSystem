@@ -55,6 +55,7 @@ namespace UI
 			cmbStatusFilter.SelectedIndex = 0;
 
 			// Show/hide action panel based on role
+			btnAdd.Visible = (_role == "Admin");
 			btnEditSelected.Visible = (_role == "Admin");
 			btnDeleteSelected.Visible = (_role == "Admin");
 			btnReactivateSelected.Visible = (_role == "Admin");
